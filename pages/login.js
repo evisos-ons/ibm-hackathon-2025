@@ -1,15 +1,15 @@
-'use client';
+"use client";
 
-import { useState, useEffect } from 'react';
-import { supabase } from '../utils/supabaseClient';
-import styles from '../styles/page.module.css';
-import { useRouter } from 'next/navigation';
+import { useState, useEffect } from "react";
+import { supabase } from "../utils/supabaseClient";
+import styles from "../styles/page.module.css";
+import { useRouter } from "next/navigation";
 
 export default function AuthPage() {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
-  const [success, setSuccess] = useState('');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
   const [isLogin, setIsLogin] = useState(true);
   const [loading, setLoading] = useState(false);
 
@@ -17,15 +17,19 @@ export default function AuthPage() {
 
   useEffect(() => {
     const checkAuth = async () => {
-      const { data: { user } } = await supabase.auth.getUser();
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
       if (user) {
-        router.push('/');
+        router.push("/");
       }
     };
-    
+
     checkAuth();
-    
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(() => {
+
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange(() => {
       checkAuth();
     });
 
@@ -35,8 +39,8 @@ export default function AuthPage() {
   const handleAuth = async (e) => {
     e.preventDefault();
     setLoading(true);
-    setError('');
-    setSuccess('');
+    setError("");
+    setSuccess("");
 
     try {
       if (isLogin) {
@@ -45,15 +49,15 @@ export default function AuthPage() {
           password,
         });
         if (error) throw error;
-        setSuccess('Logged in successfully!');
-        router.push('/');
+        setSuccess("Logged in successfully!");
+        router.push("/");
       } else {
         const { error } = await supabase.auth.signUp({
           email,
           password,
         });
         if (error) throw error;
-        setSuccess('Check your email for confirmation!');
+        setSuccess("Check your email for confirmation!");
       }
     } catch (error) {
       setError(error.message);
@@ -65,11 +69,11 @@ export default function AuthPage() {
   return (
     <div className={styles.container}>
       <div className={styles.authForm}>
-        <h2>
-          {isLogin ? 'Login to your account' : 'Create an account'}
-        </h2>
+        <h2>{isLogin ? "Login to your account" : "Create an account"}</h2>
         <span>
-            {isLogin ? 'Enter your email and password to login' : 'Enter your email and password to create an account'}
+          {isLogin
+            ? "Enter your email and password to login"
+            : "Enter your email and password to create an account"}
         </span>
         <form onSubmit={handleAuth}>
           <div className={styles.formGroup}>
@@ -93,23 +97,19 @@ export default function AuthPage() {
           </div>
           {error && <div className={styles.error}>{error}</div>}
           {success && <div className={styles.success}>{success}</div>}
-          <button 
-            type="submit" 
-            className={styles.button}
-            disabled={loading}
-          >
-            {loading ? 'Processing...' : isLogin ? 'Login' : 'Sign Up'}
+          <button type="submit" className={styles.button} disabled={loading}>
+            {loading ? "Processing..." : isLogin ? "Login" : "Sign Up"}
           </button>
         </form>
 
         <div className={styles.switchMode}>
           <p>
             {isLogin ? "Don't have an account? " : "Already have an account? "}
-            <button 
+            <button
               onClick={() => setIsLogin(!isLogin)}
               className={styles.textButton}
             >
-              {isLogin ? 'Sign Up' : 'Login'}
+              {isLogin ? "Sign Up" : "Login"}
             </button>
           </p>
         </div>
