@@ -113,8 +113,10 @@ export default function ProfilePage() {
           </div>
 
           <div className={styles.recentlyScanned}>
-            <h3>Recent Items Scanned:</h3>
+            
             {recentScans.length > 0 ? (
+                <>
+                <h3>Recent Items Scanned:</h3>
               <div className={styles.scanList}>
                 {recentScans.map((scan) => (
                   <div key={scan.id} className={styles.scanItem}>
@@ -138,6 +140,7 @@ export default function ProfilePage() {
                   </div>
                 ))}
               </div>
+              </>
             ) : (
               <p className={styles.noScans}>No items scanned yet</p>
             )}
