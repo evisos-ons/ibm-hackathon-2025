@@ -42,7 +42,7 @@ export default function ProfilePage() {
             <h3>Recent Items:</h3>
             <p>Pepsi Max 330ml</p>
           </div>
-
+          
           <div className={styles.profileActions}>
             <button 
               onClick={handleLogout}
