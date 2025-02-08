@@ -9,7 +9,8 @@
   display: flex;
   flex-direction: column;
   min-height: 100vh;
-  font-family: var(--font-geist-sans);
+  background-color: #fff;
+  color: #000;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -20,6 +21,8 @@
 
     --button-primary-hover: #ccc;
     --button-secondary-hover: #1a1a1a;
+    background-color: #000;
+    color: #fff;
   }
 }
 
@@ -46,9 +49,19 @@
   max-width: 500px;
 }
 
-.scanner video {
-  width: 100%;
+#reader {
+  width: 100% !important;
   border-radius: 8px;
+  overflow: hidden;
+}
+
+#reader * {
+  border-radius: 8px;
+}
+
+#reader video {
+  width: 100% !important;
+  border-radius: 8px !important;
   background-color: #000;
 }
 
@@ -132,12 +145,19 @@
 
 @media (max-width: 600px) {
   .page {
-    padding: 32px;
-    padding-bottom: 80px;
+    padding: 1rem;
   }
 
   .main {
-    align-items: center;
+    padding: 1rem;
+  }
+
+  .scanner {
+    max-width: 100%;
+  }
+
+  .productInfo {
+    padding: 1rem;
   }
 
   .main ol {
@@ -168,5 +188,110 @@
 @media (prefers-color-scheme: dark) {
   .logo {
     filter: invert();
+  }
+
+  #reader {
+    background-color: #1a1a1a !important;
+  }
+
+  #reader * {
+    color: white !important;
+  }
+}
+
+.inputOptions {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+  width: 100%;
+  max-width: 400px;
+}
+
+.divider {
+  color: #666;
+  font-size: 0.9rem;
+  position: relative;
+  width: 100%;
+  text-align: center;
+}
+
+.divider::before,
+.divider::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  width: 45%;
+  height: 1px;
+  background-color: #ddd;
+}
+
+.divider::before {
+  left: 0;
+}
+
+.divider::after {
+  right: 0;
+}
+
+.manualInput {
+  display: flex;
+  gap: 0.5rem;
+  width: 100%;
+}
+
+.input {
+  flex: 1;
+  padding: 0.75rem 1rem;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 1rem;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.input:focus {
+  border-color: #0070f3;
+}
+
+.hint {
+  color: #666;
+  text-align: center;
+  margin: 0.5rem 0;
+  font-size: 0.9rem;
+}
+
+@media (prefers-color-scheme: dark) {
+  .input {
+    background-color: #1a1a1a;
+    border-color: #333;
+    color: white;
+  }
+  
+  .input:focus {
+    border-color: #0070f3;
+  }
+  
+  .divider {
+    color: #888;
+  }
+  
+  .divider::before,
+  .divider::after {
+    background-color: #333;
+  }
+  
+  .hint {
+    color: #888;
+  }
+  
+  .productInfo {
+    background-color: #1a1a1a;
+    color: white;
+  }
+  
+  .nutritionInfo,
+  .environmentalInfo {
+    background-color: #222;
   }
 }
