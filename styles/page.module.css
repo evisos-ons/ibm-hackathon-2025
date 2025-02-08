@@ -748,6 +748,15 @@
   opacity: 0.9;
 }
 
+.confirmButton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.confirmButton:disabled:hover {
+  opacity: 0.5;
+}
+
 .nextButton {
   background: hsl(var(--primary));
   color: hsl(var(--primary-foreground));

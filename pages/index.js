@@ -406,8 +406,9 @@ export default function ScanPage() {
                   setStep(5);
                 }} 
                 className={styles.confirmButton}
+                disabled={!price || parseFloat(price) <= 0}
               >
-                Continue
+                {price ? 'Continue' : 'Enter a price'}
               </button>
             </div>
           </div>
