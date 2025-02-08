@@ -5,6 +5,8 @@ import toast from 'react-hot-toast'
 import styles from '../styles/page.module.css'
 import Gauge from '../components/Gauge'
 import { IoArrowForward, IoSparklesOutline } from 'react-icons/io5';
+import { useRouter } from 'next/router'
+import { supabase } from '../utils/supabaseClient'
 
 export default function ScanPage() {
   const [step, setStep] = useState(1); // 1: Scanner, 2: Confirm, 3: Portion, 4: Price, 5: Results
@@ -17,6 +19,10 @@ export default function ScanPage() {
   const [suggestions, setSuggestions] = useState(null)
   const [isSuggestionsLoading, setIsSuggestionsLoading] = useState(false)
   const [openAccordion, setOpenAccordion] = useState('');
+  const [alternatives, setAlternatives] = useState([]);
+  const [isAlternativesLoading, setIsAlternativesLoading] = useState(false);
+  const [hasEnoughInfoForAI, setHasEnoughInfoForAI] = useState(false);
+  const router = useRouter()
 
   // Initialize scanner when isScanning changes
   useEffect(() => {
@@ -105,6 +111,17 @@ export default function ScanPage() {
     };
   }, [isScanning]);
 
+  useEffect(() => {
+    const checkAuth = async () => {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) {
+        router.push('/login');
+      }
+    };
+
+    checkAuth();
+  }, [router]);
+
   const fetchProductInfo = async (code) => {
     setIsLoading(true);
     try {
@@ -114,15 +131,28 @@ export default function ScanPage() {
       if (data.status === 'success' && data.product) {
         toast.success('Product found!');
         setProductInfo(data.product);
+        // Check if there's enough info for AI suggestions
+        const hasEnoughInfo = (
+          data.product.healthInfo.ingredients || 
+          data.product.healthInfo.nutriscore !== 'unknown' ||
+          data.product.healthInfo.novaGroup ||
+          data.product.category.length > 0 ||
+          data.product.packaging.materials
+        );
+        setHasEnoughInfoForAI(hasEnoughInfo);
+        // Fetch alternatives when product is found
+        fetchAlternatives(data.product);
         setStep(2); // Move to confirmation step
       } else {
         toast.error('Product not found');
         setProductInfo(null);
+        setHasEnoughInfoForAI(false);
       }
     } catch (error) {
       console.error('Error fetching product:', error);
       toast.error('Failed to fetch product');
       setProductInfo(null);
+      setHasEnoughInfoForAI(false);
     } finally {
       setIsLoading(false);
     }
@@ -147,6 +177,20 @@ export default function ScanPage() {
 
   // Add this new function to fetch suggestions
   const fetchSuggestions = async (productData) => {
+    // Check if we have enough information to make meaningful suggestions
+    const hasEnoughInfo = (
+      productData.healthInfo.ingredients || 
+      productData.healthInfo.nutriscore !== 'unknown' ||
+      productData.healthInfo.novaGroup ||
+      productData.category.length > 0 ||
+      productData.packaging.materials
+    );
+
+    if (!hasEnoughInfo) {
+      toast.error('Not enough product information for AI suggestions');
+      return;
+    }
+
     setIsSuggestionsLoading(true);
     try {
       const response = await fetch('/api/ai/suggest', {
@@ -176,6 +220,31 @@ export default function ScanPage() {
   // Add this function to handle accordion clicks
   const handleAccordionClick = (accordionId) => {
     setOpenAccordion(openAccordion === accordionId ? '' : accordionId);
+  };
+
+  const fetchAlternatives = async (productData) => {
+    setIsAlternativesLoading(true);
+    try {
+      // Get the main category from the product
+      const mainCategory = productData.category[0];
+      const params = new URLSearchParams({
+        category: mainCategory,
+        nutriscore: productData.healthInfo.nutriscore,
+      });
+
+      const response = await fetch(`/api/alternatives?${params.toString()}`);
+      const data = await response.json();
+
+      if (data.status === 'success') {
+        setAlternatives(data.alternatives);
+      } else {
+        console.error('Failed to get alternatives:', data.error);
+      }
+    } catch (error) {
+      console.error('Error fetching alternatives:', error);
+    } finally {
+      setIsAlternativesLoading(false);
+    }
   };
 
   if (isLoading) {
@@ -395,10 +464,15 @@ export default function ScanPage() {
               <button 
                 className={styles.aiButton}
                 onClick={() => fetchSuggestions(productInfo)}
-                disabled={suggestions}
+                disabled={!hasEnoughInfoForAI || suggestions}
               >
                 <IoSparklesOutline />
-                {suggestions ? 'AI Insights Loaded' : 'Get AI Insights'}
+                {suggestions 
+                  ? 'AI Insights Loaded' 
+                  : hasEnoughInfoForAI 
+                    ? 'Get AI Insights' 
+                    : 'Not Enough Product Info'
+                }
               </button>
             )}
 
@@ -557,6 +631,41 @@ export default function ScanPage() {
               </details>
             </div>
 
+            <div className={styles.alternativesSection}>
+              <h3>Similar Products You Might Like</h3>
+              {isAlternativesLoading ? (
+                <div className={styles.loadingSpinner}>Loading alternatives...</div>
+              ) : alternatives.length > 0 ? (
+                <div className={styles.alternativesGrid}>
+                  {alternatives.map((alt) => (
+                    <div key={alt.barcode} className={styles.alternativeCard}>
+                      <div className={styles.alternativeImageContainer}>
+                      {alt.image && (
+                        <img
+                          src={alt.image}
+                          alt={alt.name}
+                          className={styles.alternativeImage}
+                        />
+                      )}
+                        </div>
+                      
+                      <div className={styles.alternativeInfo}>
+                        <h4>{alt.name}</h4>
+                        {alt.brand && <p className={styles.altBrand}>{alt.brand}</p>}
+                        {alt.nutriscore && (
+                          <div className={styles.altScore}>
+                            Nutri-Score: {alt.nutriscore.toUpperCase()}
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <p className={styles.noAlternatives}>No similar products found</p>
+              )}
+            </div>
+              <div className={styles.scanAgainButtonContainer}>
             <button 
               onClick={() => {
                 setStep(1);
@@ -566,11 +675,14 @@ export default function ScanPage() {
                 setPrice('');
                 setSuggestions(null);
                 setOpenAccordion('');
+                setAlternatives([]);
               }}
               className={styles.scanAgainButton}
             >
               Scan Another Product
-            </button>
+            </button>    
+              </div>
+            
           </div>
         );
     }
