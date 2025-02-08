@@ -406,49 +406,137 @@ export default function ScanPage() {
     }
   };
 
+'use client';
+
+import { useState, useEffect } from 'react';
+import { supabase } from '../utils/supabaseClient';
+import styles from '../styles/page.module.css';
+import { useRouter } from 'next/navigation';
+
+export default function AuthPage() {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
+  const [success, setSuccess] = useState('');
+  const [isLogin, setIsLogin] = useState(true);
+  const [loading, setLoading] = useState(false);
+
+  const router = useRouter();
+
+  useEffect(() => {
+    const checkAuth = async () => {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (user) {
+        router.push('/scanner');
+      }
+    };
+    
+    checkAuth();
+    
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(() => {
+      checkAuth();
+    });
+
+    return () => subscription?.unsubscribe();
+  }, [router]);
+
+  const handleAuth = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    setError('');
+    setSuccess('');
+
+    try {
+      if (isLogin) {
+        const { error } = await supabase.auth.signInWithPassword({
+          email,
+          password,
+        });
+        if (error) throw error;
+        setSuccess('Logged in successfully!');
+      } else {
+        const { error } = await supabase.auth.signUp({
+          email,
+          password,
+        });
+        if (error) throw error;
+        setSuccess('Check your email for confirmation!');
+      }
+    } catch (error) {
+      setError(error.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleSocialLogin = async (provider) => {
+    const { error } = await supabase.auth.signInWithOAuth({
+      provider,
+    });
+    if (error) console.error(error);
+  };
+
   return (
-    <div className={styles.page}>
-      <main className={styles.main}>
-        {renderStep()}
-      </main>
+    <div className={styles.container}>
+      <div className={styles.authForm}>
+        <h2>{isLogin ? 'Login' : 'Sign Up'}</h2>
+        <form onSubmit={handleAuth}>
+          <div className={styles.formGroup}>
+            <label>Email:</label>
+            <input
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+            />
+          </div>
+          <div className={styles.formGroup}>
+            <label>Password:</label>
+            <input
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+            />
+          </div>
+          {error && <div className={styles.error}>{error}</div>}
+          {success && <div className={styles.success}>{success}</div>}
+          <button 
+            type="submit" 
+            className={styles.button}
+            disabled={loading}
+          >
+            {loading ? 'Processing...' : isLogin ? 'Login' : 'Sign Up'}
+          </button>
+        </form>
+
+        <div className={styles.switchMode}>
+          <p>
+            {isLogin ? "Don't have an account? " : "Already have an account? "}
+            <button 
+              onClick={() => setIsLogin(!isLogin)}
+              className={styles.textButton}
+            >
+              {isLogin ? 'Sign Up' : 'Login'}
+            </button>
+          </p>
+        </div>
+
+        <div className={styles.socialLogin}>
+          <button 
+            onClick={() => handleSocialLogin('google')}
+            className={styles.socialButton}
+          >
+            Continue with Google
+          </button>
+          <button 
+            onClick={() => handleSocialLogin('github')}
+            className={styles.socialButton}
+          >
+            Continue with GitHub
+          </button>
+        </div>
+      </div>
     </div>
   );
 }
-
-function getScorePercentage(score) {
-  if (!score) return 0;
-  
-  const scoreMap = {
-    'A': 90,
-    'B': 75,
-    'C': 60,
-    'D': 45,
-    'E': 30
-  };
-  
-  return scoreMap[score.toUpperCase()] || 50;
-}
-
-function getScoreLabel(score) {
-  const labels = {
-    'A': 'Excellent nutritional value',
-    'B': 'Good nutritional value',
-    'C': 'Average nutritional value',
-    'D': 'Poor nutritional value',
-    'E': 'Very poor nutritional value'
-  };
-  
-  return labels[score.toUpperCase()] || 'Nutritional value unknown';
-}
-
-function getEnvironmentalLabel(score) {
-  const labels = {
-    'A': 'Very low environmental impact',
-    'B': 'Low environmental impact',
-    'C': 'Moderate environmental impact',
-    'D': 'High environmental impact',
-    'E': 'Very high environmental impact'
-  };
-  
-  return labels[score.toUpperCase()] || 'Environmental impact unknown';
-} 
