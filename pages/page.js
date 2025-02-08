@@ -1,7 +1,7 @@
 'use client'
 import { useState, useEffect } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
-import { useZxing } from "react-zxing";
+import { Html5QrcodeScanner } from 'html5-qrcode'
 import toast from 'react-hot-toast'
 import styles from '../styles/Home.module.css'
 import Gauge from '../components/Gauge'
@@ -18,18 +18,75 @@ export default function Page() {
   const [isDarkMode, setIsDarkMode] = useState(false)
   const [showMoreActions, setShowMoreActions] = useState(false)
 
-  const { ref } = useZxing({
-    onDecodeResult(result) {
-      const decodedText = result.getText();
-      console.log("Barcode detected:", decodedText);
-      setBarcode(decodedText);
-      setIsScanning(false);
-      fetchProductInfo(decodedText);
-    },
-    onError(error) {
-      console.warn("Scanner error:", error);
-    },
-  });
+  // Initialize scanner when isScanning changes
+  useEffect(() => {
+    let scanner = null;
+    
+    if (isScanning) {
+      try {
+        scanner = new Html5QrcodeScanner(
+          "reader",
+          {
+            fps: 10,
+            qrbox: {
+              width: 250,
+              height: 150
+            },
+            aspectRatio: 1.0,
+            showTorchButtonIfSupported: true,
+            defaultZoomValueIfSupported: 2,
+            videoConstraints: {
+              facingMode: { ideal: "environment" }
+            }
+          },
+          false
+        );
+
+        const handleSuccess = (decodedText) => {
+          console.log("Barcode detected:", decodedText);
+          setBarcode(decodedText);
+          if (scanner) {
+            try {
+              scanner.clear();
+            } catch (error) {
+              console.error("Failed to clear scanner:", error);
+            }
+          }
+          setIsScanning(false);
+          fetchProductInfo(decodedText);
+        };
+
+        const handleError = (err) => {
+          // Only log errors that aren't related to normal scanning process
+          if (!err?.message?.includes("No MultiFormat Readers")) {
+            console.warn("Scanner error:", err);
+          }
+        };
+
+        try {
+          scanner.render(handleSuccess, handleError);
+        } catch (error) {
+          console.error("Failed to render scanner:", error);
+          setIsScanning(false);
+        }
+
+      } catch (error) {
+        console.error("Scanner initialization error:", error);
+        setIsScanning(false);
+      }
+    }
+
+    // Cleanup function
+    return () => {
+      if (scanner) {
+        try {
+          scanner.clear();
+        } catch (error) {
+          console.error("Failed to clear scanner:", error);
+        }
+      }
+    };
+  }, [isScanning]); // Only re-run when isScanning changes
 
   // Update URL when step changes
   const updateStep = (newStep) => {
@@ -68,23 +125,7 @@ export default function Page() {
       
       if (data.status === 'success' && data.product) {
         toast.success('Product found!')
-        const productData = {
-          productName: data.product.product_name || data.product.generic_name || 'Unknown Product',
-          brands: data.product.brands || '',
-          image: data.product.image_front_url || '',
-          category: data.product.categories_tags || [],
-          nutrients: data.product.nutriments || {},
-          healthInfo: {
-            nutriscore: data.product.nutriscore_grade || 'unknown'
-          },
-          environmentalImpact: {
-            score: data.product.ecoscore_grade || 'not-applicable'
-          },
-          packaging: {
-            materials: data.product.packaging_tags ? data.product.packaging_tags.join(', ') : ''
-          }
-        }
-        setProductInfo(productData)
+        setProductInfo(data.product)
         updateStep(3)
       } else {
         toast.error('Product not found')
@@ -167,7 +208,7 @@ export default function Page() {
             </div>
             {isScanning && (
               <div className={styles.scannerContainer}>
-                <video ref={ref} className={styles.reader} />
+                <div id="reader" className={styles.reader}></div>
                 <p className={styles.instruction}>
                   Position the barcode in front of your camera
                 </p>
