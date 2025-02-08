@@ -6,8 +6,9 @@
   --button-primary-hover: #383838;
   --button-secondary-hover: #f2f2f2;
 
-  min-height: calc(100vh - 64px); /* Account for bottom nav */
+  min-height: 100vh;
   padding: 1rem;
+  padding-top: calc(64px + 1rem); /* Account for fixed header */
   background: hsl(var(--background));
   color: hsl(var(--foreground));
 }
@@ -252,6 +253,13 @@
   width: 100%;
 }
 
+.manualEntry {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  width: 100%;
+}
+
 .input {
   flex: 1;
   padding: 0.75rem 1rem;
@@ -302,10 +310,18 @@
 }
 
 .header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 64px;
+  padding: 0 1rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 2rem;
+  background: hsl(var(--background));
+  border-bottom: 1px solid hsl(var(--border));
+  z-index: 100;
 }
 
 .themeToggle {
@@ -803,5 +819,191 @@
   .findCheaperButton:hover {
     background: hsl(var(--primary));
     color: hsl(var(--primary-foreground));
+  }
+}
+
+.profileButton {
+  background: none;
+  border: none;
+  color: hsl(var(--foreground));
+  padding: 0.5rem;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.profileButton:hover {
+  background: hsl(var(--muted) / 0.1);
+}
+
+.loginContainer {
+  max-width: 400px;
+  margin: 2rem auto;
+  padding: 2rem;
+  background: hsl(var(--card));
+  border: 1px solid hsl(var(--border));
+  border-radius: var(--radius);
+}
+
+.loginForm {
+  margin-top: 2rem;
+}
+
+.formGroup {
+  margin-bottom: 1.5rem;
+}
+
+.formGroup label {
+  display: block;
+  margin-bottom: 0.5rem;
+  color: hsl(var(--foreground));
+  font-size: 0.9rem;
+}
+
+.formGroup .input {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  font-size: 1rem;
+  background: hsl(var(--background));
+  border: 1px solid hsl(var(--border));
+  border-radius: var(--radius);
+  color: hsl(var(--foreground));
+}
+
+.formGroup .input:focus {
+  outline: none;
+  border-color: hsl(var(--primary));
+  box-shadow: 0 0 0 2px hsl(var(--primary) / 0.1);
+}
+
+.submitButton {
+  padding: 0.8rem;
+  font-size: 1rem;
+  color: hsl(var(--primary-foreground));
+  background: hsl(var(--primary));
+  border: none;
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+.submitButton:hover:not(:disabled) {
+  opacity: 0.9;
+}
+
+.submitButton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.registerPrompt {
+  margin-top: 1.5rem;
+  text-align: center;
+  color: hsl(var(--muted-foreground));
+}
+
+.textButton {
+  background: none;
+  border: none;
+  color: hsl(var(--primary));
+  font-size: inherit;
+  cursor: pointer;
+  padding: 0;
+  text-decoration: underline;
+}
+
+.textButton:hover {
+  color: hsl(var(--primary) / 0.8);
+}
+
+@media (prefers-color-scheme: dark) {
+  .formGroup .input {
+    background: hsl(var(--card));
+  }
+}
+
+.profileContainer {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+.profileHeader {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.profileIcon {
+  color: hsl(var(--primary));
+  margin-bottom: 1rem;
+}
+
+.profileName {
+  font-size: 1.5rem;
+  margin-bottom: 0.5rem;
+  color: hsl(var(--foreground));
+}
+
+.profileEmail {
+  color: hsl(var(--muted-foreground));
+}
+
+.profileStats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.statCard {
+  background: hsl(var(--card));
+  border: 1px solid hsl(var(--border));
+  border-radius: var(--radius);
+  padding: 1.5rem;
+  text-align: center;
+}
+
+.statCard h3 {
+  font-size: 0.9rem;
+  color: hsl(var(--muted-foreground));
+  margin-bottom: 0.5rem;
+}
+
+.statCard p {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: hsl(var(--primary));
+}
+
+.profileActions {
+  display: flex;
+  justify-content: center;
+}
+
+.logoutButton {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.8rem 1.5rem;
+  background: hsl(var(--destructive) / 0.1);
+  color: hsl(var(--destructive));
+  border: none;
+  border-radius: var(--radius);
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.logoutButton:hover {
+  background: hsl(var(--destructive));
+  color: hsl(var(--destructive-foreground));
+}
+
+@media (max-width: 640px) {
+  .profileStats {
+    grid-template-columns: 1fr;
   }
 }
