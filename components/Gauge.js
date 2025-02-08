@@ -7,6 +7,7 @@ const Gauge = ({ value, label }) => {
   const offset = circumference - (value / 100) * circumference;
 
   return (
+    <>
     <div className={styles.gauge}>
       <svg className={styles.progress} width="120" height="120" viewBox="0 0 120 120">
         <circle
@@ -31,9 +32,11 @@ const Gauge = ({ value, label }) => {
       </svg>
       <div className={styles.label}>
         <span className={styles.percentage}>{value}%</span>
-        <span className={styles.text}>{label}</span>
+       
       </div>
     </div>
+          <span className={styles.text}>{label}</span>
+</>
   );
 };
 

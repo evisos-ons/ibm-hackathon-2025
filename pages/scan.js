@@ -4,15 +4,18 @@ import { Html5QrcodeScanner } from 'html5-qrcode'
 import toast from 'react-hot-toast'
 import styles from '../styles/page.module.css'
 import Gauge from '../components/Gauge'
+import { IoArrowForward } from 'react-icons/io5';
 
 export default function ScanPage() {
   const [step, setStep] = useState(1); // 1: Scanner, 2: Confirm, 3: Portion, 4: Price, 5: Results
-  const [barcode, setBarcode] = useState('')
+  const [barcode, setBarcode] = useState('3068320014067')
   const [isScanning, setIsScanning] = useState(false)
   const [productInfo, setProductInfo] = useState(null)
   const [portionPercentage, setPortionPercentage] = useState(100)
   const [price, setPrice] = useState('')
   const [isLoading, setIsLoading] = useState(false)
+  const [suggestions, setSuggestions] = useState(null)
+  const [isSuggestionsLoading, setIsSuggestionsLoading] = useState(false)
 
   // Initialize scanner when isScanning changes
   useEffect(() => {
@@ -141,6 +144,34 @@ export default function ScanPage() {
     return 'All of it';
   };
 
+  // Add this new function to fetch suggestions
+  const fetchSuggestions = async (productData) => {
+    setIsSuggestionsLoading(true);
+    try {
+      const response = await fetch('/api/ai/suggest', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ productInfo: productData }),
+      });
+      
+      const data = await response.json();
+      
+      if (data.status === 'success') {
+        setSuggestions(data.suggestions);
+      } else {
+        console.error('Failed to get suggestions:', data.error);
+        toast.error('Failed to get AI suggestions');
+      }
+    } catch (error) {
+      console.error('Error fetching suggestions:', error);
+      toast.error('Failed to get AI suggestions');
+    } finally {
+      setIsSuggestionsLoading(false);
+    }
+  };
+
   if (isLoading) {
     return (
       <div className={styles.page}>
@@ -250,7 +281,7 @@ export default function ScanPage() {
               onClick={() => setStep(4)} 
               className={styles.nextButton}
             >
-              Next →
+              Next <IoArrowForward />
             </button>
           </div>
         );
@@ -283,7 +314,7 @@ export default function ScanPage() {
                 onClick={() => setStep(5)} 
                 className={styles.nextButton}
               >
-                {price ? 'See Results →' : 'Skip →'}
+                {price ? <div className={styles.nextButton}>See Results <IoArrowForward /></div> : <div className={styles.nextButton}>Skip <IoArrowForward /></div>}
               </button>
             </div>
           </div>
@@ -308,10 +339,58 @@ export default function ScanPage() {
             {price && (
               <div className={styles.priceCard}>
                 <h3>Price Paid</h3>
-                <p className={styles.priceDisplay}>${parseFloat(price).toFixed(2)}</p>
-                <button className={styles.findCheaperButton}>
-                  Find it cheaper
+                <p className={styles.priceDisplay}>£{parseFloat(price).toFixed(2)}</p>
+                <button 
+                  className={styles.findCheaperButton}
+                  onClick={() => fetchSuggestions(productInfo)}
+                >
+                  Get AI Suggestions
                 </button>
+              </div>
+            )}
+
+            {isSuggestionsLoading && (
+              <div className={styles.suggestionsLoading}>
+                <p>Getting AI suggestions...</p>
+              </div>
+            )}
+
+            {suggestions && (
+              <div className={styles.suggestionsSection}>
+                <details className={styles.accordion}>
+                  <summary>Recycling Instructions</summary>
+                  <div className={styles.accordionContent}>
+                    <p>{suggestions.recycling}</p>
+                  </div>
+                </details>
+
+                <details className={styles.accordion}>
+                  <summary>Health Analysis</summary>
+                  <div className={styles.accordionContent}>
+                    <p>{suggestions.health}</p>
+                  </div>
+                </details>
+
+                <details className={styles.accordion}>
+                  <summary>Alternative Products</summary>
+                  <div className={styles.accordionContent}>
+                    <p>{suggestions.alternatives}</p>
+                  </div>
+                </details>
+
+                <details className={styles.accordion}>
+                  <summary>Usage Tips</summary>
+                  <div className={styles.accordionContent}>
+                    <p>{suggestions.usage}</p>
+                  </div>
+                </details>
+
+                <details className={styles.accordion}>
+                  <summary>Environmental Impact</summary>
+                  <div className={styles.accordionContent}>
+                    <p>{suggestions.environmental}</p>
+                  </div>
+                </details>
               </div>
             )}
 
