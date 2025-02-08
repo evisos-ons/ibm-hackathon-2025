@@ -297,7 +297,7 @@ export default function ScanPage() {
               <p className={styles.orDivider}>or</p>
               <form onSubmit={handleManualEntry} className={styles.manualEntry}>
                 <input
-                  type="text"
+                  type="number"
                   value={barcode}
                   onChange={(e) => setBarcode(e.target.value)}
                   placeholder="Enter barcode manually"
@@ -482,7 +482,7 @@ export default function ScanPage() {
               <button 
                 className={styles.aiButton}
                 onClick={() => fetchSuggestions(productInfo)}
-                disabled={!hasEnoughInfoForAI || suggestions}
+                disabled={!hasEnoughInfoForAI || suggestions || isSuggestionsLoading}
               >
                 <IoSparklesOutline />
                 {suggestions 

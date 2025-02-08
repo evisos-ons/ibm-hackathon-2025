@@ -354,7 +354,7 @@
 
 .themeToggle:hover {
   background: hsl(var(--muted) / 0.1);
-  transform: scale(1.1);
+  transform: scale(0.9);
 }
 
 .header a {
@@ -886,6 +886,11 @@
   font-family: inherit;
 }
 
+.aiButton:hover {
+  transform: translateY(4px);
+  box-shadow: none;
+}
+
 .aiButton:disabled {
   opacity: 0.5;
   cursor: not-allowed;
@@ -894,10 +899,6 @@
 
 .aiButton:disabled:hover {
   transform: none
-}
-.aiButton:hover {
-  transform: translateY(4px);
-  box-shadow: none;
 }
 
 .aiColumn {
@@ -1574,18 +1575,6 @@
   right: 1rem;
 }
 
-
-.recentlyScanned {
-  background: hsl(var(--card));
-  border: 1px solid hsl(var(--border));
-  border-radius: var(--radius);
-  padding: 2rem;
-  max-width: 600px;
-  max-height: fit-content;
-  margin: 0 auto;
-}
-
-
 .scanList {
   margin-top: 1rem;
   display: flex;
@@ -1651,7 +1640,7 @@
 .noScans {
   color: hsl(var(--primary));
   font-weight: 500;
-  margin-top: .5rem;
+  text-align: center;
 }
 
 .scanIcon {
@@ -1661,7 +1650,7 @@
 }
 
 .scanIcon:hover {
-  transform: rotate(45deg);
+  transform: rotate(45deg) scale(0.9);
 }
 
 .profileIcon {
@@ -1671,5 +1660,5 @@
 }
 
 .profileIcon:hover {
-  transform: scale(1.1);
+  transform: scale(0.9);
 }
