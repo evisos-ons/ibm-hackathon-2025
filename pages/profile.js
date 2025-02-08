@@ -20,6 +20,12 @@ export default function ProfilePage() {
         <div className={styles.profileSection}>
           <p>Coming soon...</p>
         </div>
+        <div>
+            <p> <br></br> </p>
+        </div>
+        <div className={styles.profileSectionRecents}>
+            <p>Recently Purchased Items:</p>
+        </div>
       </main>
     </div>
   );
