@@ -62,57 +62,28 @@ export default function AuthPage() {
     }
   };
 
-  const handleSocialLogin = async (provider) => {
-    const { error } = await supabase.auth.signInWithOAuth({
-      provider,
-    });
-    if (error) console.error(error);
-  };
-
-  const createStars = () => {
-    const stars = [];
-    for (let i = 0; i < 200; i++) {
-      const style = {
-        top: `${Math.random() * 100}%`,
-        left: `${Math.random() * 100}%`,
-        width: `${Math.random() * 3}px`,
-        height: `${Math.random() * 3}px`,
-        animationDuration: `${Math.random() * 3 + 2}s`,
-        animationDelay: `${Math.random() * 2}s`
-      };
-      stars.push(<div key={i} className={styles.star} style={style}></div>);
-    }
-    return stars;
-  };
-
   return (
     <div className={styles.container}>
-      <div className={styles.stars}>
-        {createStars()}
-      </div>
       <div className={styles.authForm}>
-        <h2 style={{ 
-          color: '#fff', 
-          textAlign: 'center', 
-          marginBottom: '2rem',
-          fontSize: '1.8rem',
-          fontWeight: '500',
-          letterSpacing: '0.5px'
-        }}>
-          {isLogin ? 'Welcome Back' : 'Create Account'}
+        <h2>
+          {isLogin ? 'Login to your account' : 'Create an account'}
         </h2>
+        <span>
+            {isLogin ? 'Enter your email and password to login' : 'Enter your email and password to create an account'}
+        </span>
         <form onSubmit={handleAuth}>
           <div className={styles.formGroup}>
-            <label>Email:</label>
+            <label>Email</label>
             <input
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
+              placeholder="harry@potter.com"
             />
           </div>
           <div className={styles.formGroup}>
-            <label>Password:</label>
+            <label>Password</label>
             <input
               type="password"
               value={password}
@@ -133,7 +104,7 @@ export default function AuthPage() {
 
         <div className={styles.switchMode}>
           <p>
-            {isLogin ? "New user? " : "Already have an account? "}
+            {isLogin ? "Don't have an account? " : "Already have an account? "}
             <button 
               onClick={() => setIsLogin(!isLogin)}
               className={styles.textButton}
