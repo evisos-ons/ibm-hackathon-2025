@@ -6,11 +6,37 @@ import { useEffect } from 'react';
 import Link from 'next/link';
 import styles from '../styles/page.module.css';
 import '../styles/globals.css';
-import { IoPersonCircleOutline } from 'react-icons/io5';
+import { IoPersonCircleOutline, IoMoonOutline, IoSunnyOutline } from 'react-icons/io5';
+import { useTheme } from '../context/ThemeContext';
 
 const inter = Inter({
   subsets: ['latin'],
 });
+
+// Separate Header component
+function Header() {
+  const { theme, toggleTheme } = useTheme();
+  
+  return (
+    <header className={styles.header}>
+      <Link href="/">
+        <span style={{ fontSize: '1.2rem', fontWeight: 'bold' }}>scannr</span>
+      </Link>
+      <div className={styles.headerControls}>
+        <button 
+          onClick={toggleTheme} 
+          className={styles.themeToggle}
+          aria-label="Toggle theme"
+        >
+          {theme === 'dark' ? <IoSunnyOutline size={22} /> : <IoMoonOutline size={22} />}
+        </button>
+        <Link href="/profile" aria-label="Profile">
+          <IoPersonCircleOutline size={24} />
+        </Link>
+      </div>
+    </header>
+  );
+}
 
 export default function App({ Component, pageProps }) {
   const router = useRouter();
@@ -31,14 +57,7 @@ export default function App({ Component, pageProps }) {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
       <div className={inter.className}>
-        {router.pathname !== '/login' && (
-          <header className={styles.header}>
-            <Link href="/"> Home </Link>
-            <Link href="/profile">
-              <IoPersonCircleOutline size={28} />
-            </Link>
-          </header>
-        )}
+        {router.pathname !== '/login' && <Header />}
         <Component {...pageProps} />
       </div>
     </ThemeProvider>
