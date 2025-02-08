@@ -6,12 +6,12 @@ import styles from '../styles/page.module.css'
 import Gauge from '../components/Gauge'
 
 export default function ScanPage() {
+  const [step, setStep] = useState(1); // 1: Scanner, 2: Confirm, 3: Portion, 4: Results
   const [barcode, setBarcode] = useState('')
   const [isScanning, setIsScanning] = useState(false)
   const [productInfo, setProductInfo] = useState(null)
-  const [weightOption, setWeightOption] = useState('half')
+  const [portionPercentage, setPortionPercentage] = useState(100)
   const [isLoading, setIsLoading] = useState(false)
-  const [showMoreActions, setShowMoreActions] = useState(false)
 
   // Initialize scanner when isScanning changes
   useEffect(() => {
@@ -109,6 +109,7 @@ export default function ScanPage() {
       if (data.status === 'success' && data.product) {
         toast.success('Product found!');
         setProductInfo(data.product);
+        setStep(2); // Move to confirmation step
       } else {
         toast.error('Product not found');
         setProductInfo(null);
@@ -132,6 +133,13 @@ export default function ScanPage() {
     fetchProductInfo(barcode);
   };
 
+  const getPortionLabel = (percentage) => {
+    if (percentage <= 25) return 'Just a bite';
+    if (percentage <= 50) return 'Half';
+    if (percentage <= 75) return 'Most of it';
+    return 'All of it';
+  };
+
   if (isLoading) {
     return (
       <div className={styles.page}>
@@ -149,12 +157,111 @@ export default function ScanPage() {
     );
   }
 
-  if (productInfo) {
-    return (
-      <div className={styles.page}>
-        <main className={styles.main}>
-          <div className={styles.productInfo}>
-            <h2>{productInfo.productName}</h2>
+  const renderStep = () => {
+    switch (step) {
+      case 1: // Scanner
+        return (
+          <div className={styles.scannerStep}>
+            <h2 className={styles.stepTitle}>Scan Your Product</h2>
+            <div className={styles.scanOptions}>
+              <button
+                onClick={() => setIsScanning(!isScanning)}
+                className={styles.scanButton}
+              >
+                {isScanning ? 'Stop Camera' : 'Open Camera'}
+              </button>
+              <p className={styles.orDivider}>or</p>
+              <form onSubmit={handleManualEntry} className={styles.manualEntry}>
+                <input
+                  type="text"
+                  value={barcode}
+                  onChange={(e) => setBarcode(e.target.value)}
+                  placeholder="Enter barcode manually"
+                  className={styles.input}
+                />
+                <button type="submit" className={styles.submitButton}>
+                  Search
+                </button>
+              </form>
+            </div>
+            {isScanning && (
+              <div className={styles.scannerContainer}>
+                <div id="reader" className={styles.reader}></div>
+                <p className={styles.instruction}>
+                  Position the barcode in front of your camera
+                </p>
+              </div>
+            )}
+          </div>
+        );
+
+      case 2: // Confirm
+        return (
+          <div className={styles.confirmStep}>
+            <h2 className={styles.stepTitle}>Is this your product?</h2>
+            {productInfo && (
+              <div className={styles.productCard}>
+                {productInfo.image && (
+                  <img 
+                    src={productInfo.image} 
+                    alt={productInfo.productName}
+                    className={styles.productImage}
+                  />
+                )}
+                <h3>{productInfo.productName}</h3>
+                {productInfo.brands && <p>{productInfo.brands}</p>}
+              </div>
+            )}
+            <div className={styles.confirmButtons}>
+              <button 
+                onClick={() => setStep(1)} 
+                className={styles.backButton}
+              >
+                No, go back
+              </button>
+              <button 
+                onClick={() => setStep(3)} 
+                className={styles.confirmButton}
+              >
+                Yes, continue
+              </button>
+            </div>
+          </div>
+        );
+
+      case 3: // Portion
+        return (
+          <div className={styles.portionStep}>
+            <h2 className={styles.stepTitle}>How much did you have?</h2>
+            <div className={styles.portionSlider}>
+              <p className={styles.portionLabel}>{getPortionLabel(portionPercentage)}</p>
+              <input
+                type="range"
+                min="0"
+                max="100"
+                value={portionPercentage}
+                onChange={(e) => setPortionPercentage(parseInt(e.target.value))}
+                className={styles.slider}
+              />
+              <p className={styles.portionValue}>{portionPercentage}%</p>
+            </div>
+            <button 
+              onClick={() => setStep(4)} 
+              className={styles.nextButton}
+            >
+              See Results →
+            </button>
+          </div>
+        );
+
+      case 4: // Results
+        return (
+          <div className={styles.resultsStep}>
+            <h2 className={styles.stepTitle}>{productInfo.productName}</h2>
+            {productInfo.brands && (
+              <p className={styles.brandName}>{productInfo.brands}</p>
+            )}
+            
             {productInfo.image && (
               <img 
                 src={productInfo.image} 
@@ -162,83 +269,101 @@ export default function ScanPage() {
                 className={styles.productImage}
               />
             )}
-            
-            {productInfo.healthInfo?.nutriscore && (
+
+            {productInfo?.healthInfo?.nutriscore && (
               <div className={styles.scoreCard}>
                 <h3>Nutrition Score</h3>
                 <Gauge 
                   value={getScorePercentage(productInfo.healthInfo.nutriscore)}
                   label={getScoreLabel(productInfo.healthInfo.nutriscore)}
                 />
+                {productInfo.healthInfo.novaGroup && (
+                  <p className={styles.novaGroup}>
+                    NOVA Group: {productInfo.healthInfo.novaGroup}
+                  </p>
+                )}
               </div>
             )}
 
             <div className={styles.accordionSection}>
               <details className={styles.accordion}>
-                <summary>Nutritional Information</summary>
+                <summary>Product Categories</summary>
                 <div className={styles.accordionContent}>
-                  {Object.entries(productInfo.nutrients || {}).map(([key, value]) => (
-                    value !== 0 && (
-                      <div key={key} className={styles.nutrientRow}>
-                        <span>{key}</span>
-                        <span>{typeof value === 'number' ? value.toFixed(2) : value}</span>
-                      </div>
-                    )
-                  ))}
+                  <ul className={styles.categoryList}>
+                    {productInfo.category.map(category => (
+                      <li key={category} className={styles.categoryItem}>
+                        {category.replace('en:', '').split('-').join(' ')}
+                      </li>
+                    ))}
+                  </ul>
                 </div>
               </details>
+
+              <details className={styles.accordion}>
+                <summary>Nutritional Information</summary>
+                <div className={styles.accordionContent}>
+                  {Object.entries(productInfo.nutrients).map(([key, value]) => (
+                    <div key={key} className={styles.nutrientRow}>
+                      <span>{key}</span>
+                      <span>{value.toFixed(1)}</span>
+                    </div>
+                  ))}
+                  {Object.values(productInfo.nutrients).every(v => v === 0) && (
+                    <p className={styles.noData}>No nutritional values - Natural water product</p>
+                  )}
+                </div>
+              </details>
+
+              {productInfo.healthInfo.ingredients && (
+                <details className={styles.accordion}>
+                  <summary>Ingredients</summary>
+                  <div className={styles.accordionContent}>
+                    <p>{productInfo.healthInfo.ingredients}</p>
+                    {productInfo.healthInfo.isVegetarian && (
+                      <p className={styles.dietaryInfo}>✓ Suitable for vegetarians</p>
+                    )}
+                  </div>
+                </details>
+              )}
+
+              {productInfo.packaging.materials && (
+                <details className={styles.accordion}>
+                  <summary>Packaging Information</summary>
+                  <div className={styles.accordionContent}>
+                    <ul className={styles.packagingList}>
+                      {productInfo.packaging.materials
+                        .split(', ')
+                        .map(material => (
+                          <li key={material} className={styles.packagingItem}>
+                            {material.replace('en:', '').split('-').join(' ')}
+                          </li>
+                        ))}
+                    </ul>
+                  </div>
+                </details>
+              )}
             </div>
 
             <button 
               onClick={() => {
+                setStep(1);
                 setProductInfo(null);
                 setBarcode('');
+                setPortionPercentage(100);
               }}
               className={styles.scanAgainButton}
             >
               Scan Another Product
             </button>
           </div>
-        </main>
-      </div>
-    );
-  }
+        );
+    }
+  };
 
   return (
     <div className={styles.page}>
       <main className={styles.main}>
-        <div className={styles.scannerStep}>
-          <h2 className={styles.stepTitle}>Scan Your Product</h2>
-          <div className={styles.scanOptions}>
-            <button
-              onClick={() => setIsScanning(!isScanning)}
-              className={styles.scanButton}
-            >
-              {isScanning ? 'Stop Camera' : 'Open Camera'}
-            </button>
-            <p className={styles.orDivider}>or</p>
-            <form onSubmit={handleManualEntry} className={styles.manualEntry}>
-              <input
-                type="text"
-                value={barcode}
-                onChange={(e) => setBarcode(e.target.value)}
-                placeholder="Enter barcode manually"
-                className={styles.input}
-              />
-              <button type="submit" className={styles.submitButton}>
-                Search
-              </button>
-            </form>
-          </div>
-          {isScanning && (
-            <div className={styles.scannerContainer}>
-              <div id="reader" className={styles.reader}></div>
-              <p className={styles.instruction}>
-                Position the barcode in front of your camera
-              </p>
-            </div>
-          )}
-        </div>
+        {renderStep()}
       </main>
     </div>
   );
@@ -268,4 +393,16 @@ function getScoreLabel(score) {
   };
   
   return labels[score.toUpperCase()] || 'Nutritional value unknown';
+}
+
+function getEnvironmentalLabel(score) {
+  const labels = {
+    'A': 'Very low environmental impact',
+    'B': 'Low environmental impact',
+    'C': 'Moderate environmental impact',
+    'D': 'High environmental impact',
+    'E': 'Very high environmental impact'
+  };
+  
+  return labels[score.toUpperCase()] || 'Environmental impact unknown';
 } 
