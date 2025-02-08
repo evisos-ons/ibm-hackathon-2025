@@ -4,17 +4,21 @@ import { Html5QrcodeScanner } from 'html5-qrcode'
 import toast from 'react-hot-toast'
 import styles from '../styles/page.module.css'
 import Gauge from '../components/Gauge'
+import { IoArrowForward, IoSparklesOutline } from 'react-icons/io5';
 import { useRouter } from 'next/router'
 import { supabase } from '../utils/supabaseClient'
 
 export default function ScanPage() {
   const [step, setStep] = useState(1); // 1: Scanner, 2: Confirm, 3: Portion, 4: Price, 5: Results
-  const [barcode, setBarcode] = useState('')
+  const [barcode, setBarcode] = useState('3068320014067')
   const [isScanning, setIsScanning] = useState(false)
   const [productInfo, setProductInfo] = useState(null)
   const [portionPercentage, setPortionPercentage] = useState(100)
   const [price, setPrice] = useState('')
   const [isLoading, setIsLoading] = useState(false)
+  const [suggestions, setSuggestions] = useState(null)
+  const [isSuggestionsLoading, setIsSuggestionsLoading] = useState(false)
+  const [openAccordion, setOpenAccordion] = useState('');
   const router = useRouter()
 
   // Initialize scanner when isScanning changes
@@ -155,6 +159,39 @@ export default function ScanPage() {
     return 'All of it';
   };
 
+  // Add this new function to fetch suggestions
+  const fetchSuggestions = async (productData) => {
+    setIsSuggestionsLoading(true);
+    try {
+      const response = await fetch('/api/ai/suggest', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ productInfo: productData }),
+      });
+      
+      const data = await response.json();
+      
+      if (data.status === 'success') {
+        setSuggestions(data.suggestions);
+      } else {
+        console.error('Failed to get suggestions:', data.error);
+        toast.error('Failed to get AI suggestions');
+      }
+    } catch (error) {
+      console.error('Error fetching suggestions:', error);
+      toast.error('Failed to get AI suggestions');
+    } finally {
+      setIsSuggestionsLoading(false);
+    }
+  };
+
+  // Add this function to handle accordion clicks
+  const handleAccordionClick = (accordionId) => {
+    setOpenAccordion(openAccordion === accordionId ? '' : accordionId);
+  };
+
   if (isLoading) {
     return (
       <div className={styles.page}>
@@ -260,12 +297,20 @@ export default function ScanPage() {
               />
               <p className={styles.portionValue}>{portionPercentage}%</p>
             </div>
-            <button 
-              onClick={() => setStep(4)} 
-              className={styles.nextButton}
-            >
-              Next →
-            </button>
+            <div className={styles.confirmButtons}>
+              <button 
+                onClick={() => setStep(2)} 
+                className={styles.backButton}
+              >
+                Back
+              </button>
+              <button 
+                onClick={() => setStep(4)} 
+                className={styles.confirmButton}
+              >
+                Next
+              </button>
+            </div>
           </div>
         );
 
@@ -273,7 +318,7 @@ export default function ScanPage() {
         return (
           <div className={styles.priceStep}>
             <h2 className={styles.stepTitle}>How much did you pay?</h2>
-            <p className={styles.priceHint}>Optional - This helps us find better deals</p>
+            <p className={styles.priceHint}>Enter the price you paid for this product</p>
             <div className={styles.priceInput}>
               <span className={styles.currencySymbol}>£</span>
               <input
@@ -284,9 +329,10 @@ export default function ScanPage() {
                 step="0.01"
                 min="0"
                 className={styles.input}
+                required
               />
             </div>
-            <div className={styles.priceButtons}>
+            <div className={styles.confirmButtons}>
               <button 
                 onClick={() => setStep(3)} 
                 className={styles.backButton}
@@ -294,10 +340,16 @@ export default function ScanPage() {
                 Back
               </button>
               <button 
-                onClick={() => setStep(5)} 
-                className={styles.nextButton}
+                onClick={() => {
+                  if (!price || parseFloat(price) <= 0) {
+                    toast.error('Please enter a valid price');
+                    return;
+                  }
+                  setStep(5);
+                }} 
+                className={styles.confirmButton}
               >
-                {price ? 'See Results →' : 'Skip →'}
+                Continue
               </button>
             </div>
           </div>
@@ -306,59 +358,122 @@ export default function ScanPage() {
       case 5: // Results
         return (
           <div className={styles.resultsStep}>
-            <h2 className={styles.stepTitle}>{productInfo.productName}</h2>
-            {productInfo.brands && (
-              <p className={styles.brandName}>{productInfo.brands}</p>
-            )}
-            
-            {productInfo.image && (
-              <img 
-                src={productInfo.image} 
-                alt={productInfo.productName}
-                className={styles.productImage}
-              />
-            )}
-
-            {price && (
-              <div className={styles.priceCard}>
-                <h3>Price Paid</h3>
-                <p className={styles.priceDisplay}>£{parseFloat(price).toFixed(2)}</p>
-                <button className={styles.findCheaperButton}>
-                  Find it cheaper
-                </button>
-              </div>
-            )}
-
-            {productInfo?.healthInfo?.nutriscore && (
-              <div className={styles.scoreCard}>
-                <h3>Nutrition Score</h3>
-                <Gauge 
-                  value={getScorePercentage(productInfo.healthInfo.nutriscore)}
-                  label={getScoreLabel(productInfo.healthInfo.nutriscore)}
-                />
-                {productInfo.healthInfo.novaGroup && (
-                  <p className={styles.novaGroup}>
-                    NOVA Group: {productInfo.healthInfo.novaGroup}
-                  </p>
+            <div className={styles.productHeader}>
+              <div>
+                <h2 className={styles.stepTitle}>{productInfo.productName}</h2>
+                {productInfo.brands && (
+                  <p className={styles.brandName}>{productInfo.brands}</p>
                 )}
               </div>
+            </div>
+
+            <div className={styles.topSection}>
+              {productInfo.image && (
+                <img 
+                  src={productInfo.image} 
+                  alt={productInfo.productName}
+                  className={styles.productImage}
+                />
+              )}
+
+              <div className={styles.mainColumn}>
+                {productInfo?.healthInfo?.nutriscore && (
+                  <div className={styles.scoreCard}>
+                    <h3>Nutrition Score</h3>
+                    <Gauge 
+                      value={getScorePercentage(productInfo.healthInfo.nutriscore)}
+                      label={getScoreLabel(productInfo.healthInfo.nutriscore)}
+                    />
+                    {productInfo.healthInfo.novaGroup && (
+                      <p className={styles.novaGroup}>
+                        NOVA Group: {productInfo.healthInfo.novaGroup}
+                      </p>
+                    )}
+                  </div>
+                )}
+
+                {price && (
+                  <div className={styles.priceCard}>
+                    <h3>Price Paid</h3>
+                    <p className={styles.priceDisplay}>£{parseFloat(price).toFixed(2)}</p>
+                  </div>
+                )}
+              </div>
+            </div>
+            {isSuggestionsLoading ? (
+              <div className={styles.aiButton}>
+                <IoSparklesOutline />
+                Loading AI Insights...
+              </div>
+            ) : (
+              <button 
+                className={styles.aiButton}
+                onClick={() => fetchSuggestions(productInfo)}
+                disabled={suggestions}
+              >
+                <IoSparklesOutline />
+                {suggestions ? 'AI Insights Loaded' : 'Get AI Insights'}
+              </button>
             )}
 
-            <div className={styles.accordionSection}>
-              <details className={styles.accordion}>
-                <summary>Product Categories</summary>
-                <div className={styles.accordionContent}>
-                  <ul className={styles.categoryList}>
-                    {productInfo.category.map(category => (
-                      <li key={category} className={styles.categoryItem}>
-                        {category.replace('en:', '').split('-').join(' ')}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              </details>
+            {suggestions && (
 
-              <details className={styles.accordion}>
+              <div className={`${styles.sideColumn} ${styles.aiColumn}`}>
+                <h3>AI Insights</h3>
+                <details 
+                  className={styles.accordion} 
+                  open={openAccordion === 'health'}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    handleAccordionClick('health');
+                  }}
+                >
+                  <summary>Health Analysis</summary>
+                  <div className={styles.accordionContent}>
+                    <p>{suggestions.health}</p>
+                  </div>
+                </details>
+
+                <details 
+                  className={styles.accordion}
+                  open={openAccordion === 'alternatives'}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    handleAccordionClick('alternatives');
+                  }}
+                >
+                  <summary>Alternative Products</summary>
+                  <div className={styles.accordionContent}>
+                    <p>{suggestions.alternatives}</p>
+                  </div>
+                </details>
+
+                <details 
+                  className={styles.accordion}
+                  open={openAccordion === 'usage'}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    handleAccordionClick('usage');
+                  }}
+                >
+                  <summary>Usage Tips</summary>
+                  <div className={styles.accordionContent}>
+                    <p>{suggestions.usage}</p>
+                  </div>
+                </details>
+              </div>
+            )}
+
+            <div className={styles.sideColumn}>
+              <h3>Product Details</h3>
+              <details 
+                className={styles.accordion}
+                open={openAccordion === 'nutrition'}
+                onClick={(e) => {
+                  e.preventDefault();
+                  handleAccordionClick('nutrition');
+                }}
+              >
                 <summary>Nutritional Information</summary>
                 <div className={styles.accordionContent}>
                   {Object.entries(productInfo.nutrients).map(([key, value]) => (
@@ -374,7 +489,14 @@ export default function ScanPage() {
               </details>
 
               {productInfo.healthInfo.ingredients && (
-                <details className={styles.accordion}>
+                <details 
+                  className={styles.accordion}
+                  open={openAccordion === 'ingredients'}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    handleAccordionClick('ingredients');
+                  }}
+                >
                   <summary>Ingredients</summary>
                   <div className={styles.accordionContent}>
                     <p>{productInfo.healthInfo.ingredients}</p>
@@ -385,10 +507,36 @@ export default function ScanPage() {
                 </details>
               )}
 
-              {productInfo.packaging.materials && (
-                <details className={styles.accordion}>
-                  <summary>Packaging Information</summary>
+              {suggestions && (
+                <details 
+                  className={styles.accordion}
+                  open={openAccordion === 'environmental'}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    handleAccordionClick('environmental');
+                  }}
+                >
+                  <summary>Environmental Impact</summary>
                   <div className={styles.accordionContent}>
+                    <p>{suggestions.environmental}</p>
+                  </div>
+                </details>
+              )}
+
+              {productInfo.packaging.materials && (
+                <details 
+                  className={styles.accordion}
+                  open={openAccordion === 'recycling'}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    handleAccordionClick('recycling');
+                  }}
+                >
+                  <summary>Recycling Information</summary>
+                  <div className={styles.accordionContent}>
+                    {suggestions?.recycling && (
+                      <p className={styles.recyclingTip}>{suggestions.recycling}</p>
+                    )}
                     <ul className={styles.packagingList}>
                       {productInfo.packaging.materials
                         .split(', ')
@@ -401,6 +549,26 @@ export default function ScanPage() {
                   </div>
                 </details>
               )}
+
+              <details 
+                className={styles.accordion}
+                open={openAccordion === 'categories'}
+                onClick={(e) => {
+                  e.preventDefault();
+                  handleAccordionClick('categories');
+                }}
+              >
+                <summary>Product Categories</summary>
+                <div className={styles.accordionContent}>
+                  <ul className={styles.categoryList}>
+                    {productInfo.category.map(category => (
+                      <li key={category} className={styles.categoryItem}>
+                        {category.replace('en:', '').split('-').join(' ')}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </details>
             </div>
 
             <button 
@@ -410,6 +578,8 @@ export default function ScanPage() {
                 setBarcode('');
                 setPortionPercentage(100);
                 setPrice('');
+                setSuggestions(null);
+                setOpenAccordion('');
               }}
               className={styles.scanAgainButton}
             >
