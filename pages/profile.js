@@ -49,7 +49,8 @@ export default function ProfilePage() {
           </div>
 
           <div className={styles.recentlyScanned}>
-
+            <h3>Recent Items:</h3>
+            <p>Pepsi Max 330ml</p>
           </div>
         </div>
       </main>
