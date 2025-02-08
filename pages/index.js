@@ -19,7 +19,7 @@ export default function AuthPage() {
     const checkAuth = async () => {
       const { data: { user } } = await supabase.auth.getUser();
       if (user) {
-        router.push('/scanner');
+        router.push('/page');
       }
     };
     
@@ -46,6 +46,7 @@ export default function AuthPage() {
         });
         if (error) throw error;
         setSuccess('Logged in successfully!');
+        router.push('/page');
       } else {
         const { error } = await supabase.auth.signUp({
           email,
@@ -68,10 +69,38 @@ export default function AuthPage() {
     if (error) console.error(error);
   };
 
+  const createStars = () => {
+    const stars = [];
+    for (let i = 0; i < 200; i++) {
+      const style = {
+        top: `${Math.random() * 100}%`,
+        left: `${Math.random() * 100}%`,
+        width: `${Math.random() * 3}px`,
+        height: `${Math.random() * 3}px`,
+        animationDuration: `${Math.random() * 3 + 2}s`,
+        animationDelay: `${Math.random() * 2}s`
+      };
+      stars.push(<div key={i} className={styles.star} style={style}></div>);
+    }
+    return stars;
+  };
+
   return (
     <div className={styles.container}>
+      <div className={styles.stars}>
+        {createStars()}
+      </div>
       <div className={styles.authForm}>
-        <h2>{isLogin ? 'Login' : 'Sign Up'}</h2>
+        <h2 style={{ 
+          color: '#fff', 
+          textAlign: 'center', 
+          marginBottom: '2rem',
+          fontSize: '1.8rem',
+          fontWeight: '500',
+          letterSpacing: '0.5px'
+        }}>
+          {isLogin ? 'Welcome Back' : 'Create Account'}
+        </h2>
         <form onSubmit={handleAuth}>
           <div className={styles.formGroup}>
             <label>Email:</label>
@@ -104,7 +133,7 @@ export default function AuthPage() {
 
         <div className={styles.switchMode}>
           <p>
-            {isLogin ? "Don't have an account? " : "Already have an account? "}
+            {isLogin ? "New user? " : "Already have an account? "}
             <button 
               onClick={() => setIsLogin(!isLogin)}
               className={styles.textButton}
@@ -112,21 +141,6 @@ export default function AuthPage() {
               {isLogin ? 'Sign Up' : 'Login'}
             </button>
           </p>
-        </div>
-
-        <div className={styles.socialLogin}>
-          <button 
-            onClick={() => handleSocialLogin('google')}
-            className={styles.socialButton}
-          >
-            Continue with Google
-          </button>
-          <button 
-            onClick={() => handleSocialLogin('github')}
-            className={styles.socialButton}
-          >
-            Continue with GitHub
-          </button>
         </div>
       </div>
     </div>
