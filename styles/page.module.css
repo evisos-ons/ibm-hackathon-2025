@@ -6,11 +6,10 @@
   --button-primary-hover: #383838;
   --button-secondary-hover: #f2f2f2;
 
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh;
-  background-color: #fff;
-  color: #000;
+  min-height: calc(100vh - 64px); /* Account for bottom nav */
+  padding: 1rem;
+  background: hsl(var(--background));
+  color: hsl(var(--foreground));
 }
 
 @media (prefers-color-scheme: dark) {
@@ -27,32 +26,63 @@
 }
 
 .main {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 2rem;
-  min-height: 100vh;
-  gap: 2rem;
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 1rem;
+  padding-bottom: 80px; /* Extra padding for bottom nav */
 }
 
-.main h1 {
+.title {
   font-size: 2.5rem;
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+.title span {
+  color: hsl(var(--primary));
+}
+
+.subtitle {
+  text-align: center;
+  color: hsl(var(--muted-foreground));
   margin-bottom: 2rem;
 }
 
+.features {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 2rem;
+  margin-top: 3rem;
+}
+
+.feature {
+  padding: 1.5rem;
+  border-radius: var(--radius);
+  background: hsl(var(--card));
+  border: 1px solid hsl(var(--border));
+}
+
+.feature h2 {
+  color: hsl(var(--primary));
+  margin-bottom: 0.5rem;
+}
+
+.feature p {
+  color: hsl(var(--muted-foreground));
+}
+
 .scanner {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 1rem;
   width: 100%;
   max-width: 500px;
+  margin: 0 auto;
 }
 
 #reader {
   width: 100% !important;
-  border-radius: 8px;
+  border-radius: var(--radius);
   overflow: hidden;
+  background: hsl(var(--card));
+  border: 1px solid hsl(var(--border));
 }
 
 #reader * {
@@ -65,58 +95,72 @@
   background-color: #000;
 }
 
-.productInfo {
-  width: 100%;
-  max-width: 600px;
-  padding: 2rem;
-  background-color: #fff;
-  border-radius: 12px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-}
-
-.nutritionInfo, .environmentalInfo {
+.hint {
+  text-align: center;
+  color: hsl(var(--muted-foreground));
   margin: 1rem 0;
-  padding: 1rem;
-  background-color: #f5f5f5;
-  border-radius: 8px;
 }
 
 .error {
-  color: #dc2626;
   padding: 1rem;
-  background-color: #fee2e2;
-  border-radius: 8px;
+  border-radius: var(--radius);
+  background: hsl(var(--destructive) / 0.1);
+  color: hsl(var(--destructive));
+  margin: 1rem 0;
+}
+
+.productInfo {
+  background: hsl(var(--card));
+  border: 1px solid hsl(var(--border));
+  border-radius: var(--radius);
+  padding: 1.5rem;
+  margin-top: 2rem;
+}
+
+.nutritionInfo,
+.environmentalInfo {
+  background: hsl(var(--muted) / 0.1);
+  border-radius: var(--radius);
+  padding: 1rem;
   margin: 1rem 0;
 }
 
 .primary {
-  background-color: #0070f3;
-  color: white;
+  background: hsl(var(--primary));
+  color: hsl(var(--primary-foreground));
   border: none;
-  padding: 0.75rem 1.5rem;
-  border-radius: 8px;
-  font-size: 1rem;
+  padding: 0.8rem 1.5rem;
+  border-radius: var(--radius);
   cursor: pointer;
-  transition: background-color 0.2s;
+  font-size: 1rem;
+  transition: opacity 0.2s;
 }
 
 .primary:hover {
-  background-color: #0051a2;
+  opacity: 0.9;
 }
 
 .secondary {
-  background-color: #e5e5e5;
-  color: #333;
+  background: hsl(var(--secondary));
+  color: hsl(var(--secondary-foreground));
   border: none;
-  padding: 0.75rem 1.5rem;
-  border-radius: 8px;
-  font-size: 1rem;
+  padding: 0.8rem 1.5rem;
+  border-radius: var(--radius);
   cursor: pointer;
-  transition: background-color 0.2s;
+  font-size: 1rem;
+  transition: opacity 0.2s;
 }
 
 .secondary:hover {
-  background-color: #d4d4d4;
+  opacity: 0.9;
+}
+
+.profileSection {
+  background: hsl(var(--card));
+  border: 1px solid hsl(var(--border));
+  border-radius: var(--radius);
+  padding: 2rem;
+  text-align: center;
 }
 
 .footer {
@@ -143,45 +187,13 @@
   }
 }
 
-@media (max-width: 600px) {
-  .page {
-    padding: 1rem;
+@media (max-width: 640px) {
+  .title {
+    font-size: 2rem;
   }
 
-  .main {
-    padding: 1rem;
-  }
-
-  .scanner {
-    max-width: 100%;
-  }
-
-  .productInfo {
-    padding: 1rem;
-  }
-
-  .main ol {
-    text-align: center;
-  }
-
-  .ctas {
-    flex-direction: column;
-  }
-
-  .ctas a {
-    font-size: 14px;
-    height: 40px;
-    padding: 0 16px;
-  }
-
-  a.secondary {
-    min-width: auto;
-  }
-
-  .footer {
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: center;
+  .features {
+    grid-template-columns: 1fr;
   }
 }
 
@@ -252,13 +264,6 @@
 
 .input:focus {
   border-color: #0070f3;
-}
-
-.hint {
-  color: #666;
-  text-align: center;
-  margin: 0.5rem 0;
-  font-size: 0.9rem;
 }
 
 @media (prefers-color-scheme: dark) {

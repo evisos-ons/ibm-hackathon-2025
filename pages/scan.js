@@ -1,7 +1,7 @@
 'use client'
 import { useState, useEffect } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
-import { Html5QrcodeScanner } from 'html5-qrcode'
+import { Html5QrcodeScanner, Html5Qrcode } from 'html5-qrcode'
 import toast from 'react-hot-toast'
 import styles from '../styles/Home.module.css'
 import Gauge from '../components/Gauge'
@@ -27,33 +27,47 @@ export default function Page() {
         scanner = new Html5QrcodeScanner(
           "reader",
           {
-            fps: 10,
+            fps: 5,
             qrbox: {
-              width: 250,
-              height: 150
+              width: 300,
+              height: 100
             },
-            aspectRatio: 1.0,
+            aspectRatio: 1.777778,
             showTorchButtonIfSupported: true,
             defaultZoomValueIfSupported: 2,
             videoConstraints: {
-              facingMode: { ideal: "environment" }
+              facingMode: { ideal: "environment" },
+              width: { min: 640, ideal: 1280, max: 1920 },
+              height: { min: 480, ideal: 720, max: 1080 }
             }
           },
           false
         );
 
         const handleSuccess = (decodedText) => {
+          // Validate barcode format
+          const barcodeRegex = /^[0-9]{8,13}$/;
+          if (!barcodeRegex.test(decodedText)) {
+            console.warn("Invalid barcode format:", decodedText);
+            return;
+          }
+
           console.log("Barcode detected:", decodedText);
           setBarcode(decodedText);
+          
+          // Stop scanning and clear scanner
           if (scanner) {
             try {
-              scanner.clear();
+              scanner.pause();
+              setTimeout(() => {
+                scanner.clear();
+                setIsScanning(false);
+                fetchProductInfo(decodedText);
+              }, 500);
             } catch (error) {
               console.error("Failed to clear scanner:", error);
             }
           }
-          setIsScanning(false);
-          fetchProductInfo(decodedText);
         };
 
         const handleError = (err) => {
@@ -68,11 +82,13 @@ export default function Page() {
         } catch (error) {
           console.error("Failed to render scanner:", error);
           setIsScanning(false);
+          toast.error('Failed to start camera');
         }
 
       } catch (error) {
         console.error("Scanner initialization error:", error);
         setIsScanning(false);
+        toast.error('Failed to initialize scanner');
       }
     }
 
@@ -80,13 +96,14 @@ export default function Page() {
     return () => {
       if (scanner) {
         try {
-          scanner.clear();
+          scanner.pause();
+          setTimeout(() => scanner.clear(), 500);
         } catch (error) {
           console.error("Failed to clear scanner:", error);
         }
       }
     };
-  }, [isScanning]); // Only re-run when isScanning changes
+  }, [isScanning]);
 
   // Update URL when step changes
   const updateStep = (newStep) => {
@@ -142,9 +159,12 @@ export default function Page() {
 
   const handleManualEntry = (e) => {
     e.preventDefault()
-    if (barcode) {
-      fetchProductInfo(barcode)
+    const barcodeRegex = /^[0-9]{8,13}$/;
+    if (!barcodeRegex.test(barcode)) {
+      toast.error('Please enter a valid 8-13 digit barcode');
+      return;
     }
+    fetchProductInfo(barcode)
   }
 
   const renderStep = () => {

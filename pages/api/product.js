@@ -7,7 +7,7 @@ export default async function handler(req, res) {
     const response = await fetch(url)
     
     if (!response.ok) {
-      throw new Error(`API responded with status: ${response.status}`)
+      console.log(`API responded with status: ${response.status}`)
     }
 
     const data = await response.json()
