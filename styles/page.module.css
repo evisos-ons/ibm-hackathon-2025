@@ -1193,7 +1193,15 @@
 }
 
 .recentlyScanned {
+  background: hsl(var(--card));
+  border: 1px solid hsl(var(--border));
+  border-radius: var(--radius);
+  padding: 2rem;
   max-width: 600px;
   margin: 0 auto;
   padding: 2rem;
+}
+
+.recentlyScanned p {
+  color: #6a11cb;
 }
