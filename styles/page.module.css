@@ -6,11 +6,10 @@
   --button-primary-hover: #383838;
   --button-secondary-hover: #f2f2f2;
 
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh;
-  background-color: #fff;
-  color: #000;
+  min-height: calc(100vh - 64px); /* Account for bottom nav */
+  padding: 1rem;
+  background: hsl(var(--background));
+  color: hsl(var(--foreground));
 }
 
 @media (prefers-color-scheme: dark) {
@@ -27,32 +26,63 @@
 }
 
 .main {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 2rem;
-  min-height: 100vh;
-  gap: 2rem;
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 1rem;
+  padding-bottom: 80px; /* Extra padding for bottom nav */
 }
 
-.main h1 {
+.title {
   font-size: 2.5rem;
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+.title span {
+  color: hsl(var(--primary));
+}
+
+.subtitle {
+  text-align: center;
+  color: hsl(var(--muted-foreground));
   margin-bottom: 2rem;
 }
 
+.features {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 2rem;
+  margin-top: 3rem;
+}
+
+.feature {
+  padding: 1.5rem;
+  border-radius: var(--radius);
+  background: hsl(var(--card));
+  border: 1px solid hsl(var(--border));
+}
+
+.feature h2 {
+  color: hsl(var(--primary));
+  margin-bottom: 0.5rem;
+}
+
+.feature p {
+  color: hsl(var(--muted-foreground));
+}
+
 .scanner {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 1rem;
   width: 100%;
   max-width: 500px;
+  margin: 0 auto;
 }
 
 #reader {
   width: 100% !important;
-  border-radius: 8px;
+  border-radius: var(--radius);
   overflow: hidden;
+  background: hsl(var(--card));
+  border: 1px solid hsl(var(--border));
 }
 
 #reader * {
@@ -65,58 +95,72 @@
   background-color: #000;
 }
 
-.productInfo {
-  width: 100%;
-  max-width: 600px;
-  padding: 2rem;
-  background-color: #fff;
-  border-radius: 12px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-}
-
-.nutritionInfo, .environmentalInfo {
+.hint {
+  text-align: center;
+  color: hsl(var(--muted-foreground));
   margin: 1rem 0;
-  padding: 1rem;
-  background-color: #f5f5f5;
-  border-radius: 8px;
 }
 
 .error {
-  color: #dc2626;
   padding: 1rem;
-  background-color: #fee2e2;
-  border-radius: 8px;
+  border-radius: var(--radius);
+  background: hsl(var(--destructive) / 0.1);
+  color: hsl(var(--destructive));
+  margin: 1rem 0;
+}
+
+.productInfo {
+  background: hsl(var(--card));
+  border: 1px solid hsl(var(--border));
+  border-radius: var(--radius);
+  padding: 1.5rem;
+  margin-top: 2rem;
+}
+
+.nutritionInfo,
+.environmentalInfo {
+  background: hsl(var(--muted) / 0.1);
+  border-radius: var(--radius);
+  padding: 1rem;
   margin: 1rem 0;
 }
 
 .primary {
-  background-color: #0070f3;
-  color: white;
+  background: hsl(var(--primary));
+  color: hsl(var(--primary-foreground));
   border: none;
-  padding: 0.75rem 1.5rem;
-  border-radius: 8px;
-  font-size: 1rem;
+  padding: 0.8rem 1.5rem;
+  border-radius: var(--radius);
   cursor: pointer;
-  transition: background-color 0.2s;
+  font-size: 1rem;
+  transition: opacity 0.2s;
 }
 
 .primary:hover {
-  background-color: #0051a2;
+  opacity: 0.9;
 }
 
 .secondary {
-  background-color: #e5e5e5;
-  color: #333;
+  background: hsl(var(--secondary));
+  color: hsl(var(--secondary-foreground));
   border: none;
-  padding: 0.75rem 1.5rem;
-  border-radius: 8px;
-  font-size: 1rem;
+  padding: 0.8rem 1.5rem;
+  border-radius: var(--radius);
   cursor: pointer;
-  transition: background-color 0.2s;
+  font-size: 1rem;
+  transition: opacity 0.2s;
 }
 
 .secondary:hover {
-  background-color: #d4d4d4;
+  opacity: 0.9;
+}
+
+.profileSection {
+  background: hsl(var(--card));
+  border: 1px solid hsl(var(--border));
+  border-radius: var(--radius);
+  padding: 2rem;
+  text-align: center;
 }
 
 .footer {
@@ -143,45 +187,13 @@
   }
 }
 
-@media (max-width: 600px) {
-  .page {
-    padding: 1rem;
+@media (max-width: 640px) {
+  .title {
+    font-size: 2rem;
   }
 
-  .main {
-    padding: 1rem;
-  }
-
-  .scanner {
-    max-width: 100%;
-  }
-
-  .productInfo {
-    padding: 1rem;
-  }
-
-  .main ol {
-    text-align: center;
-  }
-
-  .ctas {
-    flex-direction: column;
-  }
-
-  .ctas a {
-    font-size: 14px;
-    height: 40px;
-    padding: 0 16px;
-  }
-
-  a.secondary {
-    min-width: auto;
-  }
-
-  .footer {
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: center;
+  .features {
+    grid-template-columns: 1fr;
   }
 }
 
@@ -254,13 +266,6 @@
   border-color: #0070f3;
 }
 
-.hint {
-  color: #666;
-  text-align: center;
-  margin: 0.5rem 0;
-  font-size: 0.9rem;
-}
-
 @media (prefers-color-scheme: dark) {
   .input {
     background-color: #1a1a1a;
@@ -293,6 +298,511 @@
   .nutritionInfo,
   .environmentalInfo {
     background-color: #222;
+  }
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.themeToggle {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  padding: 0.5rem;
+  border-radius: 50%;
+  transition: background-color 0.2s;
+  color: hsl(var(--foreground));
+}
+
+.themeToggle:hover {
+  background: hsl(var(--muted) / 0.1);
+}
+
+/* Scan Page Styles */
+.scannerStep {
+  text-align: center;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.stepTitle {
+  font-size: 1.5rem;
+  margin-bottom: 2rem;
+  color: hsl(var(--foreground));
+}
+
+.scanOptions {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.scanButton {
+  background: hsl(var(--primary));
+  color: hsl(var(--primary-foreground));
+  border: none;
+  padding: 0.8rem 1.5rem;
+  border-radius: var(--radius);
+  font-size: 1rem;
+  cursor: pointer;
+  transition: opacity 0.2s;
+  min-width: 200px;
+}
+
+.scanButton:hover {
+  opacity: 0.9;
+}
+
+.scannerContainer {
+  margin: 2rem auto;
+  max-width: 600px;
+}
+
+.instruction {
+  color: hsl(var(--muted-foreground));
+  margin-top: 1rem;
+  text-align: center;
+}
+
+.loadingScreen {
+  text-align: center;
+  padding: 2rem;
+}
+
+.loadingAnimation {
+  margin: 2rem auto;
+  width: 200px;
+  height: 100px;
+  position: relative;
+  background: hsl(var(--muted) / 0.1);
+  border-radius: var(--radius);
+}
+
+.scannerBar {
+  width: 100%;
+  height: 2px;
+  background: hsl(var(--primary));
+  position: absolute;
+  animation: scan 2s infinite;
+}
+
+@keyframes scan {
+  0% { top: 0; }
+  50% { top: 100%; }
+  100% { top: 0; }
+}
+
+.loadingText {
+  color: hsl(var(--muted-foreground));
+  margin-top: 1rem;
+}
+
+.productImage {
+  max-width: 200px;
+  margin: 1rem auto;
+  display: block;
+  border-radius: var(--radius);
+}
+
+.scanAgainButton {
+  background: hsl(var(--primary));
+  color: hsl(var(--primary-foreground));
+  border: none;
+  padding: 0.8rem 1.5rem;
+  border-radius: var(--radius);
+  font-size: 1rem;
+  cursor: pointer;
+  transition: opacity 0.2s;
+  width: 100%;
+  margin-top: 2rem;
+}
+
+.scanAgainButton:hover {
+  opacity: 0.9;
+}
+
+.submitButton {
+  background: hsl(var(--primary));
+  color: hsl(var(--primary-foreground));
+  border: none;
+  padding: 0.8rem 1.5rem;
+  border-radius: var(--radius);
+  font-size: 1rem;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+.submitButton:hover {
+  opacity: 0.9;
+}
+
+.accordionSection {
+  margin-top: 2rem;
+}
+
+.accordion {
+  background: hsl(var(--card));
+  border: 1px solid hsl(var(--border));
+  border-radius: var(--radius);
+  margin-bottom: 1rem;
+}
+
+.accordion summary {
+  padding: 1rem;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.accordion summary:hover {
+  background: hsl(var(--muted) / 0.1);
+}
+
+.accordionContent {
+  padding: 1rem;
+  border-top: 1px solid hsl(var(--border));
+}
+
+.nutrientRow {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.5rem 0;
+  border-bottom: 1px solid hsl(var(--border));
+}
+
+.nutrientRow:last-child {
+  border-bottom: none;
+}
+
+.scoreCard {
+  background: hsl(var(--card));
+  border: 1px solid hsl(var(--border));
+  border-radius: var(--radius);
+  padding: 1.5rem;
+  margin: 1rem 0;
+  text-align: center;
+}
+
+.scoreCard h3 {
+  margin-bottom: 1rem;
+  color: hsl(var(--foreground));
+}
+
+@media (prefers-color-scheme: dark) {
+  .accordion,
+  .scoreCard {
+    background: hsl(var(--card));
+    border-color: hsl(var(--border));
+  }
+
+  .nutrientRow {
+    border-color: hsl(var(--border));
+  }
+
+  .loadingAnimation {
+    background: hsl(var(--muted) / 0.2);
+  }
+}
+
+.portionStep {
+  text-align: center;
+  max-width: 400px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+.portionSlider {
+  background: hsl(var(--card));
+  border: 1px solid hsl(var(--border));
+  border-radius: var(--radius);
+  padding: 2rem;
+  margin: 2rem 0;
+}
+
+.portionLabel {
+  font-size: 1.25rem;
+  margin-bottom: 1rem;
+  color: hsl(var(--foreground));
+}
+
+.portionValue {
+  font-size: 1rem;
+  color: hsl(var(--muted-foreground));
+  margin-top: 0.5rem;
+}
+.slider {
+  width: 100%;
+  height: 6px;
+  -webkit-appearance: none;
+  appearance: none;
+  background: hsl(var(--muted));
+  border-radius: 3px;
+  outline: none;
+  margin: 1rem 0;
+}
+
+.slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  background: hsl(var(--primary));
+  border-radius: 50%;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.slider::-moz-range-thumb {
+  width: 20px;
+  height: 20px;
+  background: hsl(var(--primary));
+  border-radius: 50%;
+  cursor: pointer;
+  transition: transform 0.2s;
+  border: none;
+}
+
+.slider::-webkit-slider-thumb:hover {
+  transform: scale(1.1);
+}
+
+.slider::-moz-range-thumb:hover {
+  transform: scale(1.1);
+}
+
+.confirmStep {
+  text-align: center;
+  max-width: 400px;
+  margin: 0 auto;
+  padding: 1rem;
+}
+
+.productCard {
+  background: hsl(var(--card));
+  border: 1px solid hsl(var(--border));
+  border-radius: var(--radius);
+  padding: 1.5rem;
+  margin: 1.5rem 0;
+}
+
+.productCard h3 {
+  margin: 1rem 0 0.5rem;
+  color: hsl(var(--foreground));
+}
+
+.productCard p {
+  color: hsl(var(--muted-foreground));
+}
+
+.confirmButtons {
+  display: flex;
+  gap: 1rem;
+  margin-top: 2rem;
+}
+
+.backButton,
+.confirmButton {
+  flex: 1;
+  padding: 0.8rem;
+  border: none;
+  border-radius: var(--radius);
+  font-size: 1rem;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+.backButton {
+  background: hsl(var(--secondary));
+  color: hsl(var(--secondary-foreground));
+}
+
+.confirmButton {
+  background: hsl(var(--primary));
+  color: hsl(var(--primary-foreground));
+}
+
+.backButton:hover,
+.confirmButton:hover {
+  opacity: 0.9;
+}
+
+.nextButton {
+  background: hsl(var(--primary));
+  color: hsl(var(--primary-foreground));
+  border: none;
+  padding: 0.8rem 1.5rem;
+  border-radius: var(--radius);
+  font-size: 1rem;
+  cursor: pointer;
+  transition: opacity 0.2s;
+  width: 100%;
+}
+
+.nextButton:hover {
+  opacity: 0.9;
+}
+
+@media (prefers-color-scheme: dark) {
+  .slider {
+    background: hsl(var(--muted) / 0.2);
+  }
+
+  .slider::-webkit-slider-thumb {
+    background: hsl(var(--primary));
+  }
+
+  .slider::-moz-range-thumb {
+    background: hsl(var(--primary));
+  }
+}
+
+.brandName {
+  text-align: center;
+  color: hsl(var(--muted-foreground));
+  margin-bottom: 1.5rem;
+  font-size: 1.1rem;
+}
+
+.resultsStep {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 1rem;
+}
+
+.categoryList,
+.packagingList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.categoryItem,
+.packagingItem {
+  background: hsl(var(--muted) / 0.1);
+  padding: 0.5rem 1rem;
+  border-radius: var(--radius);
+  margin-bottom: 0.5rem;
+  text-transform: capitalize;
+}
+
+.novaGroup {
+  margin-top: 1rem;
+  padding: 0.5rem;
+  background: hsl(var(--muted) / 0.1);
+  border-radius: var(--radius);
+  font-size: 0.9rem;
+}
+
+.dietaryInfo {
+  margin-top: 1rem;
+  color: hsl(var(--primary));
+  font-weight: 500;
+}
+
+.noData {
+  color: hsl(var(--muted-foreground));
+  font-style: italic;
+}
+
+.priceStep {
+  text-align: center;
+  max-width: 400px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+.priceHint {
+  color: hsl(var(--muted-foreground));
+  margin-bottom: 2rem;
+  font-size: 0.9rem;
+}
+
+.priceInput {
+  position: relative;
+  max-width: 200px;
+  margin: 0 auto 2rem;
+  color: hsl(var(--foreground));
+}
+
+.currencySymbol {
+  position: absolute;
+  left: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: hsl(var(--foreground));
+  font-size: 1.2rem;
+}
+
+.priceInput .input {
+  width: 100%;
+  padding: 1rem 1rem 1rem 2rem;
+  font-size: 1.2rem;
+  text-align: left;
+  background: hsl(var(--background));
+  border: 1px solid hsl(var(--border));
+  border-radius: var(--radius);
+  color: hsl(var(--foreground));
+}
+
+.priceInput .input:focus {
+  outline: none;
+  border-color: hsl(var(--primary));
+  box-shadow: 0 0 0 2px hsl(var(--primary) / 0.1);
+}
+
+.priceButtons {
+  display: flex;
+  gap: 1rem;
+}
+
+.priceCard {
+  background: hsl(var(--card));
+  border: 1px solid hsl(var(--border));
+  border-radius: var(--radius);
+  padding: 1.5rem;
+  margin: 1rem 0;
+  text-align: center;
+}
+
+.priceDisplay {
+  font-size: 2rem;
+  font-weight: bold;
+  color: hsl(var(--primary));
+  margin: 1rem 0;
+}
+
+.findCheaperButton {
+  background: hsl(var(--secondary));
+  color: hsl(var(--secondary-foreground));
+  border: none;
+  padding: 0.8rem 1.5rem;
+  border-radius: var(--radius);
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  width: 100%;
+}
+
+.findCheaperButton:hover {
+  background: hsl(var(--primary));
+  color: hsl(var(--primary-foreground));
+}
+
+@media (prefers-color-scheme: dark) {
+  .priceInput .input {
+    background: hsl(var(--card));
+    color: hsl(var(--foreground));
+  }
+  
+  .findCheaperButton:hover {
+    background: hsl(var(--primary));
+    color: hsl(var(--primary-foreground));
   }
 }
 
