@@ -1,5 +1,6 @@
 import { useTheme } from '../context/ThemeContext';
 import styles from '../styles/page.module.css';
+import { IoSunnyOutline, IoMoonOutline } from 'react-icons/io5';
 
 export default function ProfilePage() {
   const { theme, toggleTheme } = useTheme();
@@ -13,7 +14,7 @@ export default function ProfilePage() {
             onClick={toggleTheme}
             className={styles.themeToggle}
           >
-            {theme === 'dark' ? '☀️' : '🌙'}
+            {theme === 'dark' ? <IoSunnyOutline /> : <IoMoonOutline />}
           </button>
         </div>
         <div className={styles.profileSection}>

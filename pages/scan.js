@@ -6,11 +6,12 @@ import styles from '../styles/page.module.css'
 import Gauge from '../components/Gauge'
 
 export default function ScanPage() {
-  const [step, setStep] = useState(1); // 1: Scanner, 2: Confirm, 3: Portion, 4: Results
+  const [step, setStep] = useState(1); // 1: Scanner, 2: Confirm, 3: Portion, 4: Price, 5: Results
   const [barcode, setBarcode] = useState('')
   const [isScanning, setIsScanning] = useState(false)
   const [productInfo, setProductInfo] = useState(null)
   const [portionPercentage, setPortionPercentage] = useState(100)
+  const [price, setPrice] = useState('')
   const [isLoading, setIsLoading] = useState(false)
 
   // Initialize scanner when isScanning changes
@@ -249,12 +250,46 @@ export default function ScanPage() {
               onClick={() => setStep(4)} 
               className={styles.nextButton}
             >
-              See Results →
+              Next →
             </button>
           </div>
         );
 
-      case 4: // Results
+      case 4: // Price
+        return (
+          <div className={styles.priceStep}>
+            <h2 className={styles.stepTitle}>How much did you pay?</h2>
+            <p className={styles.priceHint}>Optional - This helps us find better deals</p>
+            <div className={styles.priceInput}>
+              <span className={styles.currencySymbol}>£</span>
+              <input
+                type="number"
+                value={price}
+                onChange={(e) => setPrice(e.target.value)}
+                placeholder="0.00"
+                step="0.01"
+                min="0"
+                className={styles.input}
+              />
+            </div>
+            <div className={styles.priceButtons}>
+              <button 
+                onClick={() => setStep(3)} 
+                className={styles.backButton}
+              >
+                Back
+              </button>
+              <button 
+                onClick={() => setStep(5)} 
+                className={styles.nextButton}
+              >
+                {price ? 'See Results →' : 'Skip →'}
+              </button>
+            </div>
+          </div>
+        );
+
+      case 5: // Results
         return (
           <div className={styles.resultsStep}>
             <h2 className={styles.stepTitle}>{productInfo.productName}</h2>
@@ -268,6 +303,16 @@ export default function ScanPage() {
                 alt={productInfo.productName}
                 className={styles.productImage}
               />
+            )}
+
+            {price && (
+              <div className={styles.priceCard}>
+                <h3>Price Paid</h3>
+                <p className={styles.priceDisplay}>${parseFloat(price).toFixed(2)}</p>
+                <button className={styles.findCheaperButton}>
+                  Find it cheaper
+                </button>
+              </div>
             )}
 
             {productInfo?.healthInfo?.nutriscore && (
@@ -350,6 +395,7 @@ export default function ScanPage() {
                 setProductInfo(null);
                 setBarcode('');
                 setPortionPercentage(100);
+                setPrice('');
               }}
               className={styles.scanAgainButton}
             >
