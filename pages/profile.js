@@ -48,6 +48,12 @@ export default function ProfilePage() {
             </button>
           </div>
         </div>
+        <div>
+            <p> <br></br> </p>
+        </div>
+        <div className={styles.profileSectionRecents}>
+            <p>Recently Purchased Items:</p>
+        </div>
       </main>
     </div>
   );
