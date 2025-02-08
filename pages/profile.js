@@ -38,6 +38,12 @@ export default function ProfilePage() {
             </div>
           </div>
 
+          <div className={styles.recentlyScanned}>
+            <h3>Recent Items Scanned:</h3>
+            <br></br>
+            <p>Pepsi Max 330ml</p>
+          </div>
+
           <div className={styles.profileActions}>
             <button 
               onClick={handleLogout}
@@ -47,6 +53,8 @@ export default function ProfilePage() {
               Sign Out
             </button>
           </div>
+
+          
         </div>
         <div>
             <p> <br></br> </p>
