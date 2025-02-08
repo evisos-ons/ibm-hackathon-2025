@@ -1198,10 +1198,11 @@
   border-radius: var(--radius);
   padding: 2rem;
   max-width: 600px;
+  max-height: fit-content;
   margin: 0 auto;
-  padding: 2rem;
 }
 
 .recentlyScanned p {
-  color: #6a11cb;
+  color: #8246c2;
+  font-weight: bold;
 }
