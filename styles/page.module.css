@@ -284,9 +284,9 @@
 
 @media (prefers-color-scheme: dark) {
   .input {
-    background-color: #1a1a1a;
-    border-color: #333;
-    color: white;
+    background-color: hsl(var(--input));
+    border-color: hsl(var(--border));
+    color: hsl(var(--foreground));
   }
   
   .input:focus {
@@ -385,7 +385,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 8px;
+  gap: 16px;
 }
 
 .stepTitle {
@@ -411,6 +411,7 @@
   cursor: pointer;
   transition: opacity 0.2s;
   min-width: 200px;
+  width: 100%;
 }
 
 .scanButton:hover {
@@ -985,7 +986,8 @@
 
 .priceInput {
   position: relative;
-  max-width: 200px;
+  /* max-width: 200px; */
+  width: 100%;
   margin: 0 auto 2rem;
   color: hsl(var(--foreground));
 }
@@ -1265,11 +1267,11 @@
 .formGroup input {
   width: 100%;
   padding: 0.75rem;
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  border: 1px solid hsl(var(--border));
   border-radius: 6px;
   font-size: 1rem;
-  background: rgba(255, 255, 255, 0.1);
-  color: #fff;
+  background: hsl(var(--input));
+  color: hsl(var(--foreground));
   transition: all 0.3s ease;
 }
 

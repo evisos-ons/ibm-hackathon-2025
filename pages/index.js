@@ -7,8 +7,6 @@ import Gauge from '../components/Gauge'
 import { IoArrowForward, IoSparklesOutline } from 'react-icons/io5';
 import { useRouter } from 'next/router'
 import { supabase } from '../utils/supabaseClient'
-import { useRouter } from 'next/router'
-import { supabase } from '../utils/supabaseClient'
 
 export default function ScanPage() {
   const [step, setStep] = useState(1); // 1: Scanner, 2: Confirm, 3: Portion, 4: Price, 5: Results
