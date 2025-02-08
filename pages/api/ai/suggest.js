@@ -63,7 +63,6 @@ Remember to format the response as a valid JSON object with the exact keys speci
       });
 
     } catch (error) {
-      console.log('Failed to parse JSON response:', text);
       // If JSON parsing fails, use a more robust text extraction
       suggestions = {
         recycling: text.match(/recycling["']?\s*:\s*["']([^"']*)["']/i)?.[1] || 
