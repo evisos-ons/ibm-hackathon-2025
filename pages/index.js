@@ -7,6 +7,7 @@ import Gauge from '../components/Gauge'
 import { IoArrowForward, IoSparklesOutline } from 'react-icons/io5';
 import { useRouter } from 'next/router'
 import { supabase } from '../utils/supabaseClient'
+import { saveProductScan } from '../utils/productHistory'
 
 export default function ScanPage() {
   const [step, setStep] = useState(1); // 1: Scanner, 2: Confirm, 3: Portion, 4: Price, 5: Results
@@ -23,6 +24,19 @@ export default function ScanPage() {
   const [isAlternativesLoading, setIsAlternativesLoading] = useState(false);
   const [hasEnoughInfoForAI, setHasEnoughInfoForAI] = useState(false);
   const router = useRouter()
+
+  // Add useEffect for saving scans at the top level
+  useEffect(() => {
+    const saveScan = async () => {
+      if (step === 5 && productInfo && price) {
+        const { data: { session } } = await supabase.auth.getSession();
+        if (session) {
+          await saveProductScan(session.user.id, productInfo, parseFloat(price), portionPercentage);
+        }
+      }
+    };
+    saveScan();
+  }, [step, productInfo, price, portionPercentage]);
 
   // Initialize scanner when isScanning changes
   useEffect(() => {

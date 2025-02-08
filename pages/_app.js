@@ -6,7 +6,7 @@ import { useEffect } from 'react';
 import Link from 'next/link';
 import styles from '../styles/page.module.css';
 import '../styles/globals.css';
-import { IoPersonCircleOutline, IoMoonOutline, IoSunnyOutline } from 'react-icons/io5';
+import { IoPersonCircleOutline, IoMoonOutline, IoSunnyOutline, IoScanSharp } from 'react-icons/io5';
 import { useTheme } from '../context/ThemeContext';
 
 const inter = Inter({
@@ -23,6 +23,12 @@ function Header() {
         <span style={{ fontSize: '1.2rem', fontWeight: 'bold' }}>scannr</span>
       </Link>
       <div className={styles.headerControls}>
+      <Link href="/" aria-label="Scan" className={styles.scanIcon}>
+          <IoScanSharp size={24} />
+        </Link>
+      <Link href="/profile" aria-label="Profile" className={styles.profileIcon}>
+          <IoPersonCircleOutline size={24} />
+        </Link>
         <button 
           onClick={toggleTheme} 
           className={styles.themeToggle}
@@ -30,9 +36,7 @@ function Header() {
         >
           {theme === 'dark' ? <IoSunnyOutline size={22} /> : <IoMoonOutline size={22} />}
         </button>
-        <Link href="/profile" aria-label="Profile">
-          <IoPersonCircleOutline size={24} />
-        </Link>
+
       </div>
     </header>
   );
