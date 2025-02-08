@@ -1,0 +1,53 @@
+.gauge {
+  position: relative;
+  width: 120px;
+  height: 120px;
+  margin: 0 auto;
+}
+
+.progress {
+  transform: rotate(0deg);
+}
+
+.background {
+  stroke: hsl(var(--muted));
+}
+
+:global(body.dark) .background {
+  stroke: #333;
+}
+
+.value {
+  stroke: hsl(var(--primary));
+  transition: stroke-dashoffset 0.5s ease;
+}
+
+.label {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+}
+
+.percentage {
+  display: block;
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-bottom: 0.25rem;
+  color: hsl(var(--foreground));
+}
+
+.text {
+  display: block;
+  font-size: 0.8rem;
+  color: hsl(var(--muted-foreground));
+  max-width: 100px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+:global(body.dark) .text {
+  color: #999;
+} 
