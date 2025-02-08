@@ -9,7 +9,7 @@ import { useRouter } from 'next/router'
 import { supabase } from '../utils/supabaseClient'
 
 export default function ScanPage() {
-  const [step, setStep] = useState(1); // 1: Scanner, 2: Confirm, 3: Portion, 4: Price, 5: Results
+  const [step, setStep] = useState(1); // 1: Scanner, 2: Confirm, 3: Portion, 4: Price, 5: Result
   const [barcode, setBarcode] = useState('3068320014067')
   const [isScanning, setIsScanning] = useState(false)
   const [productInfo, setProductInfo] = useState(null)
