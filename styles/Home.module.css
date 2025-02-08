@@ -22,27 +22,27 @@
 }
 
 .title span {
-  color: #0070f3;
+  color: hsl(var(--primary));
 }
 
 .subtitle {
-  color: #666;
+  color: hsl(var(--muted-foreground));
   margin-bottom: 2rem;
 }
 
 .ctaButton {
-  background: #0070f3;
-  color: white;
+  background: hsl(var(--primary));
+  color: hsl(var(--primary-foreground));
   border: none;
   padding: 1rem 2rem;
-  border-radius: 8px;
+  border-radius: var(--radius);
   font-size: 1.1rem;
   cursor: pointer;
-  transition: background 0.2s;
+  transition: opacity 0.2s;
 }
 
 .ctaButton:hover {
-  background: #0051a2;
+  opacity: 0.9;
 }
 
 .scannerStep {
@@ -62,17 +62,17 @@
 }
 
 .scanButton {
-  background: #0070f3;
-  color: white;
+  background: hsl(var(--primary));
+  color: hsl(var(--primary-foreground));
   border: none;
   padding: 0.8rem 1.5rem;
-  border-radius: 6px;
+  border-radius: var(--radius);
   cursor: pointer;
   font-size: 1rem;
 }
 
 .orDivider {
-  color: #666;
+  color: hsl(var(--muted-foreground));
 }
 
 .manualEntry {
@@ -85,17 +85,19 @@
 .input {
   flex: 1;
   padding: 0.8rem;
-  border: 1px solid #ddd;
-  border-radius: 6px;
+  border: 1px solid hsl(var(--border));
+  border-radius: var(--radius);
   font-size: 1rem;
+  background: hsl(var(--background));
+  color: hsl(var(--foreground));
 }
 
 .submitButton {
-  background: #0070f3;
-  color: white;
+  background: hsl(var(--primary));
+  color: hsl(var(--primary-foreground));
   border: none;
   padding: 0.8rem 1.5rem;
-  border-radius: 6px;
+  border-radius: var(--radius);
   cursor: pointer;
 }
 
@@ -110,16 +112,16 @@
   max-width: 100%;
   height: auto;
   aspect-ratio: 4/3;
-  border: 2px solid #ddd;
-  border-radius: 8px;
+  border: 2px solid hsl(var(--border));
+  border-radius: var(--radius);
   overflow: hidden;
-  background: #000;
+  background: hsl(var(--background));
   min-height: 400px;
   max-height: 600px;
 }
 
 .instruction {
-  color: #666;
+  color: hsl(var(--muted-foreground));
   margin-top: 1rem;
 }
 
@@ -138,7 +140,7 @@
 .scanner {
   width: 100%;
   height: 3px;
-  background: #0070f3;
+  background: hsl(var(--primary));
   position: absolute;
   animation: scan 2s infinite;
 }
@@ -156,7 +158,7 @@
 }
 
 .loadingText {
-  color: #666;
+  color: hsl(var(--muted-foreground));
 }
 
 .themeToggle {
@@ -173,17 +175,14 @@
 }
 
 .themeToggle:hover {
-  background: rgba(0, 0, 0, 0.1);
+  background: hsl(var(--muted) / 0.1);
 }
-
 
 :global(body.dark) .input {
   background: #2a2a2a;
   border-color: #444;
   color: #fff;
 }
-
-
 
 .confirmStep,
 .portionStep,
@@ -194,8 +193,9 @@
 }
 
 .productCard {
-  background: #f5f5f5;
-  border-radius: 8px;
+  background: hsl(var(--card));
+  color: hsl(var(--card-foreground));
+  border-radius: var(--radius);
   padding: 1rem;
   margin: 1rem 0;
   text-align: center;
@@ -224,10 +224,12 @@
   justify-content: space-between;
   align-items: center;
   padding: 1rem;
-  border: 1px solid #ddd;
-  border-radius: 6px;
+  border: 1px solid hsl(var(--border));
+  border-radius: var(--radius);
   cursor: pointer;
   transition: all 0.2s;
+  background: hsl(var(--card));
+  color: hsl(var(--card-foreground));
 }
 
 :global(body.dark) .portionOption {
@@ -235,8 +237,8 @@
 }
 
 .portionOption.selected {
-  border-color: #0070f3;
-  background: rgba(0, 112, 243, 0.1);
+  border-color: hsl(var(--primary));
+  background: hsl(var(--primary) / 0.1);
 }
 
 .portionOption input {
@@ -248,25 +250,20 @@
   width: 100%;
   padding: 1rem;
   border: none;
-  border-radius: 6px;
+  border-radius: var(--radius);
   cursor: pointer;
   font-size: 1rem;
   margin-top: 1rem;
 }
 
 .nextButton {
-  background: #0070f3;
-  color: white;
+  background: hsl(var(--primary));
+  color: hsl(var(--primary-foreground));
 }
 
 .backButton {
-  background: #f5f5f5;
-  color: #333;
-}
-
-:global(body.dark) .backButton {
-  background: #2a2a2a;
-  color: #fff;
+  background: hsl(var(--secondary));
+  color: hsl(var(--secondary-foreground));
 }
 
 .modalOverlay {
@@ -275,7 +272,7 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(0, 0, 0, 0.5);
+  background: hsl(var(--background) / 0.8);
   display: flex;
   align-items: flex-end;
   justify-content: center;
@@ -283,15 +280,12 @@
 }
 
 .modalContent {
-  background: white;
+  background: hsl(var(--card));
+  color: hsl(var(--card-foreground));
   width: 100%;
   max-width: 500px;
-  border-radius: 12px 12px 0 0;
+  border-radius: var(--radius) var(--radius) 0 0;
   padding: 1.5rem;
-}
-
-:global(body.dark) .modalContent {
-  background: #1a1a1a;
 }
 
 .modalActions {
@@ -303,11 +297,12 @@
 .modalAction {
   padding: 1rem;
   border: none;
-  border-radius: 6px;
-  background: #f5f5f5;
+  border-radius: var(--radius);
+  background: hsl(var(--secondary));
+  color: hsl(var(--secondary-foreground));
   cursor: pointer;
   font-size: 1rem;
-  transition: background 0.2s;
+  transition: opacity 0.2s;
 }
 
 :global(body.dark) .modalAction {
@@ -316,7 +311,7 @@
 }
 
 .modalAction:hover {
-  background: #e5e5e5;
+  opacity: 0.9;
 }
 
 :global(body.dark) .modalAction:hover {
@@ -324,8 +319,9 @@
 }
 
 .scoreCard {
-  background: #f5f5f5;
-  border-radius: 8px;
+  background: hsl(var(--card));
+  color: hsl(var(--card-foreground));
+  border-radius: var(--radius);
   padding: 1rem;
   margin: 1rem 0;
 }
@@ -339,9 +335,11 @@
 }
 
 .accordion {
-  border: 1px solid #ddd;
-  border-radius: 6px;
+  border: 1px solid hsl(var(--border));
+  border-radius: var(--radius);
   margin-bottom: 1rem;
+  background: hsl(var(--card));
+  color: hsl(var(--card-foreground));
 }
 
 :global(body.dark) .accordion {
@@ -356,7 +354,7 @@
 
 .accordionContent {
   padding: 1rem;
-  border-top: 1px solid #ddd;
+  border-top: 1px solid hsl(var(--border));
 }
 
 :global(body.dark) .accordionContent {
@@ -367,7 +365,7 @@
   display: flex;
   justify-content: space-between;
   padding: 0.5rem 0;
-  border-bottom: 1px solid #eee;
+  border-bottom: 1px solid hsl(var(--border));
 }
 
 :global(body.dark) .nutrientRow {
@@ -382,7 +380,7 @@
 
 .categoryItem {
   padding: 0.5rem 0;
-  border-bottom: 1px solid #eee;
+  border-bottom: 1px solid hsl(var(--border));
 }
 
 :global(body.dark) .categoryItem {
@@ -390,7 +388,7 @@
 }
 
 .noData {
-  color: #666;
+  color: hsl(var(--muted-foreground));
   font-style: italic;
 }
 
