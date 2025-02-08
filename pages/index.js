@@ -4,6 +4,8 @@ import { Html5QrcodeScanner } from 'html5-qrcode'
 import toast from 'react-hot-toast'
 import styles from '../styles/page.module.css'
 import Gauge from '../components/Gauge'
+import { useRouter } from 'next/router'
+import { supabase } from '../utils/supabaseClient'
 
 export default function ScanPage() {
   const [step, setStep] = useState(1); // 1: Scanner, 2: Confirm, 3: Portion, 4: Price, 5: Results
@@ -13,6 +15,7 @@ export default function ScanPage() {
   const [portionPercentage, setPortionPercentage] = useState(100)
   const [price, setPrice] = useState('')
   const [isLoading, setIsLoading] = useState(false)
+  const router = useRouter()
 
   // Initialize scanner when isScanning changes
   useEffect(() => {
@@ -100,6 +103,17 @@ export default function ScanPage() {
       }
     };
   }, [isScanning]);
+
+  useEffect(() => {
+    const checkAuth = async () => {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) {
+        router.push('/login');
+      }
+    };
+
+    checkAuth();
+  }, [router]);
 
   const fetchProductInfo = async (code) => {
     setIsLoading(true);
