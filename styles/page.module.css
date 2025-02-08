@@ -6,10 +6,14 @@
   --button-primary-hover: #383838;
   --button-secondary-hover: #f2f2f2;
 
-  min-height: calc(100vh - 64px); /* Account for bottom nav */
+  min-height: calc(100vh - 64px);
   padding: 1rem;
+  margin-top: 64px;
   background: hsl(var(--background));
   color: hsl(var(--foreground));
+  display: flex;
+  align-items: center;
+  justify-content: center;  
 }
 
 @media (prefers-color-scheme: dark) {
@@ -26,10 +30,9 @@
 }
 
 .main {
+  width: 100%;
   max-width: 800px;
-  margin: 0 auto;
   padding: 1rem;
-  padding-bottom: 80px; /* Extra padding for bottom nav */
 }
 
 .title {
@@ -179,7 +182,6 @@
   flex-shrink: 0;
 }
 
-/* Enable hover only on non-touch devices */
 @media (hover: hover) and (pointer: fine) {
   .footer a:hover {
     text-decoration: underline;
@@ -309,10 +311,18 @@
 }
 
 .header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 64px;
+  padding: 0 1rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 2rem;
+  background: hsl(var(--background));
+  border-bottom: 1px solid hsl(var(--border));
+  z-index: 100;
 }
 
 .themeToggle {
