@@ -1,5 +1,6 @@
 import { Inter } from 'next/font/google';
 import Head from 'next/head';
+import { ThemeProvider } from '../context/ThemeContext';
 import BottomNav from '../components/BottomNav';
 import '../styles/globals.css';
 
@@ -9,7 +10,7 @@ const inter = Inter({
 
 export default function App({ Component, pageProps }) {
   return (
-    <>
+    <ThemeProvider>
       <Head>
         <title>Food Scanner App</title>
         <meta name="description" content="Scan food products to understand their impact on your health and the environment" />
@@ -19,6 +20,6 @@ export default function App({ Component, pageProps }) {
         <Component {...pageProps} />
         <BottomNav />
       </div>
-    </>
+    </ThemeProvider>
   );
 } 
