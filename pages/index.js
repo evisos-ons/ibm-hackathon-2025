@@ -175,7 +175,7 @@ export default function ScanPage() {
     return 'All of it';
   };
 
-  // Add this new function to fetch suggestions
+  // Modify the fetchSuggestions function
   const fetchSuggestions = async (productData) => {
     // Check if we have enough information to make meaningful suggestions
     const hasEnoughInfo = (
@@ -198,7 +198,10 @@ export default function ScanPage() {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ productInfo: productData }),
+        body: JSON.stringify({ 
+          productInfo: productData,
+          price: price // Include the price in the request
+        }),
       });
       
       const data = await response.json();
@@ -477,11 +480,25 @@ export default function ScanPage() {
             )}
 
             {suggestions && (
-
               <div className={`${styles.sideColumn} ${styles.aiColumn}`}>
                 <h3>AI Insights</h3>
+                {price && suggestions.price && (
+                  <details 
+                    className={styles.accordion}
+                    open={openAccordion === 'price'}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      handleAccordionClick('price');
+                    }}
+                  >
+                    <summary>Price Analysis</summary>
+                    <div className={styles.accordionContent}>
+                      <p>{suggestions.price}</p>
+                    </div>
+                  </details>
+                )}
                 <details 
-                  className={styles.accordion} 
+                  className={styles.accordion}
                   open={openAccordion === 'health'}
                   onClick={(e) => {
                     e.preventDefault();

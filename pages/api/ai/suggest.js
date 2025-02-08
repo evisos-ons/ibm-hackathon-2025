@@ -10,7 +10,7 @@ export default async function handler(req, res) {
   }
 
   try {
-    const { productInfo } = req.body;
+    const { productInfo, price } = req.body;
 
     if (!productInfo) {
       return res.status(400).json({ error: 'Product information is required' });
@@ -24,7 +24,7 @@ export default async function handler(req, res) {
   "health": "Analysis of nutritional value and health implications, written in plain text",
   "alternatives": "2-3 healthier alternative products, written in plain text",
   "usage": "Best ways to use or consume this product, written in plain text",
-  "environmental": "Environmental impact analysis, written in plain text"
+  "environmental": "Environmental impact analysis, written in plain text"${price ? ',\n  "price": "Analysis of the price paid (£' + price + ') compared to typical market prices for similar products, including whether it appears to be good value"' : ''}
 }
 
 Product Information:
@@ -33,7 +33,7 @@ Product Information:
 - Nutrition Score: ${productInfo.healthInfo?.nutriscore || 'N/A'}
 - NOVA Group: ${productInfo.healthInfo?.novaGroup || 'N/A'}
 - Ingredients: ${productInfo.healthInfo?.ingredients || 'N/A'}
-- Packaging: ${productInfo.packaging?.materials || 'N/A'}
+- Packaging: ${productInfo.packaging?.materials || 'N/A'}${price ? '\n- Price Paid: £' + price : ''}
 
 Please provide detailed suggestions in each category. Keep each suggestion concise but informative.
 Do not use any markdown formatting (no **, -, #, etc.). Use simple plain text with regular punctuation.
@@ -79,7 +79,10 @@ Remember to format the response as a valid JSON object with the exact keys speci
                text.match(/Usage Tips:?(.*?)(?=Environmental Impact:|$)/s)?.[1]?.trim() || '',
         
         environmental: text.match(/environmental["']?\s*:\s*["']([^"']*)["']/i)?.[1] || 
-                      text.match(/Environmental Impact:?(.*?)$/s)?.[1]?.trim() || ''
+                      text.match(/Environmental Impact:?(.*?)(?=Price Analysis:|$)/s)?.[1]?.trim() || '',
+        
+        price: price ? (text.match(/price["']?\s*:\s*["']([^"']*)["']/i)?.[1] || 
+                text.match(/Price Analysis:?(.*?)$/s)?.[1]?.trim() || '') : undefined
       };
 
       // Clean any markdown from extracted text
