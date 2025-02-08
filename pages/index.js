@@ -308,7 +308,7 @@ export default function ScanPage() {
             {price && (
               <div className={styles.priceCard}>
                 <h3>Price Paid</h3>
-                <p className={styles.priceDisplay}>${parseFloat(price).toFixed(2)}</p>
+                <p className={styles.priceDisplay}>£{parseFloat(price).toFixed(2)}</p>
                 <button className={styles.findCheaperButton}>
                   Find it cheaper
                 </button>
