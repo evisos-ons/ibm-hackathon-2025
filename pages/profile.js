@@ -47,6 +47,10 @@ export default function ProfilePage() {
               Sign Out
             </button>
           </div>
+
+          <div className={styles.recentlyScanned}>
+
+          </div>
         </div>
       </main>
     </div>
