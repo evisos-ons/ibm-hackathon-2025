@@ -39,10 +39,11 @@ export default function ProfilePage() {
           </div>
 
           <div className={styles.recentlyScanned}>
-            <h3>Recent Items:</h3>
+            <h3>Recent Items Scanned:</h3>
+            <br></br>
             <p>Pepsi Max 330ml</p>
           </div>
-          
+
           <div className={styles.profileActions}>
             <button 
               onClick={handleLogout}
