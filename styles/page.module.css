@@ -26,8 +26,8 @@
 
     --button-primary-hover: #ccc;
     --button-secondary-hover: #1a1a1a;
-    background-color: #000;
-    color: #fff;
+    background-color: hsl(var(--background));
+    color: hsl(var(--foreground));
   }
 }
 
