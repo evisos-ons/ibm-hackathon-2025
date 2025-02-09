@@ -1,5 +1,5 @@
 .page {
-  height: calc(100vh - 72px);
+  height: calc(100dvh - 72px);
   padding: 1rem;
   box-sizing: border-box; 
   margin-top: 64px;
@@ -12,7 +12,7 @@
 
 .pageHomeScreen {
   height: 0;
-  min-height: calc(100vh - 64px);
+  min-height: calc(100dvh - 64px);
 }
 
 @media (prefers-color-scheme: dark) {
@@ -397,25 +397,42 @@
 /* Scan Page Styles */
 .scannerStep {
   text-align: center;
-  max-width: 600px;
+  width: 100%;
   margin: 0 auto;
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 16px;
+  margin-bottom: 2rem;
+}
+
+.scannerFixedContainer {
+  background: hsl(var(--background));
+  padding: 1rem;
+  box-sizing: border-box;
+  border-top: 1px solid hsl(var(--border));
+  position: fixed;
+  width: 100%;
+  left: 0;
+  right: 0;
+  bottom: 0;
 }
 
 .stepTitle {
   font-size: 1.5rem;
-  color: hsl(var(--foreground));
+font-weight: 600;
+  color: hsl(var(--primary));
+  font-family: inherit;
 }
 
 .scanOptions {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 1.5rem;
-  margin-bottom: 2rem;
+  gap: 0.5rem;
+  width: 100%;
+  max-width: 800px;
+  margin: auto;
 }
 
 .scanButton {
@@ -436,13 +453,13 @@
 }
 
 .scannerContainer {
-  margin: 2rem auto;
-  max-width: 600px;
+  margin: auto;
+  width: 100%;
 }
 
 .instruction {
   color: hsl(var(--muted-foreground));
-  margin-top: 1rem;
+  margin-bottom: 1rem;
   text-align: center;
 }
 
@@ -511,6 +528,8 @@
   transition: opacity 0.2s;
   flex: 1;
   max-width: 300px;
+  font-family: inherit;
+  font-weight: 500;
 }
 
 .saveProductButton {
@@ -527,6 +546,8 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  font-family: inherit;
+  font-weight: 500;
   gap: 0.5rem;
 }
 
@@ -1234,7 +1255,7 @@
 }
 
 .container {
-  min-height: 100vh;
+  min-height: 100dvh;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -1472,7 +1493,7 @@
 }
 
 .container {
-  min-height: 100vh;
+  min-height: 100dvh;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -1974,4 +1995,15 @@
   margin-bottom: 1.5rem;
   font-size: 1.2rem;
   color: hsl(var(--primary));
+}
+
+.undrawPhoto {
+  background: url("../public/barcode.gif") no-repeat center;
+  background-size: contain;
+  padding: 1rem;
+  box-sizing: border-box;
+  margin-bottom: 4rem;
+  width: 300px;
+  height: 300px;
+  border-radius: var(--radius);
 }

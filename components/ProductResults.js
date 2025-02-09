@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import styles from '../styles/page.module.css';
 import Gauge from './Gauge';
-import { IoSparklesOutline, IoSaveOutline } from 'react-icons/io5';
+import { IoSparklesOutline } from 'react-icons/io5';
 import { supabase } from '../utils/supabaseClient';
 import toast from 'react-hot-toast';
 import { saveAIInsight } from '../utils/aiInsights';
@@ -364,15 +364,17 @@ export default function ProductResults({
 
       <div className={styles.scanAgainButtonContainer}>
         <button onClick={onScanAgain} className={styles.scanAgainButton}>
-          Scan Another Product
+          Scan Another
         </button>
-        <button 
-          onClick={handleSaveProduct} 
-          className={styles.saveProductButton}
-          disabled={isSaving || isSaved || !userId}
-        >
-          {isSaving ? 'Saving...' : isSaved ? 'Saved!' : 'Save Product'}
-        </button>
+        {window.location.href.includes('?barcode=') ? null : (
+          <button 
+            onClick={handleSaveProduct} 
+            className={styles.saveProductButton}
+            disabled={isSaving || isSaved || !userId}
+          >
+            {isSaving ? 'Saving...' : isSaved ? 'Saved!' : 'Save Product'}
+          </button>
+        )}
       </div>
     </div>
   );
