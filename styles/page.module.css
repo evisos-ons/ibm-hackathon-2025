@@ -1839,9 +1839,13 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  flex-direction: row;
   margin-bottom: 1.5rem;
   gap: 0.5rem;
+}
+
+.insightsHeader:nth-child(1) {
+  flex-direction: column;
+  align-items: flex-start;
 }
 @media screen and (max-width: 768px) {
   .insightsHeader {
@@ -1928,14 +1932,14 @@
 }
 
 .undrawPhoto {
-  background: url('/public/undraw_photo.svg') no-repeat 50%;
-    background-size: contain;
-    padding: 1rem;
-    box-sizing: border-box;
-    margin-bottom: 4rem;
-    width: 300px;
-    height: 300px;
-    border-radius: var(--radius);
+  background: url('/barcode.gif') no-repeat center;
+  background-size: contain;
+  padding: 1rem;
+  box-sizing: border-box;
+  margin: 0 auto 4rem;
+  width: 300px;
+  height: 300px;
+  border-radius: var(--radius);
 }
 
 .trackerButtonContainer {
@@ -2076,3 +2080,172 @@
     font-weight: 600;
   }
 
+
+
+
+.insightsContainer {
+  width: 100%;
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 1rem;
+}
+
+.insightsHeader {
+  margin-bottom: 1rem;
+}
+
+.insightsHeader h2 {
+  font-size: 1.5rem;
+  color: hsl(var(--foreground));
+  margin-bottom: 1rem;
+}
+
+.insightTabs {
+  display: flex;
+  gap: 0.5rem;
+  overflow-x: auto;
+  padding-bottom: 0.5rem;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  max-width: 100%;
+}
+
+.insightTabs::-webkit-scrollbar {
+  display: none;
+}
+
+.insightTab {
+  background: none;
+  border: 1px solid hsl(var(--border));
+  padding: 0.5rem 1rem;
+  border-radius: var(--radius);
+  color: hsl(var(--muted-foreground));
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.2s ease;
+  font-size: 0.875rem;
+}
+
+.insightTab:hover {
+  background: hsl(var(--muted) / 0.1);
+}
+
+.activeTab {
+  background: hsl(var(--primary));
+  color: hsl(var(--primary-foreground));
+  border-color: hsl(var(--primary));
+}
+
+.activeTab:hover {
+  background: hsl(var(--primary));
+  opacity: 0.9;
+}
+
+.insightsList {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  max-height: 500px;
+  overflow-y: auto;
+}
+
+.insightCard {
+  background: hsl(var(--card));
+  border: 1px solid hsl(var(--border));
+  border-radius: var(--radius);
+  padding: 1rem;
+  transition: all 0.2s ease;
+}
+
+.insightCard:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 14px 0 hsl(var(--primary) / 0.1);
+}
+
+.insightProduct {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.insightImage {
+  width: 60px;
+  height: 60px;
+  object-fit: contain;
+  border-radius: var(--radius);
+  background: hsl(var(--background));
+  padding: 0.25rem;
+}
+
+.insightProductInfo h3 {
+  font-size: 1rem;
+  color: hsl(var(--foreground));
+  margin-bottom: 0.25rem;
+}
+
+.insightDate {
+  font-size: 0.875rem;
+  color: hsl(var(--muted-foreground));
+}
+
+.insightText {
+  color: hsl(var(--foreground));
+  font-size: 12px;
+  margin-bottom: 1rem;
+}
+
+.insightMeta {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: hsl(var(--primary));
+  font-size: 0.875rem;
+  margin-top:0.5rem;
+}
+
+.insightLoading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 2rem;
+  color: hsl(var(--muted-foreground));
+}
+
+.aiInsightsSection {
+  margin: 2rem 0;
+  /* padding-top: 2rem; */
+  border: 1px solid hsl(var(--border));
+  border-radius: var(--radius);
+  min-height: 500px;
+  animation: pulseAnimation 2s infinite;
+}
+
+.aiInsightsSection h2 {
+  margin-bottom: 1.5rem;
+  font-size: 1.2rem;
+  color: hsl(var(--primary));
+}
+
+
+
+.loadMoreButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  width: 100%;
+  padding: 0.75rem;
+  background: hsl(var(--secondary));
+  color: hsl(var(--secondary-foreground));
+  border: none;
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.loadMoreButton:hover {
+  background: hsl(var(--primary));
+  color: hsl(var(--primary-foreground));
+}

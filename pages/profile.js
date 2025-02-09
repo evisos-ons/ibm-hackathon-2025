@@ -7,6 +7,7 @@ import { getUserScannedProducts, getUserStats } from "../utils/productHistory";
 import { useEffect, useState } from "react";
 import UserInsights from "../components/UserInsights";
 import Link from 'next/link';
+import AIInsights from "../components/AIInsights";
 
 export default function ProfilePage() {
   const router = useRouter();
@@ -181,6 +182,12 @@ export default function ProfilePage() {
               <p className={styles.noScans}>No items scanned yet</p>
             )}
           </div>
+
+          {userId && (
+            <div className={styles.aiInsightsSection}>
+              <AIInsights userId={userId} />
+            </div>
+          )}
 
           {/* Replace AIInsights with UserInsights */}
           {userId && (
