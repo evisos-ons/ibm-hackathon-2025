@@ -3,8 +3,6 @@ import { useState, useEffect } from "react";
 import { Html5QrcodeScanner } from "html5-qrcode";
 import toast from "react-hot-toast";
 import styles from "../styles/page.module.css";
-import Gauge from "../components/Gauge";
-import { IoArrowForward, IoSparklesOutline } from "react-icons/io5";
 import { useRouter } from "next/router";
 import { supabase } from "../utils/supabaseClient";
 import { saveProductScan } from "../utils/productHistory";
@@ -24,17 +22,34 @@ export default function ScanPage() {
   const [alternatives, setAlternatives] = useState([]);
   const [isAlternativesLoading, setIsAlternativesLoading] = useState(false);
   const [hasEnoughInfoForAI, setHasEnoughInfoForAI] = useState(false);
+  const [isViewMode, setIsViewMode] = useState(false);
   const router = useRouter();
 
-  // Add useEffect for saving scans at the top level
+  // Handle barcode from URL
+  useEffect(() => {
+    const loadProductFromURL = async () => {
+      const { barcode } = router.query;
+      if (barcode && !productInfo) {
+        setBarcode(barcode);
+        setIsViewMode(true);
+        await fetchProductInfo(barcode);
+        setStep(5);
+      }
+    };
+
+    if (router.isReady) {
+      loadProductFromURL();
+    }
+  }, [router.isReady, router.query]);
+
+  // Save scan only when completing a new scan (not in view mode)
   useEffect(() => {
     const saveScan = async () => {
-      if (step === 5 && productInfo && price) {
+      if (step === 5 && productInfo && price && !isViewMode) {
         const {
           data: { session },
         } = await supabase.auth.getSession();
         if (session) {
-          console.log(productInfo);
           await saveProductScan(
             session.user.id,
             productInfo,
@@ -45,7 +60,7 @@ export default function ScanPage() {
       }
     };
     saveScan();
-  }, [step, productInfo, price, portionPercentage]);
+  }, [step, productInfo, price, portionPercentage, isViewMode]);
 
   // Initialize scanner when isScanning changes
   useEffect(() => {
@@ -146,29 +161,6 @@ export default function ScanPage() {
     checkAuth();
   }, [router]);
 
-  // Add useEffect to handle barcode from URL
-  useEffect(() => {
-    const loadProductFromURL = async () => {
-      const { barcode } = router.query;
-      if (barcode) {
-        setBarcode(barcode);
-        await fetchProductInfo(barcode);
-        // Set step to 5 only if we successfully loaded the product
-        if (productInfo) {
-          setStep(5);
-          // Set a default price if needed
-          if (!price) {
-            setPrice("0.00");
-          }
-        }
-      }
-    };
-
-    if (router.query.barcode) {
-      loadProductFromURL();
-    }
-  }, [router.query, productInfo]);
-
   const fetchProductInfo = async (code) => {
     setIsLoading(true);
     try {
@@ -177,7 +169,6 @@ export default function ScanPage() {
 
       if (data.status === "success" && data.product) {
         setProductInfo(data.product);
-        // Check if there's enough info for AI suggestions
         const hasEnoughInfo =
           data.product.healthInfo.ingredients ||
           data.product.healthInfo.nutriscore !== "unknown" ||
@@ -185,10 +176,8 @@ export default function ScanPage() {
           data.product.category.length > 0 ||
           data.product.packaging.materials;
         setHasEnoughInfoForAI(hasEnoughInfo);
-        // Fetch alternatives when product is found
         fetchAlternatives(data.product);
-        // Only move to step 2 if we're not loading from URL
-        if (!router.query.barcode) {
+        if (!isViewMode) {
           setStep(2);
         }
       } else {
@@ -467,21 +456,23 @@ export default function ScanPage() {
             alternatives={alternatives}
             isAlternativesLoading={isAlternativesLoading}
             onFetchSuggestions={() => fetchSuggestions(productInfo)}
-            onScanAgain={() => {
-              setStep(1);
-              setProductInfo(null);
-              setBarcode('');
-              setPortionPercentage(100);
-              setPrice('');
-              setSuggestions(null);
-              setOpenAccordion('');
-              setAlternatives([]);
-              // Clear the barcode from URL
-              router.replace('/scan', undefined, { shallow: true });
-            }}
+            onScanAgain={handleScanAgain}
           />
         );
     }
+  };
+
+  const handleScanAgain = () => {
+    setStep(1);
+    setProductInfo(null);
+    setBarcode('');
+    setPortionPercentage(100);
+    setPrice('');
+    setSuggestions(null);
+    setOpenAccordion('');
+    setAlternatives([]);
+    setIsViewMode(false);
+    router.replace('/scan', undefined, { shallow: true });
   };
 
   return (

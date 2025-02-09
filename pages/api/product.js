@@ -25,6 +25,7 @@ export default async function handler(req, res) {
     const productInfo = {
       status: "success",
       product: {
+        barcode: barcode,
         productName:
           product.product_name || product.generic_name || "Unknown Product",
         brands: product.brands || "",

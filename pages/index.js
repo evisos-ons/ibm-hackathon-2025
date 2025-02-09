@@ -34,7 +34,7 @@ export default function HomePage() {
   };
 
   return (
-    <div className={styles.page}>
+    <div className={`${styles.page} ${styles.pageHomeScreen}`}>
       <main className={styles.main}>
         <div className={styles.hero}>
           <h1 className={styles.title}>

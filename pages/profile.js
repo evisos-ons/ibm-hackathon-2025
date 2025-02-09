@@ -5,6 +5,7 @@ import { IoPersonCircle, IoLogOutOutline } from "react-icons/io5";
 import { supabase } from "../utils/supabaseClient";
 import { getUserScannedProducts, getUserStats } from "../utils/productHistory";
 import { useEffect, useState } from "react";
+import AIInsights from "../components/AIInsights";
 
 export default function ProfilePage() {
   const router = useRouter();
@@ -164,6 +165,13 @@ export default function ProfilePage() {
               <p className={styles.noScans}>No items scanned yet</p>
             )}
           </div>
+
+          {/* Add AI Insights section */}
+          {userId && (
+            <div className={styles.aiInsightsSection}>
+              <AIInsights userId={userId} />
+            </div>
+          )}
         </div>
       </main>
     </div>
