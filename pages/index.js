@@ -3,6 +3,7 @@ import { supabase } from "../utils/supabaseClient";
 import styles from "../styles/page.module.css";
 import { useRouter } from "next/router";
 import { IoScanSharp, IoLeafOutline, IoWalletOutline, IoTrendingUpOutline } from "react-icons/io5";
+import Link from 'next/link';
 
 export default function HomePage() {
   const [session, setSession] = useState(null);

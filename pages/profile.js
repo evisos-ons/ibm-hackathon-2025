@@ -5,6 +5,7 @@ import { IoPersonCircle, IoLogOutOutline } from "react-icons/io5";
 import { supabase } from "../utils/supabaseClient";
 import { getUserScannedProducts, getUserStats } from "../utils/productHistory";
 import { useEffect, useState } from "react";
+import Link from 'next/link';
 
 export default function ProfilePage() {
   const router = useRouter();
@@ -17,6 +18,7 @@ export default function ProfilePage() {
     totalSpent: 0
   });
   const [isLoading, setIsLoading] = useState(true);
+  const [profile, setProfile] = useState(null);
 
   useEffect(() => {
     const getUser = async () => {
@@ -60,6 +62,15 @@ export default function ProfilePage() {
 
     getUser();
   }, [router]);
+
+  useEffect(() => {
+    const fetchProfile = async () => {
+      const { data: { user } } = await supabase.auth.getUser();
+      setProfile(user);
+    };
+
+    fetchProfile();
+  }, []);
 
   const handleLogout = async () => {
     try {
@@ -163,6 +174,14 @@ export default function ProfilePage() {
             ) : (
               <p className={styles.noScans}>No items scanned yet</p>
             )}
+          </div>
+
+          <div className={styles.profileSection}>
+            <Link href="/expenditure-tracker">
+              <button className={styles.profileButton}>
+                Expenditure Tracker
+              </button>
+            </Link>
           </div>
         </div>
       </main>

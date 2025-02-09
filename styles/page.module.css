@@ -1204,13 +1204,11 @@
 }
 
 .container {
-  min-height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  max-width: 1200px;
+  margin: 0 auto;
   padding: 2rem;
-  box-sizing: border-box;
-  position: relative;
+  margin-top: 80px;
+  min-height: calc(100vh - 160px);
 }
 
 /* Star background animation */
@@ -1759,4 +1757,76 @@
     grid-template-columns: 1fr;
     padding: 1rem;
   }
+}
+
+.container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+.profileButton {
+  margin: 0.5rem 0;
+  padding: 0.5rem 1rem;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.profileButton:hover {
+  background-color: #45a049;
+}
+
+.chart-container {
+  width: 100%;
+  height: 60vh;
+  min-height: 400px;
+  position: relative;
+  margin: 2rem 0;
+}
+
+.error-message {
+  color: #dc3545;
+  background: #f8d7da;
+  padding: 1.5rem;
+  border-radius: 8px;
+  margin: 2rem 0;
+  text-align: center;
+}
+
+.error-message button {
+  background-color: #dc3545;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  margin-top: 1rem;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.error-message button:hover {
+  background-color: #c82333;
+}
+
+.loading-message {
+  text-align: center;
+  padding: 2rem;
+  color: #6c757d;
+}
+
+.no-data-message {
+  text-align: center;
+  padding: 2rem;
+  color: #6c757d;
+  background: #f8f9fa;
+  border-radius: 8px;
+  margin: 2rem 0;
+}
+
+.chartCanvas {
+  max-width: 100%;
+  height: auto !important;
 }
