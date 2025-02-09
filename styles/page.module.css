@@ -1,11 +1,4 @@
 .page {
-  --gray-rgb: 0, 0, 0;
-  --gray-alpha-200: rgba(var(--gray-rgb), 0.08);
-  --gray-alpha-100: rgba(var(--gray-rgb), 0.05);
-
-  --button-primary-hover: #383838;
-  --button-secondary-hover: #f2f2f2;
-
   height: calc(100vh - 64px);
   padding: 1rem;
   box-sizing: border-box; 
@@ -61,23 +54,40 @@
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
   gap: 2rem;
-  margin-top: 3rem;
+  padding: 2rem;
+  box-sizing: border-box;
+  margin: 0 auto;
+  width: 100%;
 }
 
 .feature {
-  padding: 1.5rem;
-  border-radius: var(--radius);
   background: hsl(var(--card));
+  padding: 1rem;
+  border-radius: var(--radius);
   border: 1px solid hsl(var(--border));
+  text-align: center;
+  transition: all 0.2s ease;
+}
+
+.feature:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 4px 14px 0 hsl(var(--primary) / 0.1);
+}
+
+.feature svg {
+  color: hsl(var(--primary));
+  margin-bottom: 1rem;
 }
 
 .feature h2 {
-  color: hsl(var(--primary));
-  margin-bottom: 0.5rem;
+  font-size: 1.25rem;
+  margin-bottom: 1rem;
+  color: hsl(var(--foreground));
 }
 
 .feature p {
   color: hsl(var(--muted-foreground));
+  line-height: 1.6;
 }
 
 .scanner {
@@ -202,6 +212,7 @@
 
   .features {
     grid-template-columns: 1fr;
+    padding: 1rem;
   }
 }
 
@@ -1236,9 +1247,8 @@
   border: 1px solid hsl(var(--border));
   border-radius: var(--radius);
   padding: 1rem;
-  max-width: 600px;
+  width: 100%;
   max-height: fit-content;
-  margin: 0 auto;
 }
 
 .recentlyScanned h3 {
@@ -1684,4 +1694,69 @@
   justify-content: center;
   gap: 0.5rem;
   color: hsl(var(--primary));
+}
+
+.hero {
+  text-align: center;
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 1rem 1rem;
+}
+
+.hero .title {
+  font-size: 3.5rem;
+  font-weight: 900;
+  line-height: 1.2;
+  margin-bottom: 1.5rem;
+  background: linear-gradient(to right, hsl(var(--foreground)), hsl(var(--primary)));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.hero .title span {
+  color: hsl(var(--primary));
+  -webkit-text-fill-color: hsl(var(--primary));
+}
+
+.hero .subtitle {
+  font-size: 1.15rem;
+  color: hsl(var(--muted-foreground));
+  margin-bottom: 2.5rem;
+}
+
+.heroButton {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  background: hsl(var(--primary));
+  color: hsl(var(--primary-foreground));
+  border: none;
+  padding: 1rem 2rem;
+  border-radius: var(--radius);
+  font-size: 1.1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 14px 0 hsl(var(--primary) / 0.3);
+}
+
+.heroButton:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px 0 hsl(var(--primary) / 0.4);
+}
+
+@media (max-width: 768px) {
+  .hero .title {
+    font-size: 2.5rem;
+  }
+
+  .hero .subtitle {
+    font-size: 1.1rem;
+  }
+
+  .features {
+    grid-template-columns: 1fr;
+    padding: 1rem;
+  }
 }

@@ -2,7 +2,7 @@ import { Inter } from "next/font/google";
 import Head from "next/head";
 import { ThemeProvider } from "../context/ThemeContext";
 import { useRouter } from "next/router";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import styles from "../styles/page.module.css";
 import "../styles/globals.css";
@@ -14,6 +14,7 @@ import {
 } from "react-icons/io5";
 import { useTheme } from "../context/ThemeContext";
 import { Toaster } from "react-hot-toast";
+import { supabase } from "../utils/supabaseClient";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -31,7 +32,7 @@ function Header() {
         </span>
       </Link>
       <div className={styles.headerControls}>
-        <Link href="/" aria-label="Scan" className={styles.scanIcon}>
+        <Link href="/scan" aria-label="Scan" className={styles.scanIcon}>
           <IoScanSharp size={24} />
         </Link>
         <Link
@@ -59,14 +60,25 @@ function Header() {
 
 export default function App({ Component, pageProps }) {
   const router = useRouter();
+  const [session, setSession] = useState(null);
 
-  // Basic auth check - replace with your actual auth logic
   useEffect(() => {
-    // const isAuthenticated = localStorage.getItem('isAuthenticated');
-    // if (!isAuthenticated && router.pathname !== '/login') {
-    //   router.push('/login');
-    // }
-  }, [router.pathname]);
+    const checkSession = async () => {
+      const { data: { session } } = await supabase.auth.getSession();
+      setSession(session);
+    };
+
+    checkSession();
+
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      setSession(session);
+    });
+
+    return () => subscription?.unsubscribe();
+  }, []);
+
+  // Only show header if user is logged in and not on login page or homepage
+  const showHeader = session && router.pathname !== "/login" && router.pathname !== "/";
 
   return (
     <ThemeProvider>
@@ -79,7 +91,7 @@ export default function App({ Component, pageProps }) {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
       <div className={inter.className}>
-        {router.pathname !== "/login" && <Header />}
+        {showHeader && <Header />}
         <Component {...pageProps} />
       </div>
       <Toaster

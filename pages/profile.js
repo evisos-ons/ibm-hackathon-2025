@@ -75,7 +75,7 @@ export default function ProfilePage() {
   };
 
   const handleScanClick = (barcode) => {
-    router.push(`/?barcode=${barcode}`);
+    router.push(`/scan?barcode=${barcode}`);
   };
 
   if (isLoading) {

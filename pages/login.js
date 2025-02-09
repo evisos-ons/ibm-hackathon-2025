@@ -21,7 +21,7 @@ export default function AuthPage() {
         data: { user },
       } = await supabase.auth.getUser();
       if (user) {
-        router.push("/");
+        router.push("/scan");
       }
     };
 
@@ -50,7 +50,7 @@ export default function AuthPage() {
         });
         if (error) throw error;
         setSuccess("Logged in successfully!");
-        router.push("/");
+        router.push("/scan");
       } else {
         const { error } = await supabase.auth.signUp({
           email,
