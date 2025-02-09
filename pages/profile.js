@@ -1,11 +1,12 @@
 import { useRouter } from "next/router";
 import styles from "../styles/page.module.css";
 import toast from "react-hot-toast";
-import { IoPersonCircle, IoLogOutOutline } from "react-icons/io5";
+import { IoPersonCircle, IoLogOutOutline, IoCompass } from "react-icons/io5";
 import { supabase } from "../utils/supabaseClient";
 import { getUserScannedProducts, getUserStats } from "../utils/productHistory";
 import { useEffect, useState } from "react";
 import AIInsights from "../components/AIInsights";
+import Link from 'next/link';
 
 export default function ProfilePage() {
   const router = useRouter();
@@ -18,6 +19,7 @@ export default function ProfilePage() {
     totalSpent: 0
   });
   const [isLoading, setIsLoading] = useState(true);
+  const [profile, setProfile] = useState(null);
 
   useEffect(() => {
     const getUser = async () => {
@@ -39,7 +41,7 @@ export default function ProfilePage() {
       setUserEmail(session.user.email);
       setUserId(session.user.id);
 
-      // Fetch user's scan history and stats
+    
       const [scanHistory, stats] = await Promise.all([
         getUserScannedProducts(session.user.id, 5),
         getUserStats(session.user.id),
@@ -61,6 +63,15 @@ export default function ProfilePage() {
 
     getUser();
   }, [router]);
+
+  useEffect(() => {
+    const fetchProfile = async () => {
+      const { data: { user } } = await supabase.auth.getUser();
+      setProfile(user);
+    };
+
+    fetchProfile();
+  }, []);
 
   const handleLogout = async () => {
     try {
@@ -109,9 +120,9 @@ export default function ProfilePage() {
             </div>
           </div>
 
-          <div className={styles.profileStats}>
+          <div className={styles.statsSection}>
             <div className={styles.statCard}>
-              <h3>Products Scanned</h3>
+              <h3>Total Scans</h3>
               <p>{userStats.totalScans}</p>
             </div>
             <div className={styles.statCard}>
@@ -122,6 +133,12 @@ export default function ProfilePage() {
               <h3>Total Spent</h3>
               <p>£{userStats.totalSpent.toFixed(2)}</p>
             </div>
+          </div>
+          <div className={styles.trackerButtonContainer}>   
+            <Link href="/tracker" className={styles.trackerButton}>
+                <IoCompass size={24} />
+                View Tracker
+            </Link>
           </div>
 
           <div className={styles.recentlyScanned}>

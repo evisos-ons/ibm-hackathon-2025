@@ -20,7 +20,7 @@ const inter = Inter({
   subsets: ["latin"],
 });
 
-// Separate Header component
+
 function Header() {
   const { theme, toggleTheme } = useTheme();
 
@@ -77,7 +77,7 @@ export default function App({ Component, pageProps }) {
     return () => subscription?.unsubscribe();
   }, []);
 
-  // Only show header if user is logged in and not on login page or homepage
+
   const showHeader = session && router.pathname !== "/login" && router.pathname !== "/";
 
   return (
