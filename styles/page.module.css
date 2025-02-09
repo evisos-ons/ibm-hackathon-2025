@@ -1333,7 +1333,6 @@
 .alternativesSection {
   width: 100%;
   padding: 1rem;
-  padding-bottom: 10rem;
   background: var(--card-background);
   border-radius: 12px;
   box-shadow: var(--card-shadow);
@@ -1926,6 +1925,17 @@
 
 .spinning {
   animation: spin 1s linear infinite;
+}
+
+.undrawPhoto {
+  background: url('/public/undraw_photo.svg') no-repeat 50%;
+    background-size: contain;
+    padding: 1rem;
+    box-sizing: border-box;
+    margin-bottom: 4rem;
+    width: 300px;
+    height: 300px;
+    border-radius: var(--radius);
 }
 
 .trackerButtonContainer {
