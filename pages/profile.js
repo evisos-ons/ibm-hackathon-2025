@@ -41,7 +41,7 @@ export default function ProfilePage() {
       setUserEmail(session.user.email);
       setUserId(session.user.id);
 
-      // Fetch user's scan history and stats
+    
       const [scanHistory, stats] = await Promise.all([
         getUserScannedProducts(session.user.id, 5),
         getUserStats(session.user.id),
@@ -120,9 +120,9 @@ export default function ProfilePage() {
             </div>
           </div>
 
-          <div className={styles.profileStats}>
+          <div className={styles.statsSection}>
             <div className={styles.statCard}>
-              <h3>Products Scanned</h3>
+              <h3>Total Scans</h3>
               <p>{userStats.totalScans}</p>
             </div>
             <div className={styles.statCard}>
@@ -133,6 +133,12 @@ export default function ProfilePage() {
               <h3>Total Spent</h3>
               <p>£{userStats.totalSpent.toFixed(2)}</p>
             </div>
+            <Link href="/expenditure-tracker" className={styles.statCard}>
+              <div className={styles.expenditureButton}>
+                <h3>Expenditure</h3>
+                <p>View Tracker</p>
+              </div>
+            </Link>
           </div>
 
           <div className={styles.recentlyScanned}>
@@ -183,14 +189,6 @@ export default function ProfilePage() {
               <AIInsights userId={userId} />
             </div>
           )}
-
-          <div className={styles.profileSection}>
-            <Link href="/expenditure-tracker">
-              <button className={styles.profileButton}>
-                Expenditure Tracker
-              </button>
-            </Link>
-          </div>
         </div>
       </main>
     </div>

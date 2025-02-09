@@ -1,6 +1,6 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { createClient } from '@supabase/supabase-js';
-import Chart from 'chart.js/auto';
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import styles from '../styles/page.module.css';
 
 const supabase = createClient(
@@ -8,51 +8,43 @@ const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
 );
 
+const formatTimestamp = (timestamp) => {
+  const date = new Date(timestamp);
+  return date.toLocaleString('en-GB', {
+    day: 'numeric',
+    month: 'short',
+    year: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit'
+  });
+};
+
 export default function ExpenditureTracker() {
-  const chartRef = useRef(null);
-  const [chartInstance, setChartInstance] = useState(null);
-  const [data, setData] = useState([]);
+  const [dailyData, setDailyData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [isMounted, setIsMounted] = useState(false);
+  const [stats, setStats] = useState({
+    totalSpent: 0,
+    averageDaily: 0,
+    highestDay: { date: '', amount: 0 },
+    lowestDay: { date: '', amount: 0 }
+  });
 
   useEffect(() => {
-    setIsMounted(true);
-    return () => setIsMounted(false);
+    fetchExpenditureData();
   }, []);
-
-  useEffect(() => {
-    if (isMounted) {
-      fetchExpenditureData();
-    }
-  }, [isMounted]);
 
   const fetchExpenditureData = async () => {
     try {
-      // First, check if there's any data in the table
-      const { count, error: countError } = await supabase
-        .from('product_history')
-        .select('*', { count: 'exact', head: true });
-
-      if (countError) throw countError;
-
-      if (count === 0) {
-        setLoading(false);
-        setData([]);
-        return;
-      }
-
-      // If there is data, fetch it with the timestamp column
       const { data: productHistory, error: fetchError } = await supabase
         .from('product_history')
         .select('*');
 
       if (fetchError) throw fetchError;
 
-      // Process data for monthly breakdown
-      const monthlyData = processMonthlyData(productHistory);
-      setData(monthlyData);
-      renderChart(monthlyData);
+      const daily = processDailyData(productHistory);
+      setDailyData(daily);
+      calculateStats(daily);
       setLoading(false);
     } catch (error) {
       console.error('Error:', error);
@@ -61,123 +53,78 @@ export default function ExpenditureTracker() {
     }
   };
 
-  const processMonthlyData = (data) => {
-    const monthlyTotals = {};
+  const processDailyData = (data) => {
+    const hourlyTotals = {};
 
     data.forEach(item => {
-      // Use the known timestamp field name
-      const dateField = 'scanned_at';
+      const date = new Date(item.scanned_at);
+      if (isNaN(date.getTime())) return;
       
-      if (!item[dateField]) {
-        console.warn('No date field found in item:', item);
-        return;
-      }
 
-      const date = new Date(item[dateField]);
-      if (isNaN(date.getTime())) {
-        console.warn('Invalid date:', item[dateField]);
-        return;
+      const hour = new Date(date);
+      hour.setMinutes(0, 0, 0);
+      const hourString = hour.toISOString();
+      
+      if (!hourlyTotals[hourString]) {
+        hourlyTotals[hourString] = {
+          total: 0,
+          products: []
+        };
       }
       
-      const monthYear = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}`;
-      
-      if (!monthlyTotals[monthYear]) {
-        monthlyTotals[monthYear] = 0;
-      }
-      
-      monthlyTotals[monthYear] += item.price || 0; // Changed from cost to price
+      hourlyTotals[hourString].total += item.price || 0;
+      hourlyTotals[hourString].products.push({
+        name: item.product_name,
+        price: item.price,
+        timestamp: date.toISOString()
+      });
     });
 
-    return Object.entries(monthlyTotals).map(([month, total]) => ({
-      month,
-      total: parseFloat(total.toFixed(2))
-    }));
+
+    const allHours = [];
+    if (Object.keys(hourlyTotals).length > 0) {
+      const firstHour = new Date(Object.keys(hourlyTotals)[0]);
+      const lastHour = new Date(Object.keys(hourlyTotals)[Object.keys(hourlyTotals).length - 1]);
+      
+      for (let d = new Date(firstHour); d <= lastHour; d.setHours(d.getHours() + 1)) {
+        const hourString = d.toISOString();
+        allHours.push({
+          timestamp: hourString,
+          total: hourlyTotals[hourString]?.total || 0,
+          products: hourlyTotals[hourString]?.products || []
+        });
+      }
+    }
+
+    return allHours;
   };
 
-  const renderChart = (data) => {
-    try {
-      // Ensure the canvas element exists and is mounted
-      if (!chartRef.current || !isMounted) {
-        console.error('Canvas element not ready');
-        setError('Chart element not ready. Please try again.');
-        return;
+  const calculateStats = (daily) => {
+    if (daily.length === 0) return;
+
+    const total = daily.reduce((sum, day) => sum + day.total, 0);
+    const averageDaily = total / daily.length;
+    const highestDay = daily.reduce((max, day) => day.total > max.total ? day : max, daily[0]);
+    const lowestDay = daily.reduce((min, day) => day.total < min.total ? day : min, daily[0]);
+
+    setStats({
+      totalSpent: total.toFixed(2),
+      averageDaily: averageDaily.toFixed(2),
+      highestDay: {
+        date: formatTimestamp(highestDay.timestamp),
+        amount: highestDay.total.toFixed(2)
+      },
+      lowestDay: {
+        date: formatTimestamp(lowestDay.timestamp),
+        amount: lowestDay.total.toFixed(2)
       }
-
-      // Check if we have valid data
-      if (!data || data.length === 0) {
-        console.warn('No data to render chart');
-        setError('No data available to display');
-        return;
-      }
-
-      const ctx = chartRef.current.getContext('2d');
-      
-      // Destroy existing chart instance if it exists
-      if (chartInstance) {
-        chartInstance.destroy();
-      }
-
-      // Prepare chart data
-      const labels = data.map(item => {
-        const [year, month] = item.month.split('-');
-        return new Date(year, month - 1).toLocaleString('default', { month: 'long', year: 'numeric' });
-      });
-
-      const totals = data.map(item => item.total);
-
-      // Create new chart instance
-      const newChartInstance = new Chart(ctx, {
-        type: 'bar',
-        data: {
-          labels: labels,
-          datasets: [{
-            label: 'Monthly Expenditure',
-            data: totals,
-            backgroundColor: 'rgba(75, 192, 192, 0.2)',
-            borderColor: 'rgba(75, 192, 192, 1)',
-            borderWidth: 1
-          }]
-        },
-        options: {
-          responsive: true,
-          maintainAspectRatio: false,
-          scales: {
-            y: {
-              beginAtZero: true,
-              title: {
-                display: true,
-                text: 'Amount (£)'
-              }
-            },
-            x: {
-              title: {
-                display: true,
-                text: 'Month'
-              }
-            }
-          },
-          plugins: {
-            tooltip: {
-              callbacks: {
-                label: (context) => {
-                  return `£${context.raw.toFixed(2)}`;
-                }
-              }
-            }
-          }
-        }
-      });
-
-      setChartInstance(newChartInstance);
-    } catch (error) {
-      console.error('Chart rendering error:', error);
-      setError('Failed to render chart. Please try again.');
-    }
+    });
   };
 
   return (
-    <div className={styles.container}>
-      <h1>Monthly Expenditure Breakdown</h1>
+    <div className={styles.expenditurePage}>
+      <h1>Expenditure Tracker</h1>
+      
       {error ? (
         <div className={styles.errorMessage}>
           <p>{error}</p>
@@ -196,14 +143,60 @@ export default function ExpenditureTracker() {
         <div className={styles.loadingMessage}>
           <p>Loading data...</p>
         </div>
-      ) : data.length > 0 ? (
-        <div className={styles.chartContainer}>
-          <canvas 
-            ref={chartRef} 
-            className={styles.chartCanvas}
-            style={{ display: 'block' }}
-          ></canvas>
-        </div>
+      ) : dailyData.length > 0 ? (
+        <>
+          <div className={styles.statsGrid}>
+            <div className={styles.statCard}>
+              <h3>Total Spent</h3>
+              <p>£{stats.totalSpent}</p>
+            </div>
+            <div className={styles.statCard}>
+              <h3>Average Daily</h3>
+              <p>£{stats.averageDaily}</p>
+            </div>
+            <div className={styles.statCard}>
+              <h3>Highest Day</h3>
+              <p>{stats.highestDay.date}: £{stats.highestDay.amount}</p>
+            </div>
+            <div className={styles.statCard}>
+              <h3>Lowest Day</h3>
+              <p>{stats.lowestDay.date}: £{stats.lowestDay.amount}</p>
+            </div>
+          </div>
+
+          <div className={styles.chartContainer}>
+            <h2>Daily Expenditure Breakdown</h2>
+            <ResponsiveContainer width="100%" height={400}>
+              <LineChart
+                data={dailyData}
+                margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
+              >
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis 
+                  dataKey="timestamp" 
+                  tickFormatter={formatTimestamp}
+                  interval={Math.floor(dailyData.length / 24)}
+                />
+                <YAxis 
+                  tickFormatter={(value) => `£${value}`}
+                />
+                <Tooltip 
+                  content={<CustomTooltip />}
+                />
+                <Legend />
+                <Line 
+                  type="monotone" 
+                  dataKey="total" 
+                  stroke="#4CAF50" 
+                  strokeWidth={2}
+                  activeDot={{ r: 6 }}
+                  name="Expenditure"
+                  connectNulls={true}
+                />
+              </LineChart>
+            </ResponsiveContainer>
+          </div>
+        </>
       ) : (
         <div className={styles.noDataMessage}>
           <p>No expenditure data available. Start scanning products to track your expenses!</p>
@@ -211,4 +204,28 @@ export default function ExpenditureTracker() {
       )}
     </div>
   );
-} 
+}
+
+const CustomTooltip = ({ active, payload, label }) => {
+  if (active && payload && payload.length) {
+    const data = payload[0].payload;
+    return (
+      <div className={styles.customTooltip}>
+        <h3>{formatTimestamp(label)}</h3>
+        <p>Total: £{data.total.toFixed(2)}</p>
+        {data.products.length > 0 && (
+          <div className={styles.productList}>
+            <h4>Products Scanned:</h4>
+            {data.products.map((product, index) => (
+              <div key={index} className={styles.productItem}>
+                <p>{product.name}</p>
+                <p>£{product.price.toFixed(2)}</p>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+    );
+  }
+  return null;
+}; 
