@@ -1903,3 +1903,38 @@ font-weight: 600;
 .spinning {
   animation: spin 1s linear infinite;
 }
+
+
+.trackerButtonContainer {
+  width: 100%;
+  box-sizing: border-box;
+}
+.trackerButton {
+  width: 100%;
+  padding: 1rem;
+  box-sizing: border-box;
+  background-color: hsl(var(--primary) /.8);
+  color: hsl(var(--primary-foreground));
+  border-radius: var(--radius);
+  text-align: center;
+  margin-top: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: inherit;
+  font-weight: 600;
+  gap: 1rem;
+  transition: background-color 0.2s ease;
+}
+
+.trackerButton:hover {
+  background-color: hsl(var(--primary) /.5);
+}
+
+.statsSection {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr); /* Two columns */
+  grid-template-rows: repeat(2, auto); /* Two rows */
+  gap: 1.5rem;
+  margin: 2rem 0;
+}
