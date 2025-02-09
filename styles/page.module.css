@@ -2303,3 +2303,109 @@ font-weight: 600;
 .trackerButton:hover {
   background-color: hsl(var(--primary) /.5);
 }
+
+/* Add these new styles */
+.financialGoals {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+  margin-bottom: 2rem;
+}
+
+.budgetSection, .savingsSection {
+  background: var(--background-light);
+  padding: 1.5rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.progressBar {
+  height: 10px;
+  background-color: #e0e0e0;
+  border-radius: 5px;
+  margin: 1rem 0;
+  overflow: hidden;
+}
+
+.progressFill {
+  height: 100%;
+  background-color: hsl(var(--primary));
+  transition: width 0.3s ease;
+}
+
+.budgetForm, .savingsForm {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 1rem;
+}
+
+.budgetForm input, .savingsForm input {
+  flex: 1;
+  padding: 0.5rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.budgetForm button, .savingsForm button {
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+/* Add status-based colors */
+.budgetSection.exceeded,
+.savingsSection.exceeded {
+  border-left: 4px solid hsl(var(--destructive));
+}
+
+.budgetSection.warning,
+.savingsSection.warning {
+  border-left: 4px solid hsl(var(--warning));
+}
+
+.budgetSection.good,
+.savingsSection.good {
+  border-left: 4px solid hsl(var(--success));
+}
+
+.budgetSection.neutral,
+.savingsSection.neutral {
+  border-left: 4px solid hsl(var(--muted));
+}
+
+.warningMessage {
+  color: hsl(var(--warning));
+  font-size: 0.9rem;
+  margin: 0.5rem 0;
+}
+
+/* Improve form styles */
+.budgetForm input:disabled,
+.savingsForm input:disabled {
+  background-color: hsl(var(--muted) / 0.1);
+  cursor: not-allowed;
+}
+
+.budgetForm button:disabled,
+.savingsForm button:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+/* Add loading spinner */
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.loadingSpinner {
+  display: inline-block;
+  width: 1rem;
+  height: 1rem;
+  border: 2px solid hsl(var(--primary));
+  border-top-color: transparent;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-left: 0.5rem;
+}
