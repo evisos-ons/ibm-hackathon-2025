@@ -1,10 +1,11 @@
 import { useState, useEffect } from 'react';
 import styles from '../styles/page.module.css';
 import Gauge from './Gauge';
-import { IoSparklesOutline } from 'react-icons/io5';
+import { IoSparklesOutline, IoSaveOutline } from 'react-icons/io5';
 import { supabase } from '../utils/supabaseClient';
 import toast from 'react-hot-toast';
 import { saveAIInsight } from '../utils/aiInsights';
+import { saveProductScan } from '../utils/productHistory';
 
 export default function ProductResults({ 
   productInfo, 
@@ -19,6 +20,8 @@ export default function ProductResults({
 }) {
   const [openAccordion, setOpenAccordion] = useState('');
   const [userId, setUserId] = useState(null);
+  const [isSaving, setIsSaving] = useState(false);
+  const [isSaved, setIsSaved] = useState(false);
 
   useEffect(() => {
     const getUser = async () => {
@@ -32,14 +35,14 @@ export default function ProductResults({
 
   useEffect(() => {
     const saveInsights = async () => {
-      if (suggestions && userId && productInfo) {
+      if (suggestions && userId && productInfo && isSaved) {
         try {
           // Save each type of insight
           const insightTypes = ['health', 'price', 'alternatives', 'usage', 'environmental', 'recycling'];
           
           for (const type of insightTypes) {
             if (suggestions[type]) {
-              const { error } = await saveAIInsight(
+              await saveAIInsight(
                 userId,
                 productInfo.barcode,
                 type,
@@ -47,10 +50,6 @@ export default function ProductResults({
                 productInfo.productName,
                 productInfo.image
               );
-
-              if (error) {
-                throw error;
-              }
             }
           }
         } catch (error) {
@@ -61,10 +60,25 @@ export default function ProductResults({
     };
 
     saveInsights();
-  }, [suggestions, userId, productInfo]);
+  }, [suggestions, userId, productInfo, isSaved]);
 
   const handleAccordionClick = (accordionId) => {
     setOpenAccordion(openAccordion === accordionId ? '' : accordionId);
+  };
+
+  const handleSaveProduct = async () => {
+    if (!userId || !productInfo || !price || isSaved) return;
+    
+    setIsSaving(true);
+    try {
+      await saveProductScan(userId, productInfo, parseFloat(price), 100);
+      setIsSaved(true);
+    } catch (error) {
+      console.error('Error saving product:', error);
+      toast.error('Failed to save product');
+    } finally {
+      setIsSaving(false);
+    }
   };
 
   if (!productInfo) {
@@ -352,6 +366,13 @@ export default function ProductResults({
         <button onClick={onScanAgain} className={styles.scanAgainButton}>
           Scan Another Product
         </button>
+        <button 
+          onClick={handleSaveProduct} 
+          className={styles.saveProductButton}
+          disabled={isSaving || isSaved || !userId}
+        >
+          {isSaving ? 'Saving...' : isSaved ? 'Saved!' : 'Save Product'}
+        </button>
       </div>
     </div>
   );
@@ -381,4 +402,4 @@ function getScoreLabel(score) {
   };
 
   return labels[score.toUpperCase()] || 'Nutritional value unknown';
-} 
+}

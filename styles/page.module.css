@@ -493,12 +493,27 @@
   padding: 1rem;
   box-sizing: border-box; 
   background-color: hsl(var(--background));
+  border-top: 1px solid hsl(var(--border));
   display: flex;
   justify-content: center;
   align-items: center;
+  gap: 1rem;
 }
 
 .scanAgainButton {
+  background: hsl(var(--secondary));
+  color: hsl(var(--secondary-foreground));
+  border: none;
+  padding: 0.8rem 1.5rem;
+  border-radius: var(--radius);
+  font-size: 1rem;
+  cursor: pointer;
+  transition: opacity 0.2s;
+  flex: 1;
+  max-width: 300px;
+}
+
+.saveProductButton {
   background: hsl(var(--primary));
   color: hsl(var(--primary-foreground));
   border: none;
@@ -507,10 +522,20 @@
   font-size: 1rem;
   cursor: pointer;
   transition: opacity 0.2s;
-  width: 100%;
-  max-width: 500px;
+  flex: 1;
+  max-width: 300px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
 }
 
+.saveProductButton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.saveProductButton:hover:not(:disabled),
 .scanAgainButton:hover {
   opacity: 0.9;
 }
@@ -819,6 +844,7 @@
   display: flex;
   flex-direction: column;
   gap: 1rem;
+  margin-bottom: 94px;
 }
 
 .productHeader {
@@ -850,7 +876,7 @@
 .mainColumn {
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
+  gap: 1rem;
   flex: 1;
   width: 100%;
 }
@@ -895,10 +921,9 @@
 }
 
 .aiButton {
-  color: hsl(var(--primary));
-  background: hsl(var(--muted));
-  box-shadow: 0 4px 0 hsl(var(--primary) / .5);
-  border: none;
+  color: hsl(var(--primary-foreground));
+  background: hsl(var(--primary));
+  border: 1px solid hsl(var(--border));
   padding: 1rem 2rem;
   box-sizing: border-box;
   border-radius: var(--radius);
@@ -917,8 +942,7 @@
 }
 
 .aiButton:hover {
-  transform: translateY(4px);
-  box-shadow: none;
+  background: hsl(var(--primary) /.8);
 }
 
 .aiButton:disabled {
@@ -1149,7 +1173,7 @@
   white-space: pre-line;
 }
 
-.aiColumn .pageAccordion {
+.aiColumn .accordion {
   background: hsl(var(--muted));
   color: hsl(var(--primary));
 }
@@ -1175,7 +1199,7 @@
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
   gap: 1rem;
-  margin-bottom: 2rem;
+  margin-bottom: 1rem;
 }
 
 .statCard {
@@ -1268,6 +1292,7 @@
   background: var(--card-background);
   border-radius: 12px;
   box-shadow: var(--card-shadow);
+  border: 1px solid hsl(var(--border));
 }
 
 .alternativesSection h3 {
@@ -1611,6 +1636,8 @@
   grid-template-columns: repeat(2, 1fr);
   gap: 1rem;
   max-height: 500px;
+  padding: 4px 0;
+  box-sizing: border-box;
   overflow-y: auto;
 }
 
@@ -1651,19 +1678,14 @@
 
 .scanItemInfo h4 {
   margin: 0;
-  font-size: .67rem;
+  font-size: .875rem;
   color: hsl(var(--foreground));
 }
 
 .scanItemInfo p {
-  margin: 0.25rem 0;
-  font-size: 0.875rem;
+  margin-top: 0.25rem;
+  font-size: 0.6rem;
   color: hsl(var(--muted-foreground));
-}
-
-.scanItemPrice {
-  font-weight: 500;
-  color: hsl(var(--primary)) !important;
 }
 
 .nutriScore {
@@ -1750,7 +1772,7 @@
   padding: 1rem 2rem;
   border-radius: var(--radius);
   font-size: 1.1rem;
-  font-weight: 500;
+  font-weight: 700;
   cursor: pointer;
   transition: all 0.2s ease;
   box-shadow: 0 4px 14px 0 hsl(var(--primary) / 0.3);

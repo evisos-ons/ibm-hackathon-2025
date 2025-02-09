@@ -127,7 +127,7 @@ export default function ProfilePage() {
           <div className={styles.recentlyScanned}>
             {recentScans.length > 0 ? (
               <>
-                <h3>Recent Items Scanned:</h3>
+                <h3>Recent Items</h3>
                 <div className={styles.scanList}>
                   {recentScans.map((scan) => (
                     <div 
@@ -144,8 +144,7 @@ export default function ProfilePage() {
                         />
                       )}
                       <div className={styles.scanItemInfo}>
-                        <h4>{scan.product_name}</h4>
-                        <p>{scan.brand}</p>
+                        <h4>{scan.product_name} - {scan.brand}</h4>
                         {scan.price && (
                           <p className={styles.scanItemPrice}>
                             £{scan.price.toFixed(2)}

@@ -5,7 +5,6 @@ import toast from "react-hot-toast";
 import styles from "../styles/page.module.css";
 import { useRouter } from "next/router";
 import { supabase } from "../utils/supabaseClient";
-import { saveProductScan } from "../utils/productHistory";
 import ProductResults from '../components/ProductResults';
 
 export default function ScanPage() {
@@ -41,26 +40,6 @@ export default function ScanPage() {
       loadProductFromURL();
     }
   }, [router.isReady, router.query]);
-
-  // Save scan only when completing a new scan (not in view mode)
-  useEffect(() => {
-    const saveScan = async () => {
-      if (step === 5 && productInfo && price && !isViewMode) {
-        const {
-          data: { session },
-        } = await supabase.auth.getSession();
-        if (session) {
-          await saveProductScan(
-            session.user.id,
-            productInfo,
-            parseFloat(price),
-            portionPercentage
-          );
-        }
-      }
-    };
-    saveScan();
-  }, [step, productInfo, price, portionPercentage, isViewMode]);
 
   // Initialize scanner when isScanning changes
   useEffect(() => {
