@@ -5,9 +5,5 @@ const inter = Inter({
 });
 
 export default function RootLayout({ children }) {
-  return (
-    <div className={inter.className}>
-      {children}
-    </div>
-  );
+  return <div className={inter.className}>{children}</div>;
 }
