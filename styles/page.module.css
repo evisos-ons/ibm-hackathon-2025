@@ -2349,8 +2349,31 @@ font-weight: 600;
 .budgetForm button, .savingsForm button {
   padding: 0.5rem 1rem;
   border: none;
-  border-radius: 4px;
-  cursor: pointer;
+  border-radius: var(--radius);
+  font-size: 0.9rem;
+  transition: all 0.2s ease;
+}
+
+.budgetForm button[type="submit"],
+.savingsForm button[type="submit"] {
+  background: hsl(var(--primary));
+  color: hsl(var(--primary-foreground));
+}
+
+.budgetForm button[type="submit"]:hover,
+.savingsForm button[type="submit"]:hover {
+  background: hsl(var(--primary) / 0.9);
+}
+
+.budgetForm button[type="button"],
+.savingsForm button[type="button"] {
+  background: hsl(var(--muted) / 0.1);
+  color: hsl(var(--foreground));
+}
+
+.budgetForm button[type="button"]:hover,
+.savingsForm button[type="button"]:hover {
+  background: hsl(var(--muted) / 0.2);
 }
 
 /* Add status-based colors */
@@ -2408,4 +2431,150 @@ font-weight: 600;
   border-radius: 50%;
   animation: spin 1s linear infinite;
   margin-left: 0.5rem;
+}
+
+.trendsSection {
+  margin-top: 2rem;
+  padding: 1.5rem;
+  background: hsl(var(--card));
+  border: 1px solid hsl(var(--border));
+  border-radius: var(--radius);
+}
+
+.trendsTabs {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.trendTab {
+  padding: 0.5rem 1rem;
+  border: 1px solid hsl(var(--border));
+  border-radius: var(--radius);
+  background: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.trendTab:hover {
+  background: hsl(var(--muted) / 0.1);
+}
+
+.activeTab {
+  background: hsl(var(--primary));
+  color: hsl(var(--primary-foreground));
+  border-color: hsl(var(--primary));
+}
+
+.trendsChart {
+  margin: 1rem 0;
+  height: 300px;
+}
+
+.categoryBreakdown {
+  margin-top: 2rem;
+}
+
+.categoryGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.categoryCard {
+  padding: 1rem;
+  background: hsl(var(--muted) / 0.1);
+  border-radius: var(--radius);
+  text-align: center;
+}
+
+.categoryCard h4 {
+  margin-bottom: 0.5rem;
+  color: hsl(var(--foreground));
+}
+
+.categoryCard p {
+  font-size: 1.1rem;
+  color: hsl(var(--primary));
+}
+
+/* Update button styles */
+.updateButton,
+.setButton {
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: var(--radius);
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  width: 100%;
+  margin-top: 1rem;
+}
+
+.updateButton {
+  background: hsl(var(--primary) / 0.1);
+  color: hsl(var(--primary));
+}
+
+.updateButton:hover {
+  background: hsl(var(--primary) / 0.2);
+}
+
+.setButton {
+  background: hsl(var(--primary));
+  color: hsl(var(--primary-foreground));
+}
+
+.setButton:hover {
+  background: hsl(var(--primary) / 0.9);
+}
+
+.updateButton:disabled,
+.setButton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Make bar chart bars narrower */
+.recharts-bar-rectangle {
+  width: 20px !important;
+}
+
+/* Adjust chart container */
+.trendsChart {
+  margin: 1rem 0;
+  height: 300px;
+}
+
+/* Improve form button styles */
+.budgetForm button,
+.savingsForm button {
+  padding: 0.5rem 1rem;
+  border-radius: var(--radius);
+  font-size: 0.9rem;
+  transition: all 0.2s ease;
+}
+
+.budgetForm button[type="submit"],
+.savingsForm button[type="submit"] {
+  background: hsl(var(--primary));
+  color: hsl(var(--primary-foreground));
+}
+
+.budgetForm button[type="submit"]:hover,
+.savingsForm button[type="submit"]:hover {
+  background: hsl(var(--primary) / 0.9);
+}
+
+.budgetForm button[type="button"],
+.savingsForm button[type="button"] {
+  background: hsl(var(--muted) / 0.1);
+  color: hsl(var(--foreground));
+}
+
+.budgetForm button[type="button"]:hover,
+.savingsForm button[type="button"]:hover {
+  background: hsl(var(--muted) / 0.2);
 }
