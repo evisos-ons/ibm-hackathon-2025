@@ -1,5 +1,5 @@
 .page {
-  height: calc(100vh - 72px);
+  height: calc(100dvh - 72px);
   padding: 1rem;
   box-sizing: border-box; 
   margin-top: 64px;
@@ -12,7 +12,7 @@
 
 .pageHomeScreen {
   height: 0;
-  min-height: calc(100vh - 64px);
+  min-height: calc(100dvh - 64px);
 }
 
 @media (prefers-color-scheme: dark) {
@@ -405,25 +405,42 @@
 /* Scan Page Styles */
 .scannerStep {
   text-align: center;
-  max-width: 600px;
+  width: 100%;
   margin: 0 auto;
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 16px;
+  margin-bottom: 2rem;
+}
+
+.scannerFixedContainer {
+  background: hsl(var(--background));
+  padding: 1rem;
+  box-sizing: border-box;
+  border-top: 1px solid hsl(var(--border));
+  position: fixed;
+  width: 100%;
+  left: 0;
+  right: 0;
+  bottom: 0;
 }
 
 .stepTitle {
   font-size: 1.5rem;
-  color: hsl(var(--foreground));
+font-weight: 600;
+  color: hsl(var(--primary));
+  font-family: inherit;
 }
 
 .scanOptions {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 1.5rem;
-  margin-bottom: 2rem;
+  gap: 0.5rem;
+  width: 100%;
+  max-width: 800px;
+  margin: auto;
 }
 
 .scanButton {
@@ -444,13 +461,13 @@
 }
 
 .scannerContainer {
-  margin: 2rem auto;
-  max-width: 600px;
+  margin: auto;
+  width: 100%;
 }
 
 .instruction {
   color: hsl(var(--muted-foreground));
-  margin-top: 1rem;
+  margin-bottom: 1rem;
   text-align: center;
 }
 
@@ -501,12 +518,29 @@
   padding: 1rem;
   box-sizing: border-box; 
   background-color: hsl(var(--background));
+  border-top: 1px solid hsl(var(--border));
   display: flex;
   justify-content: center;
   align-items: center;
+  gap: 1rem;
 }
 
 .scanAgainButton {
+  background: hsl(var(--secondary));
+  color: hsl(var(--secondary-foreground));
+  border: none;
+  padding: 0.8rem 1.5rem;
+  border-radius: var(--radius);
+  font-size: 1rem;
+  cursor: pointer;
+  transition: opacity 0.2s;
+  flex: 1;
+  max-width: 300px;
+  font-family: inherit;
+  font-weight: 500;
+}
+
+.saveProductButton {
   background: hsl(var(--primary));
   color: hsl(var(--primary-foreground));
   border: none;
@@ -515,10 +549,22 @@
   font-size: 1rem;
   cursor: pointer;
   transition: opacity 0.2s;
-  width: 100%;
-  max-width: 500px;
+  flex: 1;
+  max-width: 300px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: inherit;
+  font-weight: 500;
+  gap: 0.5rem;
 }
 
+.saveProductButton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.saveProductButton:hover:not(:disabled),
 .scanAgainButton:hover {
   opacity: 0.9;
 }
@@ -827,6 +873,7 @@
   display: flex;
   flex-direction: column;
   gap: 1rem;
+  margin-bottom: 94px;
 }
 
 .productHeader {
@@ -858,7 +905,7 @@
 .mainColumn {
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
+  gap: 1rem;
   flex: 1;
   width: 100%;
 }
@@ -903,10 +950,9 @@
 }
 
 .aiButton {
-  color: hsl(var(--primary));
-  background: hsl(var(--muted));
-  box-shadow: 0 4px 0 hsl(var(--primary) / .5);
-  border: none;
+  color: hsl(var(--primary-foreground));
+  background: hsl(var(--primary));
+  border: 1px solid hsl(var(--border));
   padding: 1rem 2rem;
   box-sizing: border-box;
   border-radius: var(--radius);
@@ -925,8 +971,7 @@
 }
 
 .aiButton:hover {
-  transform: translateY(4px);
-  box-shadow: none;
+  background: hsl(var(--primary) /.8);
 }
 
 .aiButton:disabled {
@@ -1157,7 +1202,7 @@
   white-space: pre-line;
 }
 
-.aiColumn .pageAccordion {
+.aiColumn .accordion {
   background: hsl(var(--muted));
   color: hsl(var(--primary));
 }
@@ -1218,13 +1263,13 @@
 }
 
 .container {
-  min-height: 100vh;
+  min-height: 100dvh;
   display: flex;
   justify-content: center;
   align-items: center;
   padding: 2rem;
-  box-sizing: border-box;
-  position: relative;
+  margin-top: 80px;
+  min-height: calc(100vh - 160px);
 }
 
 /* Star background animation */
@@ -1261,6 +1306,7 @@
   border: 1px solid hsl(var(--border));
   border-radius: var(--radius);
   padding: 1rem;
+  margin-top: 2rem;
   width: 100%;
   max-height: fit-content;
 }
@@ -1276,6 +1322,7 @@
   background: var(--card-background);
   border-radius: 12px;
   box-shadow: var(--card-shadow);
+  border: 1px solid hsl(var(--border));
 }
 
 .alternativesSection h3 {
@@ -1393,25 +1440,6 @@
   margin-bottom: 2rem;
 }
 
-.statCard {
-  background: hsl(var(--card));
-  border: 1px solid hsl(var(--border));
-  border-radius: var(--radius);
-  padding: 1.5rem;
-  text-align: center;
-}
-
-.statCard h3 {
-  font-size: 0.9rem;
-  color: hsl(var(--muted-foreground));
-  margin-bottom: 0.5rem;
-}
-
-.statCard p {
-  font-size: 1.5rem;
-  font-weight: bold;
-  color: hsl(var(--primary));
-}
 
 .profileActions {
   display: flex;
@@ -1455,7 +1483,7 @@
 }
 
 .container {
-  min-height: 100vh;
+  min-height: 100dvh;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -1618,6 +1646,16 @@
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 1rem;
+  max-height: 500px;
+  padding: 4px 0;
+  box-sizing: border-box;
+  overflow-y: auto;
+}
+
+@media (max-width: 640px) {
+  .scanList {
+    grid-template-columns: 1fr;
+  }
 }
 
 .scanItem {
@@ -1651,19 +1689,14 @@
 
 .scanItemInfo h4 {
   margin: 0;
-  font-size: .67rem;
+  font-size: .875rem;
   color: hsl(var(--foreground));
 }
 
 .scanItemInfo p {
-  margin: 0.25rem 0;
-  font-size: 0.875rem;
+  margin-top: 0.25rem;
+  font-size: 0.6rem;
   color: hsl(var(--muted-foreground));
-}
-
-.scanItemPrice {
-  font-weight: 500;
-  color: hsl(var(--primary)) !important;
 }
 
 .nutriScore {
@@ -1750,7 +1783,7 @@
   padding: 1rem 2rem;
   border-radius: var(--radius);
   font-size: 1.1rem;
-  font-weight: 500;
+  font-weight: 700;
   cursor: pointer;
   transition: all 0.2s ease;
   box-shadow: 0 4px 14px 0 hsl(var(--primary) / 0.3);
@@ -1837,6 +1870,8 @@
   display: flex;
   flex-direction: column;
   gap: 1rem;
+  max-height: 500px;
+  overflow-y: auto;
 }
 
 .insightCard {
@@ -1950,4 +1985,329 @@
   margin-bottom: 1.5rem;
   font-size: 1.2rem;
   color: hsl(var(--primary));
+}
+
+.undrawPhoto {
+  background: url("../public/barcode.gif") no-repeat center;
+  background-size: contain;
+  padding: 1rem;
+  box-sizing: border-box;
+  margin-bottom: 4rem;
+  width: 300px;
+  height: 300px;
+  border-radius: var(--radius);
+}
+
+.undrawPhoto {
+  background: url("../public/barcode.gif") no-repeat center;
+  background-size: contain;
+  padding: 1rem;
+  box-sizing: border-box;
+  margin-bottom: 4rem;
+  width: 300px;
+  height: 300px;
+  border-radius: var(--radius);
+}
+
+.container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+.profileButton {
+  margin: 0.5rem 0;
+  padding: 0.5rem 1rem;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.profileButton:hover {
+  background-color: #45a049;
+}
+
+.chart-container {
+  width: 100%;
+  height: 60vh;
+  min-height: 400px;
+  position: relative;
+  margin: 2rem 0;
+}
+
+.error-message {
+  color: #dc3545;
+  background: #f8d7da;
+  padding: 1.5rem;
+  border-radius: 8px;
+  margin: 2rem 0;
+  text-align: center;
+}
+
+.error-message button {
+  background-color: #dc3545;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  margin-top: 1rem;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.error-message button:hover {
+  background-color: #c82333;
+}
+
+.loading-message {
+  text-align: center;
+  padding: 2rem;
+  color: #6c757d;
+}
+
+.no-data-message {
+  text-align: center;
+  padding: 2rem;
+  color: #6c757d;
+  background: #f8f9fa;
+  border-radius: 8px;
+  margin: 2rem 0;
+}
+
+.chartCanvas {
+  max-width: 100%;
+  height: auto !important;
+}
+
+.chartContainer {
+  width: 100%;
+  min-height: 400px;
+  margin: 2rem 0;
+}
+
+.recharts-cartesian-grid line {
+  stroke: hsl(var(--border));
+}
+
+.recharts-tooltip {
+  background: hsl(var(--background)) !important;
+  border: 1px solid hsl(var(--border)) !important;
+  border-radius: var(--radius) !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1) !important;
+  color: hsl(var(--foreground)) !important;
+}
+
+.recharts-tooltip-item {
+  color: hsl(var(--foreground)) !important;
+}
+
+.expenditurePage {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 1rem;
+  margin-top: 64px;
+  min-height: calc(100vh - 64px);
+}
+
+.expenditurePage h1 {
+  font-size: 1.25rem;
+  color: hsl(var(--primary));
+  font-weight: 600;
+}
+
+.statsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1.5rem;
+  margin: 1.5rem 0;
+}
+
+.chartContainer {
+  background: hsl(var(--card));
+  border: 1px solid hsl(var(--border));
+  border-radius: var(--radius);
+  margin: 2rem 0;
+  padding-bottom: 1rem;
+  box-sizing: border-box;
+}
+
+.chartContainer h2 {
+  color: hsl(var(--primary));
+  margin-bottom: 1.5rem;
+  font-size: 1.25rem;
+  padding-left: 1rem;
+  padding-top: 1rem;
+  box-sizing: border-box;
+}
+
+.recharts-line {
+  stroke-width: 2;
+}
+
+.recharts-tooltip {
+  background: hsl(var(--background)) !important;
+  border: 1px solid hsl(var(--border)) !important;
+  border-radius: var(--radius) !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1) !important;
+  color: hsl(var(--foreground)) !important;
+}
+
+.recharts-tooltip-item {
+  color: hsl(var(--foreground)) !important;
+}
+
+.recharts-legend-item {
+  color: hsl(var(--foreground)) !important;
+}
+
+.chartsContainer {
+  display: grid;
+  gap: 2rem;
+  margin: 2rem 0;
+}
+
+.chartWrapper {
+  background: hsl(var(--card));
+  border: 1px solid hsl(var(--border));
+  border-radius: var(--radius);
+  padding: 1.5rem;
+}
+
+.chartWrapper h2 {
+  margin-bottom: 1rem;
+  font-size: 1.1rem;
+  color: hsl(var(--foreground));
+}
+
+
+/* Adjust existing styles */
+.statsGrid {
+  margin-bottom: 2rem;
+}
+
+.errorMessage,
+.loadingMessage,
+.noDataMessage {
+  margin: 2rem 0;
+}
+
+.statsSection {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr); /* Two columns */
+  grid-template-rows: repeat(2, auto); /* Two rows */
+  gap: 1.5rem;
+  margin: 2rem 0;
+}
+
+.statCard {
+  background: hsl(var(--card));
+  border: 1px solid hsl(var(--border));
+  border-radius: var(--radius);
+  padding: 1.5rem;
+  text-align: center;
+  transition: transform 0.2s ease;
+  display: flex;
+  flex-direction: column;
+  justify-content:center;
+}
+
+.statCard:hover {
+  transform: translateY(-3px);
+}
+
+.statCard h3 {
+  color: hsl(var(--muted-foreground));
+  font-size: 1rem;
+  margin-bottom: 0.5rem;
+}
+
+.statCard p {
+  font-size: 1.25rem;
+  font-weight: 500;
+  color: hsl(var(--foreground));
+}
+
+.expenditureButton {
+  cursor: pointer;
+  color: hsl(var(--primary));
+  transition: text-shadow 0.2s ease;
+}
+
+.expenditureButton h3 {
+  color: hsl(var(--primary));
+}
+
+.expenditureButton:hover p {
+  text-shadow: 0 0 8px #87CEEB; /* Light blue glow */
+}
+
+.customTooltip {
+  background: hsl(var(--background));
+  border: 1px solid hsl(var(--border));
+  border-radius: var(--radius);
+  padding: 1rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.customTooltip h3 {
+  margin-bottom: 0.5rem;
+  color: hsl(var(--foreground));
+}
+
+.customTooltip p {
+  color: hsl(var(--foreground));
+  margin: 0.25rem 0;
+}
+
+.productList {
+  margin-top: 1rem;
+}
+
+.productList h4 {
+  color: hsl(var(--muted-foreground));
+  margin-bottom: 0.5rem;
+}
+
+.productItem {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.25rem 0;
+  border-bottom: 1px solid hsl(var(--border));
+}
+
+.productItem:last-child {
+  border-bottom: none;
+}
+
+.productItem p {
+  margin: 0;
+  font-size: 0.9rem;
+}
+
+.trackerButtonContainer {
+  width: 100%;
+  box-sizing: border-box;
+}
+.trackerButton {
+  width: 100%;
+  padding: 1rem;
+  box-sizing: border-box;
+  background-color: hsl(var(--primary) /.8);
+  color: hsl(var(--primary-foreground));
+  border-radius: var(--radius);
+  text-align: center;
+  margin-top: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: inherit;
+  font-weight: 600;
+  gap: 1rem;
+  transition: background-color 0.2s ease;
+}
+
+.trackerButton:hover {
+  background-color: hsl(var(--primary) /.5);
 }

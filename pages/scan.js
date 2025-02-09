@@ -5,8 +5,7 @@ import toast from "react-hot-toast";
 import styles from "../styles/page.module.css";
 import { useRouter } from "next/router";
 import { supabase } from "../utils/supabaseClient";
-import { saveProductScan } from "../utils/productHistory";
-import ProductResults from '../components/ProductResults';
+import ProductResults from "../components/ProductResults";
 
 export default function ScanPage() {
   const [step, setStep] = useState(1); // 1: Scanner, 2: Confirm, 3: Portion, 4: Price, 5: Results
@@ -41,26 +40,6 @@ export default function ScanPage() {
       loadProductFromURL();
     }
   }, [router.isReady, router.query]);
-
-  // Save scan only when completing a new scan (not in view mode)
-  useEffect(() => {
-    const saveScan = async () => {
-      if (step === 5 && productInfo && price && !isViewMode) {
-        const {
-          data: { session },
-        } = await supabase.auth.getSession();
-        if (session) {
-          await saveProductScan(
-            session.user.id,
-            productInfo,
-            parseFloat(price),
-            portionPercentage
-          );
-        }
-      }
-    };
-    saveScan();
-  }, [step, productInfo, price, portionPercentage, isViewMode]);
 
   // Initialize scanner when isScanning changes
   useEffect(() => {
@@ -308,36 +287,48 @@ export default function ScanPage() {
       case 1: // Scanner
         return (
           <div className={styles.scannerStep}>
-            <h2 className={styles.stepTitle}>Scan Your Product</h2>
-            <div className={styles.scanOptions}>
-              <button
-                onClick={() => setIsScanning(!isScanning)}
-                className={styles.scanButton}
-              >
-                {isScanning ? "Stop Camera" : "Open Camera"}
-              </button>
-              <p className={styles.orDivider}>or</p>
-              <form onSubmit={handleManualEntry} className={styles.manualEntry}>
-                <input
-                  type="number"
-                  value={barcode}
-                  onChange={(e) => setBarcode(e.target.value)}
-                  placeholder="Enter barcode manually"
-                  className={styles.input}
-                />
-                <button type="submit" className={styles.submitButton}>
-                  Search
-                </button>
-              </form>
-            </div>
-            {isScanning && (
+
+            {isScanning ? (
               <div className={styles.scannerContainer}>
-                <div id="reader" className={styles.reader}></div>
+                
                 <p className={styles.instruction}>
                   Position the barcode in front of your camera
                 </p>
+                <div id="reader" className={styles.reader}></div>
               </div>
+            ) : (
+                <>
+                {/* <h2 className={styles.stepTitle}>Scan Your Product</h2> */}
+              <div className={styles.undrawPhoto}>
+              </div>
+              </>
             )}
+            <div className={styles.scannerFixedContainer}>
+              <div className={styles.scanOptions}>
+                <button
+                  onClick={() => setIsScanning(!isScanning)}
+                  className={styles.scanButton}
+                >
+                  {isScanning ? "Stop Camera" : "Open Camera"}
+                </button>
+                <p className={styles.orDivider}>or</p>
+                <form
+                  onSubmit={handleManualEntry}
+                  className={styles.manualEntry}
+                >
+                  <input
+                    type="number"
+                    value={barcode}
+                    onChange={(e) => setBarcode(e.target.value)}
+                    placeholder="Enter barcode manually"
+                    className={styles.input}
+                  />
+                  <button type="submit" className={styles.submitButton}>
+                    Search
+                  </button>
+                </form>
+              </div>
+            </div>
           </div>
         );
 
@@ -465,14 +456,14 @@ export default function ScanPage() {
   const handleScanAgain = () => {
     setStep(1);
     setProductInfo(null);
-    setBarcode('');
+    setBarcode("");
     setPortionPercentage(100);
-    setPrice('');
+    setPrice("");
     setSuggestions(null);
-    setOpenAccordion('');
+    setOpenAccordion("");
     setAlternatives([]);
     setIsViewMode(false);
-    router.replace('/scan', undefined, { shallow: true });
+    router.replace("/scan", undefined, { shallow: true });
   };
 
   return (
@@ -480,42 +471,4 @@ export default function ScanPage() {
       <main className={styles.main}>{renderStep()}</main>
     </div>
   );
-}
-
-function getScorePercentage(score) {
-  if (!score) return 0;
-
-  const scoreMap = {
-    A: 90,
-    B: 75,
-    C: 60,
-    D: 45,
-    E: 30,
-  };
-
-  return scoreMap[score.toUpperCase()] || 50;
-}
-
-function getScoreLabel(score) {
-  const labels = {
-    A: "Excellent nutritional value",
-    B: "Good nutritional value",
-    C: "Average nutritional value",
-    D: "Poor nutritional value",
-    E: "Very poor nutritional value",
-  };
-
-  return labels[score.toUpperCase()] || "Nutritional value unknown";
-}
-
-function getEnvironmentalLabel(score) {
-  const labels = {
-    A: "Very low environmental impact",
-    B: "Low environmental impact",
-    C: "Moderate environmental impact",
-    D: "High environmental impact",
-    E: "Very high environmental impact",
-  };
-
-  return labels[score.toUpperCase()] || "Environmental impact unknown";
 }

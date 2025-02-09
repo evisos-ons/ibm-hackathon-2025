@@ -90,7 +90,7 @@ export default function AIInsights({ userId }) {
               <div className={styles.insightProductInfo}>
                 <h3>{insight.product_name}</h3>
                 <span className={styles.insightDate}>
-                  {new Date(insight.created_at).toLocaleDateString()}
+                  {new Date(insight.created_at).toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' })} {new Date(insight.created_at).toLocaleDateString('en-GB', { day: '2-digit', month: '2-digit', year: '2-digit' })}
                 </span>
               </div>
             </div>
