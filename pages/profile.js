@@ -14,6 +14,7 @@ export default function ProfilePage() {
   const [userStats, setUserStats] = useState({
     totalScans: 0,
     healthScore: "N/A",
+    totalSpent: 0
   });
   const [isLoading, setIsLoading] = useState(true);
 
@@ -73,6 +74,10 @@ export default function ProfilePage() {
     }
   };
 
+  const handleScanClick = (barcode) => {
+    router.push(`/?barcode=${barcode}`);
+  };
+
   if (isLoading) {
     return (
       <div className={styles.page}>
@@ -112,6 +117,10 @@ export default function ProfilePage() {
               <h3>Health Score</h3>
               <p>{userStats.healthScore}</p>
             </div>
+            <div className={styles.statCard}>
+              <h3>Total Spent</h3>
+              <p>£{userStats.totalSpent.toFixed(2)}</p>
+            </div>
           </div>
 
           <div className={styles.recentlyScanned}>
@@ -120,7 +129,12 @@ export default function ProfilePage() {
                 <h3>Recent Items Scanned:</h3>
                 <div className={styles.scanList}>
                   {recentScans.map((scan) => (
-                    <div key={scan.id} className={styles.scanItem}>
+                    <div 
+                      key={scan.id} 
+                      className={styles.scanItem}
+                      onClick={() => handleScanClick(scan.barcode)}
+                      style={{ cursor: 'pointer' }}
+                    >
                       {scan.image_url && (
                         <img
                           src={scan.image_url}

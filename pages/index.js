@@ -8,6 +8,7 @@ import { IoArrowForward, IoSparklesOutline } from "react-icons/io5";
 import { useRouter } from "next/router";
 import { supabase } from "../utils/supabaseClient";
 import { saveProductScan } from "../utils/productHistory";
+import ProductResults from '../components/ProductResults';
 
 export default function ScanPage() {
   const [step, setStep] = useState(1); // 1: Scanner, 2: Confirm, 3: Portion, 4: Price, 5: Results
@@ -33,6 +34,7 @@ export default function ScanPage() {
           data: { session },
         } = await supabase.auth.getSession();
         if (session) {
+          console.log(productInfo);
           await saveProductScan(
             session.user.id,
             productInfo,
@@ -144,6 +146,29 @@ export default function ScanPage() {
     checkAuth();
   }, [router]);
 
+  // Add useEffect to handle barcode from URL
+  useEffect(() => {
+    const loadProductFromURL = async () => {
+      const { barcode } = router.query;
+      if (barcode) {
+        setBarcode(barcode);
+        await fetchProductInfo(barcode);
+        // Set step to 5 only if we successfully loaded the product
+        if (productInfo) {
+          setStep(5);
+          // Set a default price if needed
+          if (!price) {
+            setPrice("0.00");
+          }
+        }
+      }
+    };
+
+    if (router.query.barcode) {
+      loadProductFromURL();
+    }
+  }, [router.query, productInfo]);
+
   const fetchProductInfo = async (code) => {
     setIsLoading(true);
     try {
@@ -151,7 +176,6 @@ export default function ScanPage() {
       const data = await response.json();
 
       if (data.status === "success" && data.product) {
-        toast.success("Product found!");
         setProductInfo(data.product);
         // Check if there's enough info for AI suggestions
         const hasEnoughInfo =
@@ -163,7 +187,10 @@ export default function ScanPage() {
         setHasEnoughInfoForAI(hasEnoughInfo);
         // Fetch alternatives when product is found
         fetchAlternatives(data.product);
-        setStep(2); // Move to confirmation step
+        // Only move to step 2 if we're not loading from URL
+        if (!router.query.barcode) {
+          setStep(2);
+        }
       } else {
         toast.error("Product not found");
         setProductInfo(null);
@@ -431,310 +458,28 @@ export default function ScanPage() {
 
       case 5: // Results
         return (
-          <div className={styles.resultsStep}>
-            <div className={styles.productHeader}>
-              <div>
-                <h2 className={styles.stepTitle}>{productInfo.productName}</h2>
-                {productInfo.brands && (
-                  <p className={styles.brandName}>{productInfo.brands}</p>
-                )}
-              </div>
-            </div>
-
-            <div className={styles.topSection}>
-              {productInfo.image && (
-                <img
-                  src={productInfo.image}
-                  alt={productInfo.productName}
-                  className={styles.productImage}
-                />
-              )}
-
-              <div className={styles.mainColumn}>
-                {productInfo?.healthInfo?.nutriscore && (
-                  <div className={styles.scoreCard}>
-                    <h3>Nutrition Score</h3>
-                    <Gauge
-                      value={getScorePercentage(
-                        productInfo.healthInfo.nutriscore
-                      )}
-                      label={getScoreLabel(productInfo.healthInfo.nutriscore)}
-                    />
-                    {productInfo.healthInfo.novaGroup && (
-                      <p className={styles.novaGroup}>
-                        NOVA Group: {productInfo.healthInfo.novaGroup}
-                      </p>
-                    )}
-                  </div>
-                )}
-
-                {price && (
-                  <div className={styles.priceCard}>
-                    <h3>Price Paid</h3>
-                    <p className={styles.priceDisplay}>
-                      £{parseFloat(price).toFixed(2)}
-                    </p>
-                  </div>
-                )}
-              </div>
-            </div>
-            {isSuggestionsLoading ? (
-              <div className={styles.aiButton}>
-                <IoSparklesOutline />
-                Loading AI Insights...
-              </div>
-            ) : (
-              <button
-                className={styles.aiButton}
-                onClick={() => fetchSuggestions(productInfo)}
-                disabled={
-                  !hasEnoughInfoForAI || suggestions || isSuggestionsLoading
-                }
-              >
-                <IoSparklesOutline />
-                {suggestions
-                  ? "AI Insights Loaded"
-                  : hasEnoughInfoForAI
-                  ? "Get AI Insights"
-                  : "Not Enough Product Info"}
-              </button>
-            )}
-
-            {suggestions && (
-              <div className={`${styles.sideColumn} ${styles.aiColumn}`}>
-                <h3>AI Insights</h3>
-                {price && suggestions.price && (
-                  <details
-                    className={styles.accordion}
-                    open={openAccordion === "price"}
-                    onClick={(e) => {
-                      e.preventDefault();
-                      handleAccordionClick("price");
-                    }}
-                  >
-                    <summary>Price Analysis</summary>
-                    <div className={styles.accordionContent}>
-                      <p>{suggestions.price}</p>
-                    </div>
-                  </details>
-                )}
-                <details
-                  className={styles.accordion}
-                  open={openAccordion === "health"}
-                  onClick={(e) => {
-                    e.preventDefault();
-                    handleAccordionClick("health");
-                  }}
-                >
-                  <summary>Health Analysis</summary>
-                  <div className={styles.accordionContent}>
-                    <p>{suggestions.health}</p>
-                  </div>
-                </details>
-
-                <details
-                  className={styles.accordion}
-                  open={openAccordion === "alternatives"}
-                  onClick={(e) => {
-                    e.preventDefault();
-                    handleAccordionClick("alternatives");
-                  }}
-                >
-                  <summary>Alternative Products</summary>
-                  <div className={styles.accordionContent}>
-                    <p>{suggestions.alternatives}</p>
-                  </div>
-                </details>
-
-                <details
-                  className={styles.accordion}
-                  open={openAccordion === "usage"}
-                  onClick={(e) => {
-                    e.preventDefault();
-                    handleAccordionClick("usage");
-                  }}
-                >
-                  <summary>Usage Tips</summary>
-                  <div className={styles.accordionContent}>
-                    <p>{suggestions.usage}</p>
-                  </div>
-                </details>
-              </div>
-            )}
-
-            <div className={styles.sideColumn}>
-              <h3>Product Details</h3>
-              <details
-                className={styles.accordion}
-                open={openAccordion === "nutrition"}
-                onClick={(e) => {
-                  e.preventDefault();
-                  handleAccordionClick("nutrition");
-                }}
-              >
-                <summary>Nutritional Information</summary>
-                <div className={styles.accordionContent}>
-                  {Object.entries(productInfo.nutrients).map(([key, value]) => (
-                    <div key={key} className={styles.nutrientRow}>
-                      <span>{key}</span>
-                      <span>{value.toFixed(1)}</span>
-                    </div>
-                  ))}
-                  {Object.values(productInfo.nutrients).every(
-                    (v) => v === 0
-                  ) && (
-                    <p className={styles.noData}>
-                      No nutritional values - Natural water product
-                    </p>
-                  )}
-                </div>
-              </details>
-
-              {productInfo.healthInfo.ingredients && (
-                <details
-                  className={styles.accordion}
-                  open={openAccordion === "ingredients"}
-                  onClick={(e) => {
-                    e.preventDefault();
-                    handleAccordionClick("ingredients");
-                  }}
-                >
-                  <summary>Ingredients</summary>
-                  <div className={styles.accordionContent}>
-                    <p>{productInfo.healthInfo.ingredients}</p>
-                    {productInfo.healthInfo.isVegetarian && (
-                      <p className={styles.dietaryInfo}>
-                        ✓ Suitable for vegetarians
-                      </p>
-                    )}
-                  </div>
-                </details>
-              )}
-
-              {suggestions && (
-                <details
-                  className={styles.accordion}
-                  open={openAccordion === "environmental"}
-                  onClick={(e) => {
-                    e.preventDefault();
-                    handleAccordionClick("environmental");
-                  }}
-                >
-                  <summary>Environmental Impact</summary>
-                  <div className={styles.accordionContent}>
-                    <p>{suggestions.environmental}</p>
-                  </div>
-                </details>
-              )}
-
-              {productInfo.packaging.materials && (
-                <details
-                  className={styles.accordion}
-                  open={openAccordion === "recycling"}
-                  onClick={(e) => {
-                    e.preventDefault();
-                    handleAccordionClick("recycling");
-                  }}
-                >
-                  <summary>Recycling Information</summary>
-                  <div className={styles.accordionContent}>
-                    {suggestions?.recycling && (
-                      <p className={styles.recyclingTip}>
-                        {suggestions.recycling}
-                      </p>
-                    )}
-                    <ul className={styles.packagingList}>
-                      {productInfo.packaging.materials
-                        .split(", ")
-                        .map((material) => (
-                          <li key={material} className={styles.packagingItem}>
-                            {material.replace("en:", "").split("-").join(" ")}
-                          </li>
-                        ))}
-                    </ul>
-                  </div>
-                </details>
-              )}
-
-              <details
-                className={styles.accordion}
-                open={openAccordion === "categories"}
-                onClick={(e) => {
-                  e.preventDefault();
-                  handleAccordionClick("categories");
-                }}
-              >
-                <summary>Product Categories</summary>
-                <div className={styles.accordionContent}>
-                  <ul className={styles.categoryList}>
-                    {productInfo.category.map((category) => (
-                      <li key={category} className={styles.categoryItem}>
-                        {category.replace("en:", "").split("-").join(" ")}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              </details>
-            </div>
-
-            <div className={styles.alternativesSection}>
-              <h3>Similar Products You Might Like</h3>
-              {isAlternativesLoading ? (
-                <div className={styles.loadingSpinner}>
-                  Loading alternatives...
-                </div>
-              ) : alternatives.length > 0 ? (
-                <div className={styles.alternativesGrid}>
-                  {alternatives.map((alt) => (
-                    <div key={alt.barcode} className={styles.alternativeCard}>
-                      <div className={styles.alternativeImageContainer}>
-                        {alt.image && (
-                          <img
-                            src={alt.image}
-                            alt={alt.name}
-                            className={styles.alternativeImage}
-                          />
-                        )}
-                      </div>
-
-                      <div className={styles.alternativeInfo}>
-                        <h4>{alt.name}</h4>
-                        {alt.brand && (
-                          <p className={styles.altBrand}>{alt.brand}</p>
-                        )}
-                        {alt.nutriscore && (
-                          <div className={styles.altScore}>
-                            Nutri-Score: {alt.nutriscore.toUpperCase()}
-                          </div>
-                        )}
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              ) : (
-                <p className={styles.noAlternatives}>
-                  No similar products found
-                </p>
-              )}
-            </div>
-            <div className={styles.scanAgainButtonContainer}>
-              <button
-                onClick={() => {
-                  setStep(1);
-                  setProductInfo(null);
-                  setBarcode("");
-                  setPortionPercentage(100);
-                  setPrice("");
-                  setSuggestions(null);
-                  setOpenAccordion("");
-                  setAlternatives([]);
-                }}
-                className={styles.scanAgainButton}
-              >
-                Scan Another Product
-              </button>
-            </div>
-          </div>
+          <ProductResults
+            productInfo={productInfo}
+            price={price}
+            suggestions={suggestions}
+            isSuggestionsLoading={isSuggestionsLoading}
+            hasEnoughInfoForAI={hasEnoughInfoForAI}
+            alternatives={alternatives}
+            isAlternativesLoading={isAlternativesLoading}
+            onFetchSuggestions={() => fetchSuggestions(productInfo)}
+            onScanAgain={() => {
+              setStep(1);
+              setProductInfo(null);
+              setBarcode('');
+              setPortionPercentage(100);
+              setPrice('');
+              setSuggestions(null);
+              setOpenAccordion('');
+              setAlternatives([]);
+              // Clear the barcode from URL
+              router.replace('/', undefined, { shallow: true });
+            }}
+          />
         );
     }
   };

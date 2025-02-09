@@ -64,16 +64,19 @@ export async function getUserScannedProducts(userId, limit = 10) {
 export async function getUserStats(userId) {
   try {
     console.log('Calculating stats for user:', userId);
-    // Get total number of scans
-    const { data: scanCount, error: scanError } = await supabase
+    // Get total number of scans and sum of prices
+    const { data: stats, error: statsError } = await supabase
       .from('product_history')
-      .select('id', { count: 'exact' })
+      .select('id, price')
       .eq('user_id', userId);
 
-    if (scanError) {
-      console.error('Error getting scan count:', scanError);
-      throw scanError;
+    if (statsError) {
+      console.error('Error getting stats:', statsError);
+      throw statsError;
     }
+
+    const totalScans = stats.length;
+    const totalSpent = stats.reduce((sum, scan) => sum + (scan.price || 0), 0);
 
     // Get average nutriscore
     const { data: nutriscores, error: nutriError } = await supabase
@@ -102,12 +105,13 @@ export async function getUserStats(userId) {
                        avgScore >= 2 ? 'C' :
                        avgScore >= 1.5 ? 'D' : 'E';
 
-    const stats = {
-      totalScans: scanCount.length,
+    const returnStats = {
+      totalScans,
       healthScore,
+      totalSpent: parseFloat(totalSpent.toFixed(2))
     };
-    console.log('Calculated stats:', stats);
-    return { data: stats, error: null };
+    console.log('Calculated stats:', returnStats);
+    return { data: returnStats, error: null };
   } catch (error) {
     console.error('Error fetching user stats:', error);
     return { data: null, error };

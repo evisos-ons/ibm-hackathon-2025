@@ -26,7 +26,9 @@ function Header() {
   return (
     <header className={styles.header}>
       <Link href="/">
-        <span style={{ fontSize: "1.2rem", fontWeight: "bold" }}>scannr</span>
+        <span className={styles.headerTitle}>
+          <IoScanSharp /> ScanSave
+        </span>
       </Link>
       <div className={styles.headerControls}>
         <Link href="/" aria-label="Scan" className={styles.scanIcon}>
@@ -69,10 +71,10 @@ export default function App({ Component, pageProps }) {
   return (
     <ThemeProvider>
       <Head>
-        <title>Food Scanner App</title>
+        <title>ScanSave.in</title>
         <meta
           name="description"
-          content="Scan food products to understand their impact on your health and the environment"
+          content="Track your spending by scanning food products. Understand their impact on your health and the environment."
         />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
