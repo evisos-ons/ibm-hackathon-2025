@@ -1178,26 +1178,6 @@
   margin-bottom: 2rem;
 }
 
-.statCard {
-  background: hsl(var(--card));
-  border: 1px solid hsl(var(--border));
-  border-radius: var(--radius);
-  padding: 1rem;
-  text-align: center;
-}
-
-.statCard h3 {
-  font-size: 0.9rem;
-  color: hsl(var(--muted-foreground));
-  margin-bottom: 0.5rem;
-}
-
-.statCard p {
-  font-size: 1.5rem;
-  font-weight: bold;
-  color: hsl(var(--primary));
-}
-
 .profileActions {
   display: flex;
   justify-content: center;
@@ -1251,6 +1231,7 @@
   border: 1px solid hsl(var(--border));
   border-radius: var(--radius);
   padding: 1rem;
+  margin-top: 2rem;
   width: 100%;
   max-height: fit-content;
 }
@@ -1383,25 +1364,6 @@
   margin-bottom: 2rem;
 }
 
-.statCard {
-  background: hsl(var(--card));
-  border: 1px solid hsl(var(--border));
-  border-radius: var(--radius);
-  padding: 1.5rem;
-  text-align: center;
-}
-
-.statCard h3 {
-  font-size: 0.9rem;
-  color: hsl(var(--muted-foreground));
-  margin-bottom: 0.5rem;
-}
-
-.statCard p {
-  font-size: 1.5rem;
-  font-weight: bold;
-  color: hsl(var(--primary));
-}
 
 .profileActions {
   display: flex;
@@ -2016,7 +1978,7 @@
 
 .chartContainer {
   width: 100%;
-  height: 400px;
+  min-height: 400px;
   margin: 2rem 0;
 }
 
@@ -2039,55 +2001,40 @@
 .expenditurePage {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 2rem;
-  padding-top: 80px;
-  min-height: calc(100vh - 80px);
+  padding: 1rem;
+  margin-top: 64px;
+  min-height: calc(100vh - 64px);
+}
+
+.expenditurePage h1 {
+  font-size: 1.25rem;
+  color: hsl(var(--primary));
+  font-weight: 600;
 }
 
 .statsGrid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   gap: 1.5rem;
-  margin: 2rem 0;
-}
-
-.statCard {
-  background: hsl(var(--card));
-  border: 1px solid hsl(var(--border));
-  border-radius: var(--radius);
-  padding: 1.5rem;
-  text-align: center;
-  transition: transform 0.2s ease;
-}
-
-.statCard:hover {
-  transform: translateY(-3px);
-}
-
-.statCard h3 {
-  color: hsl(var(--muted-foreground));
-  font-size: 1rem;
-  margin-bottom: 0.5rem;
-}
-
-.statCard p {
-  font-size: 1.25rem;
-  font-weight: 500;
-  color: hsl(var(--foreground));
+  margin: 1.5rem 0;
 }
 
 .chartContainer {
   background: hsl(var(--card));
   border: 1px solid hsl(var(--border));
   border-radius: var(--radius);
-  padding: 2rem;
   margin: 2rem 0;
+  padding-bottom: 1rem;
+  box-sizing: border-box;
 }
 
 .chartContainer h2 {
-  color: hsl(var(--foreground));
+  color: hsl(var(--primary));
   margin-bottom: 1.5rem;
   font-size: 1.25rem;
+  padding-left: 1rem;
+  padding-top: 1rem;
+  box-sizing: border-box;
 }
 
 .recharts-line {
@@ -2129,10 +2076,6 @@
   color: hsl(var(--foreground));
 }
 
-.chartContainer {
-  height: 300px;
-  position: relative;
-}
 
 /* Adjust existing styles */
 .statsGrid {
@@ -2160,6 +2103,9 @@
   padding: 1.5rem;
   text-align: center;
   transition: transform 0.2s ease;
+  display: flex;
+  flex-direction: column;
+  justify-content:center;
 }
 
 .statCard:hover {
@@ -2186,11 +2132,6 @@
 
 .expenditureButton h3 {
   color: hsl(var(--primary));
-}
-
-.expenditureButton p {
-  transition: text-shadow 0.2s ease;
-  color: #87CEEB; /* Light blue color */
 }
 
 .expenditureButton:hover p {
@@ -2238,4 +2179,30 @@
 .productItem p {
   margin: 0;
   font-size: 0.9rem;
+}
+
+.trackerButtonContainer {
+  width: 100%;
+  box-sizing: border-box;
+}
+.trackerButton {
+  width: 100%;
+  padding: 1rem;
+  box-sizing: border-box;
+  background-color: hsl(var(--primary) /.8);
+  color: hsl(var(--primary-foreground));
+  border-radius: var(--radius);
+  text-align: center;
+  margin-top: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: inherit;
+  font-weight: 600;
+  gap: 1rem;
+  transition: background-color 0.2s ease;
+}
+
+.trackerButton:hover {
+  background-color: hsl(var(--primary) /.5);
 }

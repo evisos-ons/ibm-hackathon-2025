@@ -1,7 +1,7 @@
 import { useRouter } from "next/router";
 import styles from "../styles/page.module.css";
 import toast from "react-hot-toast";
-import { IoPersonCircle, IoLogOutOutline } from "react-icons/io5";
+import { IoPersonCircle, IoLogOutOutline, IoCompass } from "react-icons/io5";
 import { supabase } from "../utils/supabaseClient";
 import { getUserScannedProducts, getUserStats } from "../utils/productHistory";
 import { useEffect, useState } from "react";
@@ -133,11 +133,11 @@ export default function ProfilePage() {
               <h3>Total Spent</h3>
               <p>£{userStats.totalSpent.toFixed(2)}</p>
             </div>
-            <Link href="/expenditure-tracker" className={styles.statCard}>
-              <div className={styles.expenditureButton}>
-                <h3>Expenditure</h3>
-                <p>View Tracker</p>
-              </div>
+          </div>
+          <div className={styles.trackerButtonContainer}>   
+            <Link href="/tracker" className={styles.trackerButton}>
+                <IoCompass size={24} />
+                View Tracker
             </Link>
           </div>
 

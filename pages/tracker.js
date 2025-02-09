@@ -1,12 +1,7 @@
 import { useEffect, useState } from 'react';
-import { createClient } from '@supabase/supabase-js';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import styles from '../styles/page.module.css';
-
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL,
-  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
-);
+import { supabase } from '../utils/supabaseClient';
 
 const formatTimestamp = (timestamp) => {
   const date = new Date(timestamp);
@@ -42,9 +37,15 @@ export default function ExpenditureTracker() {
 
       if (fetchError) throw fetchError;
 
+      console.log('Fetched data:', productHistory);
       const daily = processDailyData(productHistory);
-      setDailyData(daily);
-      calculateStats(daily);
+      console.log('Processed data:', daily);
+      if (daily && daily.length > 0) {
+        setDailyData(daily);
+        calculateStats(daily);
+      } else {
+        console.error('No data after processing:', daily);
+      }
       setLoading(false);
     } catch (error) {
       console.error('Error:', error);
@@ -54,69 +55,77 @@ export default function ExpenditureTracker() {
   };
 
   const processDailyData = (data) => {
-    const hourlyTotals = {};
+    if (!data || data.length === 0) {
+      console.log('No data received in processDailyData');
+      return [];
+    }
 
-    data.forEach(item => {
+    // Sort data by timestamp
+    const sortedData = [...data].sort((a, b) => 
+      new Date(a.scanned_at).getTime() - new Date(b.scanned_at).getTime()
+    );
+
+    // Group by minute and calculate totals
+    const minuteGroups = sortedData.reduce((acc, item) => {
       const date = new Date(item.scanned_at);
-      if (isNaN(date.getTime())) return;
-      
+      if (isNaN(date.getTime())) {
+        console.log('Invalid date:', item.scanned_at);
+        return acc;
+      }
 
-      const hour = new Date(date);
-      hour.setMinutes(0, 0, 0);
-      const hourString = hour.toISOString();
-      
-      if (!hourlyTotals[hourString]) {
-        hourlyTotals[hourString] = {
+      // Create a key for this minute
+      date.setSeconds(0, 0);
+      const minuteKey = date.toISOString();
+
+      if (!acc[minuteKey]) {
+        acc[minuteKey] = {
+          timestamp: minuteKey,
           total: 0,
           products: []
         };
       }
-      
-      hourlyTotals[hourString].total += item.price || 0;
-      hourlyTotals[hourString].products.push({
+
+      acc[minuteKey].total += item.price || 0;
+      acc[minuteKey].products.push({
         name: item.product_name,
         price: item.price,
-        timestamp: date.toISOString()
+        timestamp: item.scanned_at
       });
-    });
 
+      return acc;
+    }, {});
 
-    const allHours = [];
-    if (Object.keys(hourlyTotals).length > 0) {
-      const firstHour = new Date(Object.keys(hourlyTotals)[0]);
-      const lastHour = new Date(Object.keys(hourlyTotals)[Object.keys(hourlyTotals).length - 1]);
-      
-      for (let d = new Date(firstHour); d <= lastHour; d.setHours(d.getHours() + 1)) {
-        const hourString = d.toISOString();
-        allHours.push({
-          timestamp: hourString,
-          total: hourlyTotals[hourString]?.total || 0,
-          products: hourlyTotals[hourString]?.products || []
-        });
-      }
-    }
+    // Convert to array and sort by timestamp
+    const result = Object.values(minuteGroups).sort((a, b) => 
+      new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime()
+    );
 
-    return allHours;
+    console.log('Processed minute groups:', result);
+    return result;
   };
 
   const calculateStats = (daily) => {
-    if (daily.length === 0) return;
+    if (!daily || daily.length === 0) {
+      console.log('No data received in calculateStats');
+      return;
+    }
 
-    const total = daily.reduce((sum, day) => sum + day.total, 0);
+    console.log('Calculating stats for data:', daily);
+    const total = daily.reduce((sum, day) => sum + (day.total || 0), 0);
     const averageDaily = total / daily.length;
-    const highestDay = daily.reduce((max, day) => day.total > max.total ? day : max, daily[0]);
-    const lowestDay = daily.reduce((min, day) => day.total < min.total ? day : min, daily[0]);
+    const highestDay = daily.reduce((max, day) => (day.total || 0) > (max.total || 0) ? day : max, daily[0]);
+    const lowestDay = daily.reduce((min, day) => (day.total || 0) < (min.total || 0) ? day : min, daily[0]);
 
     setStats({
       totalSpent: total.toFixed(2),
       averageDaily: averageDaily.toFixed(2),
       highestDay: {
         date: formatTimestamp(highestDay.timestamp),
-        amount: highestDay.total.toFixed(2)
+        amount: (highestDay.total || 0).toFixed(2)
       },
       lowestDay: {
         date: formatTimestamp(lowestDay.timestamp),
-        amount: lowestDay.total.toFixed(2)
+        amount: (lowestDay.total || 0).toFixed(2)
       }
     });
   };
@@ -143,7 +152,7 @@ export default function ExpenditureTracker() {
         <div className={styles.loadingMessage}>
           <p>Loading data...</p>
         </div>
-      ) : dailyData.length > 0 ? (
+      ) : dailyData && dailyData.length > 0 ? (
         <>
           <div className={styles.statsGrid}>
             <div className={styles.statCard}>
@@ -156,11 +165,11 @@ export default function ExpenditureTracker() {
             </div>
             <div className={styles.statCard}>
               <h3>Highest Day</h3>
-              <p>{stats.highestDay.date}: £{stats.highestDay.amount}</p>
+              <p>{stats.highestDay.date}</p><p>£{stats.highestDay.amount}</p>
             </div>
             <div className={styles.statCard}>
               <h3>Lowest Day</h3>
-              <p>{stats.lowestDay.date}: £{stats.lowestDay.amount}</p>
+              <p>{stats.lowestDay.date}</p><p>£{stats.lowestDay.amount}</p>
             </div>
           </div>
 
@@ -175,7 +184,8 @@ export default function ExpenditureTracker() {
                 <XAxis 
                   dataKey="timestamp" 
                   tickFormatter={formatTimestamp}
-                  interval={Math.floor(dailyData.length / 24)}
+                  interval="preserveStartEnd"
+                  minTickGap={50}
                 />
                 <YAxis 
                   tickFormatter={(value) => `£${value}`}
@@ -187,7 +197,7 @@ export default function ExpenditureTracker() {
                 <Line 
                   type="monotone" 
                   dataKey="total" 
-                  stroke="#4CAF50" 
+                  stroke="hsl(var(--primary))" 
                   strokeWidth={2}
                   activeDot={{ r: 6 }}
                   name="Expenditure"
