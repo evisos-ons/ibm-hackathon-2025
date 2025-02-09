@@ -1,7 +1,10 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import styles from '../styles/page.module.css';
 import Gauge from './Gauge';
 import { IoSparklesOutline } from 'react-icons/io5';
+import { supabase } from '../utils/supabaseClient';
+import toast from 'react-hot-toast';
+import { saveAIInsight } from '../utils/aiInsights';
 
 export default function ProductResults({ 
   productInfo, 
@@ -15,6 +18,50 @@ export default function ProductResults({
   onScanAgain 
 }) {
   const [openAccordion, setOpenAccordion] = useState('');
+  const [userId, setUserId] = useState(null);
+
+  useEffect(() => {
+    const getUser = async () => {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (user) {
+        setUserId(user.id);
+      }
+    };
+    getUser();
+  }, []);
+
+  useEffect(() => {
+    const saveInsights = async () => {
+      if (suggestions && userId && productInfo) {
+        try {
+          // Save each type of insight
+          const insightTypes = ['health', 'price', 'alternatives', 'usage', 'environmental', 'recycling'];
+          
+          for (const type of insightTypes) {
+            if (suggestions[type]) {
+              const { error } = await saveAIInsight(
+                userId,
+                productInfo.barcode,
+                type,
+                suggestions[type],
+                productInfo.productName,
+                productInfo.image
+              );
+
+              if (error) {
+                throw error;
+              }
+            }
+          }
+        } catch (error) {
+          console.error('Error saving insights:', error);
+          toast.error('Failed to save AI insights');
+        }
+      }
+    };
+
+    saveInsights();
+  }, [suggestions, userId, productInfo]);
 
   const handleAccordionClick = (accordionId) => {
     setOpenAccordion(openAccordion === accordionId ? '' : accordionId);
