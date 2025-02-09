@@ -1,7 +1,7 @@
 .page {
   height: calc(100dvh - 72px);
   padding: 1rem;
-  box-sizing: border-box; 
+  box-sizing: border-box;
   margin-top: 64px;
   background: hsl(var(--background));
   color: hsl(var(--foreground));
@@ -253,7 +253,7 @@
 
 .divider::before,
 .divider::after {
-  content: '';
+  content: "";
   position: absolute;
   top: 50%;
   width: 45%;
@@ -305,29 +305,29 @@
     border-color: hsl(var(--border));
     color: hsl(var(--foreground));
   }
-  
+
   .input:focus {
     border-color: #0070f3;
   }
-  
+
   .divider {
     color: #888;
   }
-  
+
   .divider::before,
   .divider::after {
     background-color: #333;
   }
-  
+
   .hint {
     color: #888;
   }
-  
+
   .productInfo {
     background-color: #1a1a1a;
     color: white;
   }
-  
+
   .nutritionInfo,
   .environmentalInfo {
     background-color: #222;
@@ -420,7 +420,7 @@
 
 .stepTitle {
   font-size: 1.5rem;
-font-weight: 600;
+  font-weight: 600;
   color: hsl(var(--primary));
   font-family: inherit;
 }
@@ -486,9 +486,15 @@ font-weight: 600;
 }
 
 @keyframes scan {
-  0% { top: 0; }
-  50% { top: 100%; }
-  100% { top: 0; }
+  0% {
+    top: 0;
+  }
+  50% {
+    top: 100%;
+  }
+  100% {
+    top: 0;
+  }
 }
 
 .loadingText {
@@ -508,7 +514,7 @@ font-weight: 600;
   left: 0;
   width: 100%;
   padding: 1rem;
-  box-sizing: border-box; 
+  box-sizing: border-box;
   background-color: hsl(var(--background));
   border-top: 1px solid hsl(var(--border));
   display: flex;
@@ -600,7 +606,7 @@ font-weight: 600;
 }
 
 .accordion summary::after {
-  content: '›';
+  content: "›";
   position: absolute;
   right: 1rem;
   transform: rotate(90deg);
@@ -963,7 +969,7 @@ font-weight: 600;
 }
 
 .aiButton:hover {
-  background: hsl(var(--primary) /.8);
+  background: hsl(var(--primary) / 0.8);
 }
 
 .aiButton:disabled {
@@ -973,27 +979,31 @@ font-weight: 600;
 }
 
 .aiButton:disabled:hover {
-  transform: none
+  transform: none;
 }
 
 .aiColumn {
-  box-shadow: 0 0 0 1px hsl(var(--primary) / .5);
+  box-shadow: 0 0 0 1px hsl(var(--primary) / 0.5);
   padding: 1rem;
   border-radius: var(--radius);
   animation: pulseAnimation 3s infinite;
 }
 
 @keyframes pulseAnimation {
-  0% { box-shadow: 0 0 0 1px hsl(var(--primary) / .5); }
-  50% { box-shadow: 0 0 0 2px hsl(var(--primary) / .75); }
-  100% { box-shadow: 0 0 0 1px hsl(var(--primary) / .5); }
+  0% {
+    box-shadow: 0 0 0 1px hsl(var(--primary) / 0.5);
+  }
+  50% {
+    box-shadow: 0 0 0 2px hsl(var(--primary) / 0.75);
+  }
+  100% {
+    box-shadow: 0 0 0 1px hsl(var(--primary) / 0.5);
+  }
 }
 
 .aiColumn h3 {
   color: hsl(var(--primary));
 }
-
-
 
 .sparkle {
   display: inline-block;
@@ -1005,9 +1015,18 @@ font-weight: 600;
 }
 
 @keyframes sparkleAnimation {
-  0% { transform: scale(1); opacity: 1; }
-  50% { transform: scale(1.2); opacity: 0.8; }
-  100% { transform: scale(1); opacity: 1; }
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.2);
+    opacity: 0.8;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
 }
 
 .recyclingTip {
@@ -1147,7 +1166,7 @@ font-weight: 600;
     background: hsl(var(--card));
     color: hsl(var(--foreground));
   }
-  
+
   .findCheaperButton:hover {
     background: hsl(var(--primary));
     color: hsl(var(--primary-foreground));
@@ -1170,9 +1189,15 @@ font-weight: 600;
 }
 
 @keyframes pulse {
-  0% { opacity: 0.6; }
-  50% { opacity: 1; }
-  100% { opacity: 0.6; }
+  0% {
+    opacity: 0.6;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0.6;
+  }
 }
 
 /* .suggestionsSection .accordion {
@@ -1199,12 +1224,10 @@ font-weight: 600;
   color: hsl(var(--primary));
 }
 
-
 .profileHeader {
   text-align: center;
   margin-bottom: 2rem;
 }
-
 
 .profileName {
   font-size: 1.5rem;
@@ -1266,7 +1289,8 @@ font-weight: 600;
 
 /* Star background animation */
 @keyframes twinkle {
-  0%, 100% {
+  0%,
+  100% {
     opacity: 0.5;
     transform: scale(1);
   }
@@ -1291,7 +1315,6 @@ font-weight: 600;
   border-radius: 50%;
   animation: twinkle 2s infinite ease-in-out;
 }
-
 
 .recentlyScanned {
   background: hsl(var(--card));
@@ -1339,7 +1362,6 @@ font-weight: 600;
   box-shadow: 0 2px 4px hsl(var(--foreground) / 0.1);
 }
 
-
 .alternativeImageContainer {
   width: 100%;
   height: 160px;
@@ -1358,7 +1380,6 @@ font-weight: 600;
 .alternativeCard:hover .alternativeImage {
   transform: scale(1.05);
 }
-
 
 .alternativeInfo {
   padding: 1rem;
@@ -1432,7 +1453,6 @@ font-weight: 600;
   margin-bottom: 2rem;
 }
 
-
 .profileActions {
   display: flex;
   justify-content: center;
@@ -1449,12 +1469,12 @@ font-weight: 600;
   justify-content: center;
   margin-top: 1rem;
   gap: 0.5rem;
-  padding: 2px 16px ;
+  padding: 2px 16px;
   box-sizing: border-box;
   border: none;
   border-radius: var(--radius);
   background: hsl(var(--background));
-  color: hsl(var(--foreground) / .5);
+  color: hsl(var(--foreground) / 0.5);
   border: 1px solid hsl(var(--border));
   font-size: 0.875rem;
   cursor: pointer;
@@ -1464,9 +1484,8 @@ font-weight: 600;
 }
 
 .logoutButton:hover {
-  background: hsl(var(--primary) /.2);
+  background: hsl(var(--primary) / 0.2);
 }
-
 
 @media (max-width: 640px) {
   .profileStats {
@@ -1486,7 +1505,8 @@ font-weight: 600;
 
 /* Star background animation */
 @keyframes twinkle {
-  0%, 100% {
+  0%,
+  100% {
     opacity: 0.5;
     transform: scale(1);
   }
@@ -1513,7 +1533,7 @@ font-weight: 600;
 }
 
 .authForm {
-  background: hsl(var(--background));   
+  background: hsl(var(--background));
   padding: 1.5rem 1.25rem;
   border-radius: 15px;
   /* box-shadow: 0 0 20px hsl(var(--muted)); */
@@ -1594,7 +1614,7 @@ font-weight: 600;
 }
 
 .textButton:hover {
-    color: hsl(var(--primary));
+  color: hsl(var(--primary));
   text-decoration: underline;
 }
 
@@ -1653,8 +1673,8 @@ font-weight: 600;
 .scanItem {
   display: flex;
   align-items: center;
-  gap: .5rem;
-  padding: .5rem;
+  gap: 0.5rem;
+  padding: 0.5rem;
   box-sizing: border-box;
   background: hsl(var(--card));
   border: 1px solid hsl(var(--border));
@@ -1681,7 +1701,7 @@ font-weight: 600;
 
 .scanItemInfo h4 {
   margin: 0;
-  font-size: .875rem;
+  font-size: 0.875rem;
   color: hsl(var(--foreground));
 }
 
@@ -1748,7 +1768,11 @@ font-weight: 600;
   font-weight: 900;
   line-height: 1.2;
   margin-bottom: 1.5rem;
-  background: linear-gradient(to right, hsl(var(--foreground)), hsl(var(--primary)));
+  background: linear-gradient(
+    to right,
+    hsl(var(--foreground)),
+    hsl(var(--primary))
+  );
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -1818,7 +1842,7 @@ font-weight: 600;
   align-items: center;
   flex-direction: row;
   margin-bottom: 1.5rem;
-  gap: 0.5rem
+  gap: 0.5rem;
 }
 @media screen and (max-width: 768px) {
   .insightsHeader {
@@ -1904,7 +1928,6 @@ font-weight: 600;
   animation: spin 1s linear infinite;
 }
 
-
 .trackerButtonContainer {
   width: 100%;
   box-sizing: border-box;
@@ -1913,7 +1936,7 @@ font-weight: 600;
   width: 100%;
   padding: 1rem;
   box-sizing: border-box;
-  background-color: hsl(var(--primary) /.8);
+  background-color: hsl(var(--primary) / 0.8);
   color: hsl(var(--primary-foreground));
   border-radius: var(--radius);
   text-align: center;
@@ -1928,7 +1951,7 @@ font-weight: 600;
 }
 
 .trackerButton:hover {
-  background-color: hsl(var(--primary) /.5);
+  background-color: hsl(var(--primary) / 0.5);
 }
 
 .statsSection {
@@ -1938,7 +1961,6 @@ font-weight: 600;
   gap: 1.5rem;
   margin: 2rem 0;
 }
-
 
 .statsGrid {
   display: grid;
@@ -2004,8 +2026,43 @@ font-weight: 600;
   color: hsl(var(--foreground));
 }
 
-
 /* Adjust existing styles */
 .statsGrid {
   margin-bottom: 2rem;
 }
+  .chartContainer {
+    width: 100%;
+    min-height: 400px;
+    margin: 2rem 0;
+  }
+
+  .recharts-cartesian-grid line {
+    stroke: hsl(var(--border));
+  }
+
+  .recharts-tooltip {
+    background: hsl(var(--background)) !important;
+    border: 1px solid hsl(var(--border)) !important;
+    border-radius: var(--radius) !important;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1) !important;
+    color: hsl(var(--foreground)) !important;
+  }
+
+  .recharts-tooltip-item {
+    color: hsl(var(--foreground)) !important;
+  }
+
+  .expenditurePage {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 1rem;
+    margin-top: 64px;
+    min-height: calc(100dvh - 64px);
+  }
+
+  .expenditurePage h1 {
+    font-size: 1.25rem;
+    color: hsl(var(--primary));
+    font-weight: 600;
+  }
+
