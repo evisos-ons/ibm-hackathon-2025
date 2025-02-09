@@ -1938,3 +1938,74 @@ font-weight: 600;
   gap: 1.5rem;
   margin: 2rem 0;
 }
+
+
+.statsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1.5rem;
+  margin: 1.5rem 0;
+}
+
+.chartContainer {
+  background: hsl(var(--card));
+  border: 1px solid hsl(var(--border));
+  border-radius: var(--radius);
+  margin: 2rem 0;
+  padding-bottom: 1rem;
+  box-sizing: border-box;
+}
+
+.chartContainer h2 {
+  color: hsl(var(--primary));
+  margin-bottom: 1.5rem;
+  font-size: 1.25rem;
+  padding-left: 1rem;
+  padding-top: 1rem;
+  box-sizing: border-box;
+}
+
+.recharts-line {
+  stroke-width: 2;
+}
+
+.recharts-tooltip {
+  background: hsl(var(--background)) !important;
+  border: 1px solid hsl(var(--border)) !important;
+  border-radius: var(--radius) !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1) !important;
+  color: hsl(var(--foreground)) !important;
+}
+
+.recharts-tooltip-item {
+  color: hsl(var(--foreground)) !important;
+}
+
+.recharts-legend-item {
+  color: hsl(var(--foreground)) !important;
+}
+
+.chartsContainer {
+  display: grid;
+  gap: 2rem;
+  margin: 2rem 0;
+}
+
+.chartWrapper {
+  background: hsl(var(--card));
+  border: 1px solid hsl(var(--border));
+  border-radius: var(--radius);
+  padding: 1.5rem;
+}
+
+.chartWrapper h2 {
+  margin-bottom: 1rem;
+  font-size: 1.1rem;
+  color: hsl(var(--foreground));
+}
+
+
+/* Adjust existing styles */
+.statsGrid {
+  margin-bottom: 2rem;
+}
