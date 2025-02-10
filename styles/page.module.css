@@ -3133,7 +3133,11 @@ font-weight: 600;
   padding: 1.5rem;
   border-radius: var(--radius);
   border: 1px solid hsl(var(--border));
-  margin-top: 1.5rem;
+  grid-column: span 2;
+}
+
+.savingsChallengeSection h2{
+  color: hsl(var(--primary));
 }
 
 .challengeForm {
@@ -3242,6 +3246,7 @@ font-weight: 600;
   padding: 1rem;
   border-radius: var(--radius);
   margin: 1rem 0;
+  border: 1px solid hsl(var(--border));
 }
 
 .challengeDetails p {

@@ -696,9 +696,9 @@ export default function ExpenditureTracker() {
           {savingsChallenge ? (
             <>
               <div className={styles.challengeDetails}>
-                <p>Target: Reduce spending by {savingsChallenge.targetPercentage}%</p>
-                <p>Base Spending: £{savingsChallenge.baseSpending.toFixed(2)}</p>
-                <p>Target Spending: £{(savingsChallenge.baseSpending * (1 - savingsChallenge.targetPercentage / 100)).toFixed(2)}</p>
+                <p><strong>Target:</strong> Reduce spending by {savingsChallenge.targetPercentage}%</p>
+                <p><strong>Base Spending:</strong> £{savingsChallenge.baseSpending.toFixed(2)}</p>
+                <p><strong>Target Spending:</strong> £{(savingsChallenge.baseSpending * (1 - savingsChallenge.targetPercentage / 100)).toFixed(2)}</p>
                 <div className={styles.progressBar}>
                   <div 
                     style={{ width: `${calculateChallengeProgress()}%` }}
