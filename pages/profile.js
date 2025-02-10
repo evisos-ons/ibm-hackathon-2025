@@ -174,7 +174,7 @@ export default function ProfilePage() {
                           )}
                           {scan.nutriscore && (
                             <span>
-                              Nutri-Score: {scan.nutriscore.toUpperCase()}
+                              Nutri-Score: <strong>{scan.nutriscore.toUpperCase()}</strong>
                             </span>
                           )}
                         </div>
