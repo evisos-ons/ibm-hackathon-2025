@@ -143,19 +143,21 @@ export default function ScanPage() {
   const fetchProductInfo = async (code) => {
     setIsLoading(true);
     try {
-      console.log('Fetching product info for barcode:', code);
+      console.log("Fetching product info for barcode:", code);
       const response = await fetch(`/api/product?barcode=${code}&weight=100`, {
         headers: {
-          'Accept': 'application/json'
-        }
+          Accept: "application/json",
+        },
       });
-      
+
       if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status} - ${response.statusText}`);
+        throw new Error(
+          `HTTP error! status: ${response.status} - ${response.statusText}`
+        );
       }
-      
+
       const data = await response.json();
-      console.log('Product API response:', data);
+      console.log("Product API response:", data);
 
       if (data.status === "success" && data.product) {
         setProductInfo(data.product);
@@ -171,8 +173,8 @@ export default function ScanPage() {
           setStep(2);
         }
       } else {
-        const errorMessage = data.error || 'Product not found';
-        console.error('Product API error:', errorMessage);
+        const errorMessage = data.error || "Product not found";
+        console.error("Product API error:", errorMessage);
         toast.error(errorMessage);
         setProductInfo(null);
         setHasEnoughInfoForAI(false);
@@ -300,23 +302,20 @@ export default function ScanPage() {
       case 1: // Scanner
         return (
           <div className={styles.scannerStep}>
-
             {isScanning ? (
               <div className={styles.scannerContainer}>
-                
                 <p className={styles.instruction}>
                   Position the barcode in front of your camera
                 </p>
                 <div id="reader" className={styles.reader}></div>
               </div>
             ) : (
-                <>
-                <h2 className={styles.stepTitle}>Scan Your Product</h2>
-              <div className={styles.undrawPhoto}>
-              </div>
-              <p className={styles.instruction}>
-                Position the barcode in front of your camera or enter the barcode manually!
-              </p>
+              <>
+                <div className={styles.undrawPhoto}></div>
+                <p className={styles.instruction}>
+                  Position the barcode in front of your camera or enter the
+                  barcode manually!
+                </p>
               </>
             )}
             <div className={styles.scannerFixedContainer}>

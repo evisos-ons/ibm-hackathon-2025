@@ -4,7 +4,7 @@ export default async function handler(req, res) {
 
   try {
     const url = `https://world.openfoodfacts.org/api/v3/product/${barcode}.json`;
-    const response = await fetch(url);
+    const response = await fetch(url, { timeout: 30000 });
 
     if (!response.ok) {
       console.log(`API responded with status: ${response.status}`);

@@ -43,7 +43,7 @@
 .features {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 2rem;
+  gap: 1rem;
   padding: 2rem;
   box-sizing: border-box;
   margin: 0 auto;
@@ -351,6 +351,15 @@
   gap: 1rem;
 }
 
+  .headerControls svg {
+    color: hsl(var(--primary));
+    transition: all 0.2s ease;
+  }
+
+.headerControls svg:hover {
+  transform: scale(0.9);
+}
+
 .themeToggle {
   background: none;
   border: none;
@@ -471,9 +480,19 @@ font-weight: 600;
   color: hsl(var(--primary));
 }
 
+.loadingScreen svg {
+  animation: rotate 1.2s infinite cubic-bezier(0.4, 0, 0.2, 1);
+  transform-origin: center;
+  will-change: transform;
+}
+
 @keyframes rotate {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
 
 
@@ -700,8 +719,8 @@ font-weight: 600;
 .portionSlider {
   background: hsl(var(--card));
   border-radius: var(--radius);
-  padding: 2rem;
-  margin: 2rem 0;
+  padding: 1rem;
+  margin: 1rem 0;
   width: 100%;
 }
 
@@ -1217,16 +1236,8 @@ font-weight: 600;
   color: hsl(var(--primary));
 }
 
-
-.profileHeader {
-  text-align: center;
-  margin-bottom: 2rem;
-}
-
-
 .profileName {
   font-size: 1.5rem;
-  margin-bottom: 0.5rem;
   color: hsl(var(--foreground));
 }
 
@@ -1389,12 +1400,11 @@ font-weight: 600;
 
 .profileHeader {
   text-align: center;
-  margin-bottom: 2rem;
+  margin-bottom: 1rem;
 }
 
 .profileName {
   font-size: 1.5rem;
-  margin-bottom: 0.5rem;
   color: hsl(var(--foreground));
 }
 
@@ -1407,6 +1417,20 @@ font-weight: 600;
   grid-template-columns: repeat(2, 1fr);
   gap: 1rem;
   margin-bottom: 2rem;
+}
+
+@media (max-width: 640px) {
+  .profileName {
+    text-align: left
+  }
+
+  .profileEmail {
+    text-align: left
+  }
+
+  .profileHeader {
+    text-align: left;
+  }
 }
 
 
@@ -1442,6 +1466,12 @@ font-weight: 600;
 
 .logoutButton:hover {
   background: hsl(var(--primary) /.2);
+}
+
+@media (max-width: 640px) {
+  .logoutButtonContainer{
+    justify-content: flex-start;
+  }
 }
 
 
@@ -1734,6 +1764,12 @@ font-weight: 600;
 
 .headerTitle svg {
   transition: all 0.2s ease;
+}
+
+@media (max-width: 768px) {
+  .headerTitle svg {
+    display: none;
+  }
 }
 
 .headerTitle:hover svg {
@@ -2189,14 +2225,14 @@ font-weight: 600;
   align-items: center;
 }
 
+.statsSection .statCard:nth-child(3) {
+  grid-column: span 2;
+}
+
 @media (max-width: 768px) {
   .statCard {
     align-items: flex-start;
   }
-}
-
-.statCard:hover {
-  transform: translateY(-3px);
 }
 
 .statCard h3 {
@@ -2532,7 +2568,6 @@ font-weight: 600;
 
 .trendTab:hover {
   background: hsl(var(--muted));
-  color: hsl(var(--primary));
 }
 
 .activeTab {
@@ -3018,7 +3053,7 @@ font-weight: 600;
 }
 
 .aiInsightsSection {
-  margin: 2rem 0;
+  margin: 1rem 0;
   /* padding-top: 2rem; */
   border: 1px solid hsl(var(--border));
   border-radius: var(--radius);

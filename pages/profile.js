@@ -1,12 +1,11 @@
 import { useRouter } from "next/router";
 import styles from "../styles/page.module.css";
 import toast from "react-hot-toast";
-import { IoPersonCircle, IoLogOutOutline, IoCompass } from "react-icons/io5";
+import { IoPersonCircle, IoLogOutOutline, IoReloadCircleSharp } from "react-icons/io5";
 import { supabase } from "../utils/supabaseClient";
 import { getUserScannedProducts, getUserStats } from "../utils/productHistory";
 import { useEffect, useState } from "react";
 import UserInsights from "../components/UserInsights";
-import Link from "next/link";
 import AIInsights from "../components/AIInsights";
 
 export default function ProfilePage() {
@@ -97,7 +96,7 @@ export default function ProfilePage() {
       <div className={styles.page}>
         <main className={styles.main}>
           <div className={styles.loadingScreen}>
-            <IoPersonCircle size={80} />
+            <IoReloadCircleSharp size={80} />
           </div>
         </main>
       </div>
@@ -128,19 +127,13 @@ export default function ProfilePage() {
               <p>{userStats.totalScans}</p>
             </div>
             <div className={styles.statCard}>
-              <h3>Health Score</h3>
-              <p>{userStats.healthScore}</p>
-            </div>
-            <div className={styles.statCard}>
               <h3>Total Spent</h3>
               <p>£{userStats.totalSpent.toFixed(2)}</p>
             </div>
-          </div>
-          <div className={styles.trackerButtonContainer}>
-            <Link href="/tracker" className={styles.trackerButton}>
-              <IoCompass size={24} />
-              View Spending Tracker
-            </Link>
+            <div className={styles.statCard}>
+              <h3>Health Score</h3>
+              <p>{userStats.healthScore}</p>
+            </div>
           </div>
 
           <div className={styles.recentlyScanned}>
