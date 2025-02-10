@@ -110,7 +110,7 @@ export default function UserInsights({ userId }) {
           className={styles.refreshButton}
           title={!canRefresh ? `Next refresh available in ${getTimeRemaining()}` : 'Generate new insights'}
         >
-          <IoRefreshOutline size={20} className={loading ? styles.spinning : ''} />
+          <IoRefreshOutline size={16} className={loading ? styles.spinning : ''} />
           {!canRefresh ? `Try again in ${getTimeRemaining()}` : 'Refresh Insights'}
         </button>
       </div>

@@ -37,10 +37,14 @@ export default function ExpenditureTracker() {
     trendAnalysis: []
   });
   const [selectedTrendPeriod, setSelectedTrendPeriod] = useState('weekly');
+  const [savingsChallenge, setSavingsChallenge] = useState(null);
+  const [showChallengeForm, setShowChallengeForm] = useState(false);
+  const [isSettingChallenge, setIsSettingChallenge] = useState(false);
 
   useEffect(() => {
     fetchExpenditureData();
     fetchFinancialGoals();
+    fetchSavingsChallenge();
   }, []);
 
   const fetchExpenditureData = async () => {
@@ -88,6 +92,32 @@ export default function ExpenditureTracker() {
     } catch (error) {
       console.error('Error fetching financial goals:', error);
       setError('Failed to load financial goals. Please try again.');
+    }
+  };
+
+  const fetchSavingsChallenge = async () => {
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) return;
+
+      const { data: challenge, error } = await supabase
+        .from('savings_challenges')
+        .select('*')
+        .eq('user_id', user.id)
+        .single();
+
+      if (error && error.code !== 'PGRST116') throw error;
+
+      if (challenge) {
+        setSavingsChallenge({
+          baseSpending: challenge.base_spending,
+          targetPercentage: challenge.target_percentage,
+          startDate: challenge.start_date,
+          userId: user.id
+        });
+      }
+    } catch (error) {
+      console.error('Error fetching savings challenge:', error);
     }
   };
 
@@ -261,6 +291,21 @@ export default function ExpenditureTracker() {
     return progress >= 100 ? 'exceeded' : progress >= 80 ? 'warning' : 'good';
   };
 
+  const calculateChallengeProgress = () => {
+    if (!savingsChallenge) return 0;
+    
+    const currentSpending = parseFloat(stats.totalSpent);
+    const targetReduction = savingsChallenge.baseSpending * (savingsChallenge.targetPercentage / 100);
+    const targetSpending = savingsChallenge.baseSpending - targetReduction;
+    
+    if (currentSpending <= targetSpending) {
+      return 100; // Goal achieved
+    }
+    
+    const progress = ((savingsChallenge.baseSpending - currentSpending) / targetReduction) * 100;
+    return Math.max(0, Math.min(100, progress));
+  };
+
   const BudgetForm = () => (
     <form onSubmit={handleSetBudget} className={styles.budgetForm}>
       <input
@@ -310,6 +355,94 @@ export default function ExpenditureTracker() {
       </button>
     </form>
   );
+
+  const SavingsChallengeForm = () => (
+    <form onSubmit={handleSetChallenge} className={styles.challengeForm}>
+      <div className={styles.challengeInputGroup}>
+        <label>Base Weekly Spending</label>
+        <input
+          type="number"
+          name="baseSpending"
+          step="0.01"
+          min="0"
+          placeholder="Enter your typical weekly spending"
+          required
+          disabled={isSettingChallenge}
+        />
+      </div>
+      <div className={styles.challengeInputGroup}>
+        <label>Target Reduction (%)</label>
+        <input
+          type="number"
+          name="targetPercentage"
+          step="1"
+          min="1"
+          max="100"
+          placeholder="Enter target reduction percentage"
+          required
+          disabled={isSettingChallenge}
+        />
+      </div>
+      <div className={styles.challengeButtons}>
+        <button type="submit" disabled={isSettingChallenge}>
+          {isSettingChallenge ? 'Setting Challenge...' : 'Start Challenge'}
+        </button>
+        <button 
+          type="button" 
+          onClick={() => setShowChallengeForm(false)}
+          disabled={isSettingChallenge}
+        >
+          Cancel
+        </button>
+      </div>
+    </form>
+  );
+
+  const handleSetChallenge = async (e) => {
+    e.preventDefault();
+    setIsSettingChallenge(true);
+    setError(null);
+
+    try {
+      const formData = new FormData(e.target);
+      const baseSpending = parseFloat(formData.get('baseSpending'));
+      const targetPercentage = parseFloat(formData.get('targetPercentage'));
+
+      if (isNaN(baseSpending) || isNaN(targetPercentage)) {
+        throw new Error('Please enter valid numbers');
+      }
+
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) throw new Error('Please sign in to set a challenge');
+
+      const challenge = {
+        baseSpending,
+        targetPercentage,
+        startDate: new Date().toISOString(),
+        userId: user.id
+      };
+
+      const { error } = await supabase
+        .from('savings_challenges')
+        .upsert({
+          user_id: user.id,
+          base_spending: baseSpending,
+          target_percentage: targetPercentage,
+          start_date: challenge.startDate,
+          updated_at: new Date().toISOString()
+        }, { onConflict: 'user_id' });
+
+      if (error) throw error;
+
+      setSavingsChallenge(challenge);
+      setShowChallengeForm(false);
+    } catch (error) {
+      console.error('Error setting challenge:', error);
+      setError(error.message);
+    } finally {
+      setIsSettingChallenge(false);
+    }
+  };
 
   const analyzeSpendingTrends = (data) => {
     if (!data || data.length === 0) return;
@@ -415,17 +548,23 @@ export default function ExpenditureTracker() {
             <BarChart
               data={trendsData.weeklyComparison}
               margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
+              className={styles.barChart}
             >
               <CartesianGrid strokeDasharray="3 3" />
               <XAxis dataKey="week" />
               <YAxis tickFormatter={(value) => `£${value}`} />
-              <Tooltip content={<CustomTooltip />} />
+              <Tooltip 
+                content={<CustomTooltip />}
+                wrapperClassName={styles.barChartTooltip}
+              />
               <Legend />
               <Bar 
                 dataKey="total" 
                 fill="hsl(var(--primary))" 
                 name="Weekly Spending"
                 barSize={20}
+                radius={[4, 4, 0, 0]}
+                className={styles.weeklyBar}
               />
             </BarChart>
           </ResponsiveContainer>
@@ -438,13 +577,24 @@ export default function ExpenditureTracker() {
             <BarChart
               data={trendsData.monthlyComparison}
               margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
+              className={styles.barChart}
             >
               <CartesianGrid strokeDasharray="3 3" />
               <XAxis dataKey="month" />
               <YAxis tickFormatter={(value) => `£${value}`} />
-              <Tooltip content={<CustomTooltip />} />
+              <Tooltip 
+                content={<CustomTooltip />}
+                wrapperClassName={styles.barChartTooltip}
+              />
               <Legend />
-              <Bar dataKey="total" fill="hsl(var(--primary))" name="Monthly Spending" />
+              <Bar 
+                dataKey="total" 
+                fill="hsl(var(--primary))" 
+                name="Monthly Spending"
+                barSize={20}
+                radius={[4, 4, 0, 0]}
+                className={styles.monthlyBar}
+              />
             </BarChart>
           </ResponsiveContainer>
         </div>
@@ -540,7 +690,40 @@ export default function ExpenditureTracker() {
           )}
           {showSavingsForm && <SavingsGoalForm />}
         </div>
-      </div>
+          </div>
+        <div className={styles.savingsChallengeSection}>
+          <h2>Savings Challenge</h2>
+          {savingsChallenge ? (
+            <>
+              <div className={styles.challengeDetails}>
+                <p><strong>Target:</strong> Reduce spending by {savingsChallenge.targetPercentage}%</p>
+                <p><strong>Base Spending:</strong> £{savingsChallenge.baseSpending.toFixed(2)}</p>
+                <p><strong>Target Spending:</strong> £{(savingsChallenge.baseSpending * (1 - savingsChallenge.targetPercentage / 100)).toFixed(2)}</p>
+                <div className={styles.progressBar}>
+                  <div 
+                    style={{ width: `${calculateChallengeProgress()}%` }}
+                    className={styles.progressFill}
+                  ></div>
+                </div>
+                <p>{calculateChallengeProgress().toFixed(1)}% towards goal</p>
+              </div>
+              <button 
+                className={styles.updateButton}
+                onClick={() => setShowChallengeForm(true)}
+              >
+                Update Challenge
+              </button>
+            </>
+          ) : (
+            <button 
+              className={styles.setButton}
+              onClick={() => setShowChallengeForm(true)}
+            >
+              Set Savings Challenge
+            </button>
+          )}
+          {showChallengeForm && <SavingsChallengeForm />}
+        </div>
 
       {!loading && dailyData.length > 0 && <TrendsAnalysis />}
 

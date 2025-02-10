@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { supabase } from "../utils/supabaseClient";
 import styles from "../styles/page.module.css";
 import { useRouter } from "next/router";
-import { IoScanSharp, IoLeafOutline, IoWalletOutline, IoTrendingUpOutline, IoLogoGithub } from "react-icons/io5";
+import { IoScanSharp, IoLeafOutline, IoWalletOutline, IoTrendingUpOutline, IoLogoGithub, IoShareOutline } from "react-icons/io5";
 import Link from 'next/link';
 import Image from 'next/image';
 
@@ -118,12 +118,15 @@ export default function HomePage() {
               Yunusa
             </a>
           </div>
-          <a href="https://github.com/evirunurm/ibm-hackathon-2025" className={styles.githubLink}>
+          <a href="https://github.com/evisos-ons/ibm-hackathon-2025" className={styles.githubLink}>
             <IoLogoGithub size={20} />
-            Open Source; GitHub Repository
+            GitHub Repository
           </a>
         </footer>
       </main>
+      <div className={styles.iosPrompt}>
+        <p>Tap the <IoShareOutline size={20} className={styles.iosPromptIcon} /> icon to Add to Home Screen</p>
+      </div>
     </div>
   );
 }

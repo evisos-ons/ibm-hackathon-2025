@@ -143,8 +143,19 @@ export default function ScanPage() {
   const fetchProductInfo = async (code) => {
     setIsLoading(true);
     try {
-      const response = await fetch(`/api/product?barcode=${code}&weight=100`);
+      console.log('Fetching product info for barcode:', code);
+      const response = await fetch(`/api/product?barcode=${code}&weight=100`, {
+        headers: {
+          'Accept': 'application/json'
+        }
+      });
+      
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status} - ${response.statusText}`);
+      }
+      
       const data = await response.json();
+      console.log('Product API response:', data);
 
       if (data.status === "success" && data.product) {
         setProductInfo(data.product);
@@ -160,13 +171,15 @@ export default function ScanPage() {
           setStep(2);
         }
       } else {
-        toast.error("Product not found");
+        const errorMessage = data.error || 'Product not found';
+        console.error('Product API error:', errorMessage);
+        toast.error(errorMessage);
         setProductInfo(null);
         setHasEnoughInfoForAI(false);
       }
     } catch (error) {
-      console.error("Error fetching product:", error);
-      toast.error("Failed to fetch product");
+      console.error("Error fetching product:", error.message);
+      toast.error(`Failed to fetch product: ${error.message}`);
       setProductInfo(null);
       setHasEnoughInfoForAI(false);
     } finally {

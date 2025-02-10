@@ -9,23 +9,9 @@
   align-items: flex-start;
   justify-content: center;
 }
-
 .pageHomeScreen {
   height: 0;
   min-height: calc(100dvh - 64px);
-}
-
-@media (prefers-color-scheme: dark) {
-  .page {
-    --gray-rgb: 255, 255, 255;
-    --gray-alpha-200: rgba(var(--gray-rgb), 0.145);
-    --gray-alpha-100: rgba(var(--gray-rgb), 0.06);
-
-    --button-primary-hover: #ccc;
-    --button-secondary-hover: #1a1a1a;
-    background-color: hsl(var(--background));
-    color: hsl(var(--foreground));
-  }
 }
 
 .main {
@@ -61,6 +47,7 @@
   padding: 2rem;
   box-sizing: border-box;
   margin: 0 auto;
+  margin-top: 1rem;
   width: 100%;
 }
 
@@ -469,12 +456,27 @@ font-weight: 600;
   color: hsl(var(--muted-foreground));
   margin-bottom: 0.5rem;
   text-align: center;
+  padding: 0 .25rem;
+  box-sizing: border-box;
 }
 
 .loadingScreen {
   text-align: center;
   padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  color: hsl(var(--primary));
 }
+
+@keyframes rotate {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+
 
 .loadingAnimation {
   margin: 2rem auto;
@@ -574,6 +576,7 @@ font-weight: 600;
   color: hsl(var(--primary-foreground));
   border: none;
   padding: 0.8rem 1.5rem;
+  box-sizing: border-box;
   border-radius: var(--radius);
   font-size: 1rem;
   cursor: pointer;
@@ -696,7 +699,6 @@ font-weight: 600;
 
 .portionSlider {
   background: hsl(var(--card));
-  border: 1px solid hsl(var(--border));
   border-radius: var(--radius);
   padding: 2rem;
   margin: 2rem 0;
@@ -764,7 +766,6 @@ font-weight: 600;
 
 .productCard {
   background: hsl(var(--card));
-  border: 1px solid hsl(var(--border));
   border-radius: var(--radius);
   padding: 1.5rem;
   display: flex;
@@ -784,6 +785,14 @@ font-weight: 600;
 
 .confirmButtons {
   display: flex;
+  align-items: center;    
+  justify-content: center;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  padding: 1rem;
+  box-sizing: border-box;
+  border-top: 1px solid hsl(var(--border));
   gap: 1rem;
   width: 100%;
 }
@@ -798,6 +807,7 @@ font-weight: 600;
   cursor: pointer;
   transition: opacity 0.2s;
   font-family: inherit;
+  max-width: 300px;
 }
 
 .backButton {
@@ -1249,7 +1259,7 @@ font-weight: 600;
   align-items: center;
   padding: 2rem;
   margin-top: 80px;
-  min-height: calc(100vh - 160px);
+  min-height: calc(100dvh - 160px);
 }
 
 
@@ -1322,6 +1332,7 @@ font-weight: 600;
   padding: 1rem;
   border-top: 1px solid hsl(var(--border));
   background: hsl(var(--muted));
+  height: 100%;
 }
 
 .alternativeInfo h4 {
@@ -1368,6 +1379,13 @@ font-weight: 600;
   overflow-y: auto;
   box-sizing: border-box;
 }
+
+@media (max-width: 640px) {
+  .profileContainer {
+    padding: 0 2px;
+  }
+}
+
 
 .profileHeader {
   text-align: center;
@@ -1652,18 +1670,22 @@ font-weight: 600;
 
 .scanItemInfo span {
   font-size: 0.65rem;
-  background: hsl(var(--muted));  
   color: hsl(var(--muted-foreground));
-  padding: 0.1rem 1.5rem;
   box-sizing: border-box;
   border-radius: var(--radius);
-  border: 1px solid hsl(var(--primary) / .25);
 }
 
 .scanItemDetailsContainer {
   display: flex;
+  flex-direction: column;
+  align-items: flex-start;
   gap: 0.35rem;
   margin-top: 0.35rem;
+}
+
+.scanItemDetailsContainer span strong {
+  color: hsl(var(--primary));
+  font-weight: 500;
 }
 
 .nutriScore {
@@ -1710,12 +1732,20 @@ font-weight: 600;
   color: hsl(var(--primary));
 }
 
+.headerTitle svg {
+  transition: all 0.2s ease;
+}
+
+.headerTitle:hover svg {
+  transform: rotate(-45deg);
+}
+
+
 .hero {
   text-align: center;
 
   max-width: 800px;
   margin: 0 auto;
-  padding: 1rem 1rem;
 }
 
 .hero .title {
@@ -1951,28 +1981,6 @@ font-weight: 600;
   color: hsl(var(--primary));
 }
 
-.undrawPhoto {
-  background: url("../public/barcode.gif") no-repeat center;
-  background-size: contain;
-  padding: 1rem;
-  box-sizing: border-box;
-  margin-bottom: 4rem;
-  width: 300px;
-  height: 300px;
-  border-radius: var(--radius);
-}
-
-.undrawPhoto {
-  background: url("../public/barcode.gif") no-repeat center;
-  background-size: contain;
-  padding: 1rem;
-  box-sizing: border-box;
-  margin-bottom: 4rem;
-  width: 300px;
-  height: 300px;
-  border-radius: var(--radius);
-}
-
 .container {
   max-width: 800px;
   margin: 0 auto;
@@ -2072,7 +2080,7 @@ font-weight: 600;
   margin: 0 auto;
   padding: 1rem;
   margin-top: 64px;
-  min-height: calc(100vh - 64px);
+  min-height: calc(100dvh - 64px);
 }
 
 .expenditurePage h1 {
@@ -2195,6 +2203,7 @@ font-weight: 600;
   color: hsl(var(--primary));
   font-size: 1rem;
   margin-bottom: 0.5rem;
+  text-align: left;
 }
 
 .statCard p {
@@ -2289,15 +2298,22 @@ font-weight: 600;
 /* Add these new styles */
 .financialGoals {
   display: grid;
+  grid-template-columns: repeat(2, 1fr);
   box-sizing: border-box;
-  grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
   gap: 1rem;
   font-family: inherit;
+}
+
+@media screen and (max-width: 746px) {
+  .financialGoals {
+    grid-template-columns: repeat(1, 1fr);
+  }
 }
 
 .budgetSection, .savingsSection {
   background: hsl(var(--card));
   padding: 1.5rem;
+  max-width: 100vw;
   box-sizing: border-box;
   border-radius: var(--radius);
   border: 1px solid hsl(var(--border));
@@ -2336,7 +2352,7 @@ font-weight: 600;
 .budgetForm input, .savingsForm input {
   /* flex: 1; */
   width: 100%;
-  padding: 0.5rem 1.5rem;
+  padding: 0.15rem 0.5rem 0.15rem 1.5rem;
   box-sizing: border-box; 
   border: 1px solid hsl(var(--border));
   border-radius: var(--radius);
@@ -2505,13 +2521,18 @@ font-weight: 600;
   box-sizing: border-box; 
   border: 1px solid hsl(var(--border));
   border-radius: var(--radius);
-  background: none;
+  background: hsl(var(--card));
+  color: hsl(var(--foreground));
   cursor: pointer;
   transition: all 0.2s ease;
+  font-family: inherit;
+  font-size: 0.9rem;
+  font-weight: 500;
 }
 
 .trendTab:hover {
-  background: hsl(var(--muted) / 0.1);
+  background: hsl(var(--muted));
+  color: hsl(var(--primary));
 }
 
 .activeTab {
@@ -2520,9 +2541,43 @@ font-weight: 600;
   border-color: hsl(var(--primary));
 }
 
+.activeTab:hover {
+  background: hsl(var(--primary));
+  opacity: 0.9;
+}
+
 .trendsChart {
   margin: 1rem 0;
   height: 300px;
+}
+
+/* Remove the :global syntax and use regular class names */
+.barChart {
+  width: 100%;
+  height: 100%;
+}
+
+.barChartBar {
+  width: 20px !important;
+}
+
+.barChartTooltip {
+  background: hsl(var(--background));
+  border: 1px solid hsl(var(--border));
+  border-radius: var(--radius);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  padding: 1rem;
+}
+
+/* Add these styles for better bar appearance */
+.monthlyBar {
+  max-width: 30px;
+  border-radius: 4px 4px 0 0;
+}
+
+.weeklyBar {
+  max-width: 20px;
+  border-radius: 4px 4px 0 0;
 }
 
 .categoryBreakdown {
@@ -2558,6 +2613,7 @@ font-weight: 600;
 .updateButton,
 .setButton {
   padding: 0.75rem 1.5rem;
+  box-sizing: border-box;
   border: none;
   border-radius: var(--radius);
   font-size: 0.9rem;
@@ -2685,7 +2741,7 @@ font-weight: 600;
   background-size: contain;
   padding: 1rem;
   box-sizing: border-box;
-  margin: 0 auto 4rem;
+  margin: 0 auto;
   width: 300px;
   height: 300px;
   border-radius: var(--radius);
@@ -2997,7 +3053,8 @@ font-weight: 600;
 }
 
 .footerSection {
-  margin-top: 4rem;
+  margin-top: 1rem;
+  margin-bottom: 4rem;
   padding: 2rem;
   text-align: center;
   border-top: 1px solid hsl(var(--border));
@@ -3050,4 +3107,173 @@ font-weight: 600;
   background: hsl(var(--primary));
   color: hsl(var(--primary-foreground));
   transform: translateY(-2px);
+}
+
+.iosPrompt {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  padding: 1rem;
+  box-sizing: border-box;
+  border-top: 1px solid hsl(var(--border));
+  width: 100%;
+  text-align: center;
+  color: hsl(var(--muted-foreground));
+  background: hsl(var(--background));
+  display: none;
+}
+
+.iosPrompt p{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.3rem;
+}
+
+@media (max-width: 768px) {
+  .iosPrompt {
+    display: block;
+  }
+}
+
+.savingsChallengeSection {
+  background: hsl(var(--card));
+  padding: 1.5rem;
+  border-radius: var(--radius);
+  border: 1px solid hsl(var(--border));
+  width: 100%;
+  margin-top: 1rem;
+}
+
+.savingsChallengeSection h2{
+  color: hsl(var(--primary));
+  font-size: 1.2rem;
+}
+
+.challengeForm {
+  margin-top: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.challengeInputGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.challengeInputGroup label {
+  font-size: 0.9rem;
+  color: hsl(var(--muted-foreground));
+}
+
+.challengeInputGroup input {
+  padding: 0.5rem;
+  border: 1px solid hsl(var(--border));
+  border-radius: var(--radius);
+  background: hsl(var(--background));
+  color: hsl(var(--foreground));
+}
+
+.challengeButtons {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.challengeButtons button[type="submit"] {
+  flex: 2;
+  padding: 0.75rem 1.5rem;
+  background: hsl(var(--primary));
+  color: hsl(var(--primary-foreground));
+  border: none;
+  border-radius: var(--radius);
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-family: inherit;
+}
+
+.challengeButtons button[type="submit"]:hover {
+  opacity: 0.9;
+}
+
+.challengeButtons button[type="submit"]:disabled {
+  background: hsl(var(--primary) / 0.5);
+  cursor: not-allowed;
+}
+
+.challengeButtons button[type="button"] {
+  flex: 1;
+  padding: 0.75rem 1.5rem;
+  background: hsl(var(--muted));
+  color: hsl(var(--muted-foreground));
+  border: none;
+  border-radius: var(--radius);
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-family: inherit;
+}
+
+.challengeButtons button[type="button"]:hover {
+  background: hsl(var(--muted) / 0.8);
+}
+
+.challengeButtons button[type="button"]:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Update input styles to match */
+.challengeInputGroup input {
+  padding: 0.75rem;
+  border: 1px solid hsl(var(--border));
+  border-radius: var(--radius);
+  background: hsl(var(--background));
+  color: hsl(var(--foreground));
+  font-size: 0.9rem;
+  width: 100%;
+  transition: border-color 0.2s ease;
+}
+
+.challengeInputGroup input:focus {
+  outline: none;
+  border-color: hsl(var(--primary));
+  box-shadow: 0 0 0 2px hsl(var(--primary) / 0.1);
+}
+
+.challengeInputGroup input:disabled {
+  background: hsl(var(--muted) / 0.1);
+  cursor: not-allowed;
+}
+
+.challengeDetails {
+  background: hsl(var(--muted) / 0.1);
+  padding: 1rem;
+  border-radius: var(--radius);
+  margin: 1rem 0;
+  border: 1px solid hsl(var(--border));
+}
+
+.challengeDetails p {
+  margin: 0.5rem 0;
+  color: hsl(var(--foreground));
+}
+
+.progressBar {
+  height: 10px;
+  background: hsl(var(--muted));
+  border-radius: 5px;
+  margin: 1rem 0;
+  overflow: hidden;
+}
+
+.progressFill {
+  height: 100%;
+  background: hsl(var(--primary));
+  transition: width 0.3s ease;
 }

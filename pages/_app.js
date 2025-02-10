@@ -1,4 +1,4 @@
-import { Inter } from "next/font/google";
+import { GeistSans } from "geist/font/sans";
 import Head from "next/head";
 import { ThemeProvider } from "../context/ThemeContext";
 import { useRouter } from "next/router";
@@ -15,10 +15,8 @@ import {
 import { useTheme } from "../context/ThemeContext";
 import { Toaster } from "react-hot-toast";
 import { supabase } from "../utils/supabaseClient";
+import { Analytics } from "@vercel/analytics/react"
 
-const inter = Inter({
-  subsets: ["latin"],
-});
 
 
 function Header() {
@@ -77,24 +75,44 @@ export default function App({ Component, pageProps }) {
     return () => subscription?.unsubscribe();
   }, []);
 
-
   const showHeader = session && router.pathname !== "/login" && router.pathname !== "/";
 
   return (
     <ThemeProvider>
       <Head>
-        <title>ScanSave.in</title>
+        <title>ScanSave</title>
         <meta
           name="description"
           content="Track your spending by scanning food products. Understand their impact on your health and the environment."
         />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
+        
+        {/* Open Graph / Facebook */}
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="https://scansave.in/" />
+        <meta property="og:title" content="ScanSave.in" />
+        <meta property="og:description" content="Track your spending by scanning food products. Understand their impact on your health and the environment." />
+        <meta property="og:image" content="/banner.png" />
+
+        {/* Twitter */}
+        <meta property="twitter:card" content="summary_large_image" />
+        <meta property="twitter:url" content="https://scansave.in/" />
+        <meta property="twitter:title" content="ScanSave.in" />
+        <meta property="twitter:description" content="Track your spending by scanning food products. Understand their impact on your health and the environment." />
+        <meta property="twitter:image" content="/banner.png" />
+
+        <meta name="theme-color" content="#000000" />
+        <link rel="manifest" href="/manifest.json" />
+        <link rel="icon" href="/icon-192x192.png" />
+        <link rel="apple-touch-icon" href="/icon-192x192.png" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+        <meta name="apple-mobile-web-app-title" content="ScanSave" />
       </Head>
-      <div className={inter.className}>
+      <div className={GeistSans.className}>
         {showHeader && <Header />}
         <Component {...pageProps} />
-      </div>
-      <Toaster
+        <Toaster
         position="top-left"
         toastOptions={{
           className: "",
@@ -109,6 +127,8 @@ export default function App({ Component, pageProps }) {
           },
         }}
       />
+      </div>
+      <Analytics />
     </ThemeProvider>
   );
 }
