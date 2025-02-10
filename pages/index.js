@@ -2,8 +2,9 @@ import { useEffect, useState } from "react";
 import { supabase } from "../utils/supabaseClient";
 import styles from "../styles/page.module.css";
 import { useRouter } from "next/router";
-import { IoScanSharp, IoLeafOutline, IoWalletOutline, IoTrendingUpOutline } from "react-icons/io5";
+import { IoScanSharp, IoLeafOutline, IoWalletOutline, IoTrendingUpOutline, IoLogoGithub } from "react-icons/io5";
 import Link from 'next/link';
+import Image from 'next/image';
 
 export default function HomePage() {
   const [session, setSession] = useState(null);
@@ -72,6 +73,56 @@ export default function HomePage() {
             <p>Receive AI-powered recommendations for healthier and more affordable alternatives.</p>
           </div>
         </div>
+
+        <footer className={styles.footerSection}>
+          <p className={styles.createdBy}>Created by Team 10</p>
+          <div className={styles.teamList}>
+            <a href="https://github.com/evisos-ons" target="_blank" className={styles.teamMember}>
+              <Image 
+                src="https://avatars.githubusercontent.com/u/180557538?s=64&v=4"
+                alt="Sebastian's GitHub avatar"
+                width={24}
+                height={24}
+                className={styles.avatar}
+              />
+              Sebastian
+            </a>
+            <a href="https://github.com/AshIsOnGithub" target="_blank" className={styles.teamMember}>
+              <Image 
+                src="https://avatars.githubusercontent.com/u/161076558?s=64&v=4"
+                alt="Ash's GitHub avatar"
+                width={24}
+                height={24}
+                className={styles.avatar}
+              />
+              Ash
+            </a>
+            <a href="https://github.com/PatChimsi" target="_blank" className={styles.teamMember}>
+              <Image 
+                src="https://avatars.githubusercontent.com/u/198340776?s=64&v=4"
+                alt="Patrick's GitHub avatar"
+                width={24}
+                height={24}
+                className={styles.avatar}
+              />
+              Patrick
+            </a>
+            <a href="https://github.com/yunusa1232" target="_blank" className={styles.teamMember}>
+              <Image 
+                src="https://avatars.githubusercontent.com/u/198340825?s=64&v=4"
+                alt="Yunusa's GitHub avatar"
+                width={24}
+                height={24}
+                className={styles.avatar}
+              />
+              Yunusa
+            </a>
+          </div>
+          <a href="https://github.com/evirunurm/ibm-hackathon-2025" className={styles.githubLink}>
+            <IoLogoGithub size={20} />
+            Open Source; GitHub Repository
+          </a>
+        </footer>
       </main>
     </div>
   );

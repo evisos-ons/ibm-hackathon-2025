@@ -97,7 +97,7 @@ export default function UserInsights({ userId }) {
       <div className={styles.insightsHeader}>
         <div className={styles.insightsHeaderText}>
         <h3>AI Shopping Insights</h3>
-        <span> Ask AI to rate your spending and shopping habits.</span>
+        <span> Ask AI to rate your spending and shopping habits every 12 hours.</span>
         </div>
         
         <button

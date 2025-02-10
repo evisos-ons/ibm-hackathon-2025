@@ -61,6 +61,7 @@ export default function AIInsights({ userId }) {
     <div className={styles.insightsContainer}>
       <div className={styles.insightsHeader}>
         <h2>AI Insights</h2>
+        <span>When scanning an item and clicking the 'AI Insights' button, AI will generate insights based on the item's nutritional information. View your saved insights here.</span>
         <div className={styles.insightTabs}>
           {INSIGHT_TYPES.map((type) => (
             <button

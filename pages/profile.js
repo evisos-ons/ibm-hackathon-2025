@@ -6,7 +6,7 @@ import { supabase } from "../utils/supabaseClient";
 import { getUserScannedProducts, getUserStats } from "../utils/productHistory";
 import { useEffect, useState } from "react";
 import UserInsights from "../components/UserInsights";
-import Link from 'next/link';
+import Link from "next/link";
 import AIInsights from "../components/AIInsights";
 
 export default function ProfilePage() {
@@ -17,7 +17,7 @@ export default function ProfilePage() {
   const [userStats, setUserStats] = useState({
     totalScans: 0,
     healthScore: "N/A",
-    totalSpent: 0
+    totalSpent: 0,
   });
   const [isLoading, setIsLoading] = useState(true);
   const [profile, setProfile] = useState(null);
@@ -42,7 +42,6 @@ export default function ProfilePage() {
       setUserEmail(session.user.email);
       setUserId(session.user.id);
 
-    
       const [scanHistory, stats] = await Promise.all([
         getUserScannedProducts(session.user.id, 5),
         getUserStats(session.user.id),
@@ -67,7 +66,9 @@ export default function ProfilePage() {
 
   useEffect(() => {
     const fetchProfile = async () => {
-      const { data: { user } } = await supabase.auth.getUser();
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
       setProfile(user);
     };
 
@@ -135,10 +136,10 @@ export default function ProfilePage() {
               <p>£{userStats.totalSpent.toFixed(2)}</p>
             </div>
           </div>
-          <div className={styles.trackerButtonContainer}>   
+          <div className={styles.trackerButtonContainer}>
             <Link href="/tracker" className={styles.trackerButton}>
-                <IoCompass size={24} />
-                View Tracker
+              <IoCompass size={24} />
+              View Tracker
             </Link>
           </div>
 
@@ -148,11 +149,11 @@ export default function ProfilePage() {
                 <h3>Recent Items</h3>
                 <div className={styles.scanList}>
                   {recentScans.map((scan) => (
-                    <div 
-                      key={scan.id} 
+                    <div
+                      key={scan.id}
                       className={styles.scanItem}
                       onClick={() => handleScanClick(scan.barcode)}
-                      style={{ cursor: 'pointer' }}
+                      style={{ cursor: "pointer" }}
                     >
                       {scan.image_url && (
                         <img
@@ -162,17 +163,21 @@ export default function ProfilePage() {
                         />
                       )}
                       <div className={styles.scanItemInfo}>
-                        <h4>{scan.product_name} - {scan.brand}</h4>
-                        {scan.price && (
-                          <p className={styles.scanItemPrice}>
-                            £{scan.price.toFixed(2)}
-                          </p>
-                        )}
-                        {scan.nutriscore && (
-                          <span className={styles.nutriScore}>
-                            Nutri-Score: {scan.nutriscore.toUpperCase()}
-                          </span>
-                        )}
+                        <h4>
+                          {scan.product_name} - {scan.brand}
+                        </h4>
+                        <div className={styles.scanItemDetailsContainer}>
+                          {scan.price && (
+                            <span>
+                              £{scan.price.toFixed(2)}
+                            </span>
+                          )}
+                          {scan.nutriscore && (
+                            <span>
+                              Nutri-Score: {scan.nutriscore.toUpperCase()}
+                            </span>
+                          )}
+                        </div>
                       </div>
                     </div>
                   ))}
@@ -190,7 +195,7 @@ export default function ProfilePage() {
           )}
 
           {userId && (
-            <div className={styles.insightsSection}>
+            <div className={styles.aiInsightsSection}>
               <UserInsights userId={userId} />
             </div>
           )}
