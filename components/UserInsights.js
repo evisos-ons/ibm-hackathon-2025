@@ -19,7 +19,11 @@ export default function UserInsights({ userId }) {
         .order('created_at', { ascending: false })
         .limit(1);
 
-      if (error) throw error;
+      if (error) {
+        console.error('Error fetching insights:', error);
+        toast.error('Failed to fetch insights');
+        throw error;
+      }
       if (latestInsight && latestInsight.length > 0) {
         setInsights(latestInsight[0]);
       }
@@ -62,7 +66,7 @@ export default function UserInsights({ userId }) {
         await fetchLatestInsights();
         toast.success('Generated new insights!');
       } else {
-        throw new Error(data.error);
+        toast.error('Unable to generate insights at this time.');
       }
     } catch (error) {
       console.error('Error generating insights:', error);

@@ -459,7 +459,7 @@ font-weight: 600;
 
 .instruction {
   color: hsl(var(--muted-foreground));
-  margin-bottom: 1rem;
+  margin-bottom: 0.5rem;
   text-align: center;
 }
 
@@ -1262,7 +1262,6 @@ font-weight: 600;
 .alternativesSection {
   width: 100%;
   padding: 1rem;
-  padding-bottom: 10rem;
   background: var(--card-background);
   border-radius: 12px;
   box-shadow: var(--card-shadow);
@@ -1288,7 +1287,6 @@ font-weight: 600;
   border-radius: 8px;
   overflow: hidden;
   transition: transform 0.2s ease;
-  box-shadow: 0 2px 4px hsl(var(--foreground) / 0.1);
 }
 
 
@@ -1315,6 +1313,7 @@ font-weight: 600;
 .alternativeInfo {
   padding: 1rem;
   border-top: 1px solid hsl(var(--border));
+  background: hsl(var(--muted));
 }
 
 .alternativeInfo h4 {
@@ -2148,6 +2147,9 @@ font-weight: 600;
 .loadingMessage,
 .noDataMessage {
   margin: 2rem 0;
+  color: hsl(var(--primary));
+  text-align: center;
+  width: 100%;
 }
 
 .statsSection {
@@ -2280,7 +2282,7 @@ font-weight: 600;
 .financialGoals {
   display: grid;
   box-sizing: border-box;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
   gap: 1rem;
   font-family: inherit;
 }
@@ -2324,18 +2326,24 @@ font-weight: 600;
 }
 
 .budgetForm input, .savingsForm input {
-  flex: 1;
-  padding: 0.5rem;
-  border: 1px solid #ddd;
-  border-radius: 4px;
+  /* flex: 1; */
+  width: 100%;
+  padding: 0.5rem 1.5rem;
+  box-sizing: border-box; 
+  border: 1px solid hsl(var(--border));
+  border-radius: var(--radius);
+  font-family: inherit;
+  background: hsl(var(--input));
 }
 
 .budgetForm button, .savingsForm button {
   padding: 0.5rem 1rem;
+  width: 100%;
   border: none;
   border-radius: var(--radius);
   font-size: 0.9rem;
   transition: all 0.2s ease;
+  font-family: inherit;
 }
 
 .budgetForm button[type="submit"],
@@ -2349,9 +2357,8 @@ font-weight: 600;
   background: hsl(var(--primary) / 0.9);
 }
 
-.budgetForm button[type="button"],
-.savingsForm button[type="button"] {
-  background: hsl(var(--muted) / 0.1);
+.cancelBudgetButton {
+  background: hsl(var(--muted));
   color: hsl(var(--foreground));
 }
 
@@ -2390,7 +2397,7 @@ font-weight: 600;
 /* Improve form styles */
 .budgetForm input:disabled,
 .savingsForm input:disabled {
-  background-color: hsl(var(--muted) / 0.1);
+  background-color: hsl(var(--muted));
   cursor: not-allowed;
 }
 
@@ -2398,6 +2405,51 @@ font-weight: 600;
 .savingsForm button:disabled {
   opacity: 0.7;
   cursor: not-allowed;
+}
+
+.insightsHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.insightsHeader:nth-child(1) {
+  flex-direction: column;
+  align-items: flex-start;
+}
+@media screen and (max-width: 768px) {
+  .insightsHeader {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+}
+
+.insightsHeader h3 {
+  margin: 0;
+  font-size: 1.2rem;
+  color: hsl(var(--primary));
+}
+
+.insightsHeader span {
+  font-size: 0.8rem;
+  color: hsl(var(--muted-foreground));
+}
+
+.refreshButton {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.25rem 1.5rem;
+  background: hsl(var(--primary));
+  color: hsl(var(--primary-foreground));
+  border: none;
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition: opacity 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 /* Add loading spinner */
@@ -2553,110 +2605,6 @@ font-weight: 600;
   transition: all 0.2s ease;
 }
 
-.budgetForm button[type="submit"],
-.savingsForm button[type="submit"] {
-  background: hsl(var(--primary));
-  color: hsl(var(--primary-foreground));
-}
-
-.budgetForm button[type="submit"]:hover,
-.savingsForm button[type="submit"]:hover {
-  background: hsl(var(--primary) / 0.9);
-}
-
-.budgetForm button[type="button"],
-.savingsForm button[type="button"] {
-  background: hsl(var(--muted) / 0.1);
-  color: hsl(var(--foreground));
-}
-
-.budgetForm button[type="button"]:hover,
-.savingsForm button[type="button"]:hover {
-  background: hsl(var(--muted) / 0.2);
-}.page {
-  height: calc(100dvh - 72px);
-  padding: 1rem;
-  box-sizing: border-box;
-  margin-top: 64px;
-  background: hsl(var(--background));
-  color: hsl(var(--foreground));
-  display: flex;
-  align-items: flex-start;
-  justify-content: center;
-}
-
-.pageHomeScreen {
-  height: 0;
-  min-height: calc(100dvh - 64px);
-}
-
-@media (prefers-color-scheme: dark) {
-  .page {
-    --gray-rgb: 255, 255, 255;
-    --gray-alpha-200: rgba(var(--gray-rgb), 0.145);
-    --gray-alpha-100: rgba(var(--gray-rgb), 0.06);
-
-    --button-primary-hover: #ccc;
-    --button-secondary-hover: #1a1a1a;
-    background-color: hsl(var(--background));
-    color: hsl(var(--foreground));
-  }
-}
-
-
-.insightsContainer {
-  width: 100%;
-  padding: 1.5rem;
-  background: hsl(var(--card));
-  border-radius: var(--radius);
-  margin-top: 2rem;
-  border: 1px solid hsl(var(--border));
-}
-
-.insightsHeader {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 0.75rem;
-}
-
-.insightsHeader:nth-child(1) {
-  flex-direction: column;
-  align-items: flex-start;
-}
-@media screen and (max-width: 768px) {
-  .insightsHeader {
-    align-items: flex-start;
-    flex-direction: column;
-  }
-}
-
-.insightsHeader h3 {
-  margin: 0;
-  font-size: 1.2rem;
-  color: hsl(var(--primary));
-}
-
-.insightsHeader span {
-  font-size: 0.8rem;
-  color: hsl(var(--muted-foreground));
-}
-
-.refreshButton {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 0.25rem 1.5rem;
-  background: hsl(var(--primary));
-  color: hsl(var(--primary-foreground));
-  border: none;
-  border-radius: var(--radius);
-  cursor: pointer;
-  transition: opacity 0.2s;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
 
 @media screen and (max-width: 768px) {
   .refreshButton {

@@ -279,6 +279,7 @@ export default function ExpenditureTracker() {
         type="button" 
         onClick={() => setShowBudgetForm(false)}
         disabled={isSettingBudget}
+        className={styles.cancelBudgetButton}
       >
         Cancel
       </button>
@@ -303,6 +304,7 @@ export default function ExpenditureTracker() {
         type="button" 
         onClick={() => setShowSavingsForm(false)}
         disabled={isSettingSavingsGoal}
+        className={styles.cancelBudgetButton}
       >
         Cancel
       </button>
