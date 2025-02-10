@@ -118,7 +118,7 @@ export default function HomePage() {
               Yunusa
             </a>
           </div>
-          <a href="https://github.com/evirunurm/ibm-hackathon-2025" className={styles.githubLink}>
+          <a href="https://github.com/evisos-ons/ibm-hackathon-2025" className={styles.githubLink}>
             <IoLogoGithub size={20} />
             Open Source; GitHub Repository
           </a>
