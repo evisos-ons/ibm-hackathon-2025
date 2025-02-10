@@ -313,7 +313,7 @@ export default function ExpenditureTracker() {
         name="budget"
         step="0.01"
         min="0"
-        placeholder="Enter your budget"
+        placeholder="Budget"
         required
         disabled={isSettingBudget}
       />
@@ -338,7 +338,7 @@ export default function ExpenditureTracker() {
         name="savingsGoal"
         step="0.01"
         min="0"
-        placeholder="Enter savings goal"
+        placeholder="Goal"
         required
         disabled={isSettingSavingsGoal}
       />

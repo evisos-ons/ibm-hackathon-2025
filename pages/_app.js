@@ -21,6 +21,7 @@ import { Analytics } from "@vercel/analytics/react";
 
 function Header() {
   const { theme, toggleTheme } = useTheme();
+  const router = useRouter();
 
   return (
     <header className={styles.header}>
@@ -31,20 +32,24 @@ function Header() {
         </span>
       </Link>
       <div className={styles.headerControls}>
-        <Link href="/scan" aria-label="Scan" className={styles.headerIcon}>
+        <Link 
+          href="/scan" 
+          aria-label="Scan" 
+          className={`${styles.headerIcon} ${router.pathname === '/scan' ? styles.activeHeader : ''}`}
+        >
           <IoScanCircleOutline size={28} />
         </Link>
         <Link
           href="/tracker"
           aria-label="Tracker"
-          className={styles.headerIcon}
+          className={`${styles.headerIcon} ${router.pathname === '/tracker' ? styles.activeHeader : ''}`}
         >
           <IoCompassOutline size={28} />
         </Link>
         <Link
           href="/profile"
           aria-label="Profile"
-          className={styles.headerIcon}
+          className={`${styles.headerIcon} ${router.pathname === '/profile' ? styles.activeHeader : ''}`}
         >
           <IoPersonCircleOutline size={28} />
         </Link>
