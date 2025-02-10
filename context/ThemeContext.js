@@ -6,8 +6,34 @@ const ThemeContext = createContext({
   toggleTheme: () => null,
 });
 
+const THEME_COLORS = {
+  light: {
+    background: '#ffffff',
+    theme: '#ffffff'
+  },
+  dark: {
+    background: '#020817',
+    theme: '#020817'
+  }
+};
+
 export function ThemeProvider({ children }) {
   const [theme, setTheme] = useState('light');
+
+  const updateThemeColors = (newTheme) => {
+    // Update meta tags
+    const themeColorMeta = document.querySelector('meta[name="theme-color"]');
+    const manifestLink = document.querySelector('link[rel="manifest"]');
+    
+    if (themeColorMeta) {
+      themeColorMeta.setAttribute('content', THEME_COLORS[newTheme].theme);
+    }
+
+    // Update manifest link
+    if (manifestLink) {
+      manifestLink.href = `/manifest.json?theme=${newTheme}`;
+    }
+  };
 
   useEffect(() => {
     // Check localStorage first
@@ -15,6 +41,7 @@ export function ThemeProvider({ children }) {
     if (storedTheme) {
       setTheme(storedTheme);
       document.documentElement.className = storedTheme;
+      updateThemeColors(storedTheme);
     } else {
       // If no stored preference, check system preference
       const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
@@ -22,6 +49,7 @@ export function ThemeProvider({ children }) {
       setTheme(initialTheme);
       localStorage.setItem('theme', initialTheme);
       document.documentElement.className = initialTheme;
+      updateThemeColors(initialTheme);
     }
 
     // Listen for system theme changes
@@ -31,6 +59,7 @@ export function ThemeProvider({ children }) {
       setTheme(newTheme);
       localStorage.setItem('theme', newTheme);
       document.documentElement.className = newTheme;
+      updateThemeColors(newTheme);
     };
 
     mediaQuery.addEventListener('change', handleChange);
@@ -42,6 +71,7 @@ export function ThemeProvider({ children }) {
     setTheme(newTheme);
     localStorage.setItem('theme', newTheme);
     document.documentElement.className = newTheme;
+    updateThemeColors(newTheme);
   };
 
   return (

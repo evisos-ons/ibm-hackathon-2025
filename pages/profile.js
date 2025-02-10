@@ -97,7 +97,7 @@ export default function ProfilePage() {
       <div className={styles.page}>
         <main className={styles.main}>
           <div className={styles.loadingScreen}>
-            <p>Loading profile...</p>
+            <IoPersonCircle size={80} />
           </div>
         </main>
       </div>

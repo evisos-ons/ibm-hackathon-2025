@@ -330,7 +330,8 @@ export default function ProductResults({
       <div className={styles.alternativesSection}>
         <h3>Similar Products You Might Like</h3>
         {isAlternativesLoading ? (
-          <div className={styles.loadingSpinner}>Loading alternatives...</div>
+          <div className={styles.loadingSpinner}>
+          </div>
         ) : alternatives.length > 0 ? (
           <div className={styles.alternativesGrid}>
             {alternatives.map((alt) => (

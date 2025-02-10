@@ -67,7 +67,7 @@ body {
 body {
   color: hsl(var(--foreground));
   background: hsl(var(--background));
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: inherit;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -92,4 +92,5 @@ a {
 
 button {
   cursor: pointer;
+  font-family: inherit;
 }
