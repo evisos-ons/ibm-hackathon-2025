@@ -189,7 +189,6 @@ export default function ProfilePage() {
             </div>
           )}
 
-          {/* Replace AIInsights with UserInsights */}
           {userId && (
             <div className={styles.insightsSection}>
               <UserInsights userId={userId} />
