@@ -2513,13 +2513,18 @@ font-weight: 600;
   box-sizing: border-box; 
   border: 1px solid hsl(var(--border));
   border-radius: var(--radius);
-  background: none;
+  background: hsl(var(--card));
+  color: hsl(var(--foreground));
   cursor: pointer;
   transition: all 0.2s ease;
+  font-family: inherit;
+  font-size: 0.9rem;
+  font-weight: 500;
 }
 
 .trendTab:hover {
-  background: hsl(var(--muted) / 0.1);
+  background: hsl(var(--muted));
+  color: hsl(var(--primary));
 }
 
 .activeTab {
@@ -2528,9 +2533,43 @@ font-weight: 600;
   border-color: hsl(var(--primary));
 }
 
+.activeTab:hover {
+  background: hsl(var(--primary));
+  opacity: 0.9;
+}
+
 .trendsChart {
   margin: 1rem 0;
   height: 300px;
+}
+
+/* Remove the :global syntax and use regular class names */
+.barChart {
+  width: 100%;
+  height: 100%;
+}
+
+.barChartBar {
+  width: 20px !important;
+}
+
+.barChartTooltip {
+  background: hsl(var(--background));
+  border: 1px solid hsl(var(--border));
+  border-radius: var(--radius);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  padding: 1rem;
+}
+
+/* Add these styles for better bar appearance */
+.monthlyBar {
+  max-width: 30px;
+  border-radius: 4px 4px 0 0;
+}
+
+.weeklyBar {
+  max-width: 20px;
+  border-radius: 4px 4px 0 0;
 }
 
 .categoryBreakdown {
@@ -3087,4 +3126,139 @@ font-weight: 600;
   .iosPrompt {
     display: block;
   }
+}
+
+.savingsChallengeSection {
+  background: hsl(var(--card));
+  padding: 1.5rem;
+  border-radius: var(--radius);
+  border: 1px solid hsl(var(--border));
+  margin-top: 1.5rem;
+}
+
+.challengeForm {
+  margin-top: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.challengeInputGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.challengeInputGroup label {
+  font-size: 0.9rem;
+  color: hsl(var(--muted-foreground));
+}
+
+.challengeInputGroup input {
+  padding: 0.5rem;
+  border: 1px solid hsl(var(--border));
+  border-radius: var(--radius);
+  background: hsl(var(--background));
+  color: hsl(var(--foreground));
+}
+
+.challengeButtons {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.challengeButtons button[type="submit"] {
+  flex: 2;
+  padding: 0.75rem 1.5rem;
+  background: hsl(var(--primary));
+  color: hsl(var(--primary-foreground));
+  border: none;
+  border-radius: var(--radius);
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-family: inherit;
+}
+
+.challengeButtons button[type="submit"]:hover {
+  opacity: 0.9;
+}
+
+.challengeButtons button[type="submit"]:disabled {
+  background: hsl(var(--primary) / 0.5);
+  cursor: not-allowed;
+}
+
+.challengeButtons button[type="button"] {
+  flex: 1;
+  padding: 0.75rem 1.5rem;
+  background: hsl(var(--muted));
+  color: hsl(var(--muted-foreground));
+  border: none;
+  border-radius: var(--radius);
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-family: inherit;
+}
+
+.challengeButtons button[type="button"]:hover {
+  background: hsl(var(--muted) / 0.8);
+}
+
+.challengeButtons button[type="button"]:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Update input styles to match */
+.challengeInputGroup input {
+  padding: 0.75rem;
+  border: 1px solid hsl(var(--border));
+  border-radius: var(--radius);
+  background: hsl(var(--background));
+  color: hsl(var(--foreground));
+  font-size: 0.9rem;
+  width: 100%;
+  transition: border-color 0.2s ease;
+}
+
+.challengeInputGroup input:focus {
+  outline: none;
+  border-color: hsl(var(--primary));
+  box-shadow: 0 0 0 2px hsl(var(--primary) / 0.1);
+}
+
+.challengeInputGroup input:disabled {
+  background: hsl(var(--muted) / 0.1);
+  cursor: not-allowed;
+}
+
+.challengeDetails {
+  background: hsl(var(--muted) / 0.1);
+  padding: 1rem;
+  border-radius: var(--radius);
+  margin: 1rem 0;
+}
+
+.challengeDetails p {
+  margin: 0.5rem 0;
+  color: hsl(var(--foreground));
+}
+
+.progressBar {
+  height: 10px;
+  background: hsl(var(--muted));
+  border-radius: 5px;
+  margin: 1rem 0;
+  overflow: hidden;
+}
+
+.progressFill {
+  height: 100%;
+  background: hsl(var(--primary));
+  transition: width 0.3s ease;
 }
