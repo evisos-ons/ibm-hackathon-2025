@@ -311,11 +311,12 @@ export default function ScanPage() {
               </div>
             ) : (
               <>
-                <div className={styles.undrawPhoto}></div>
                 <p className={styles.instruction}>
                   Position the barcode in front of your camera or enter the
                   barcode manually!
                 </p>
+                <div className={styles.undrawPhoto}></div>
+
               </>
             )}
             <div className={styles.scannerFixedContainer}>
