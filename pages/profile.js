@@ -139,7 +139,7 @@ export default function ProfilePage() {
           <div className={styles.trackerButtonContainer}>
             <Link href="/tracker" className={styles.trackerButton}>
               <IoCompass size={24} />
-              View Tracker
+              View Spending Tracker
             </Link>
           </div>
 
