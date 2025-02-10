@@ -1,4 +1,4 @@
-# ScanSave.in
+# ScanSaveIn
 **Food Scanner App with AI Insights**
 
 A modern web application that helps users scan food products to understand their nutritional value, environmental impact, and get AI-powered insights about their food choices.
