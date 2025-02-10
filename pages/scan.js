@@ -298,9 +298,12 @@ export default function ScanPage() {
               </div>
             ) : (
                 <>
-                {/* <h2 className={styles.stepTitle}>Scan Your Product</h2> */}
+                <h2 className={styles.stepTitle}>Scan Your Product</h2>
               <div className={styles.undrawPhoto}>
               </div>
+              <p className={styles.instruction}>
+                Position the barcode in front of your camera or enter the barcode manually!
+              </p>
               </>
             )}
             <div className={styles.scannerFixedContainer}>

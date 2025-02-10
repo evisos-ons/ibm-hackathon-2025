@@ -95,7 +95,7 @@ export default function App({ Component, pageProps }) {
         <Component {...pageProps} />
       </div>
       <Toaster
-        position="bottom-center"
+        position="top-left"
         toastOptions={{
           className: "",
           duration: 5000,

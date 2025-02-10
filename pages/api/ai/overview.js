@@ -28,8 +28,6 @@ export default async function handler(req, res) {
       .gte('scanned_at', lastWeek.toISOString())
       .order('scanned_at', { ascending: false });
 
-    console.log('Product History:', productHistory);
-
     if (historyError) {
       console.error('History Error:', historyError);
       throw historyError;
