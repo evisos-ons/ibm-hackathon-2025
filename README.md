@@ -9,6 +9,7 @@ A modern web application that helps users scan food products to understand their
 - Detailed nutritional information
 - AI-powered insights and recommendations
 - Price tracking and comparison
+- Budget tracking and savings goal setting
 - Environmental impact and recycling information
 - Dark/Light theme support
 - Responsive design for all devices
