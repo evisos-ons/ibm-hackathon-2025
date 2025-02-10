@@ -690,7 +690,7 @@ export default function ExpenditureTracker() {
           )}
           {showSavingsForm && <SavingsGoalForm />}
         </div>
-
+          </div>
         <div className={styles.savingsChallengeSection}>
           <h2>Savings Challenge</h2>
           {savingsChallenge ? (
@@ -724,7 +724,6 @@ export default function ExpenditureTracker() {
           )}
           {showChallengeForm && <SavingsChallengeForm />}
         </div>
-      </div>
 
       {!loading && dailyData.length > 0 && <TrendsAnalysis />}
 

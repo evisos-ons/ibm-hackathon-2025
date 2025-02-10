@@ -2298,7 +2298,7 @@ font-weight: 600;
 
 @media screen and (max-width: 746px) {
   .financialGoals {
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(1, 1fr);
   }
 }
 
@@ -3133,11 +3133,13 @@ font-weight: 600;
   padding: 1.5rem;
   border-radius: var(--radius);
   border: 1px solid hsl(var(--border));
-  grid-column: span 2;
+  width: 100%;
+  margin-top: 1rem;
 }
 
 .savingsChallengeSection h2{
   color: hsl(var(--primary));
+  font-size: 1.2rem;
 }
 
 .challengeForm {
