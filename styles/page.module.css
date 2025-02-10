@@ -173,6 +173,14 @@
   text-align: center;
 }
 
+.profileSectionRecents {
+  background: hsl(var(--card));
+  border: 1px solid hsl(var(--border));
+  border-radius: var(--radius);
+  padding: 2rem;
+  text-align: left;
+}
+
 .footer {
   grid-row-start: 3;
   display: flex;
