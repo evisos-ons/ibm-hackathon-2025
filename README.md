@@ -45,11 +45,15 @@ Create a `.env.local` file in the root directory with the following variables:
 NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
 NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
 GEMINI_API_KEY=your_gemini_api_key
+SUPABASE_SERVICE_ROLE_KEY=your_supabase_service_role_key
 ```
 
-Alternatively, you can export the Gemini API key in your terminal:
+Alternatively, you can export the environment variables in your terminal:
 ```bash
+export NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
+export NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
 export GEMINI_API_KEY=your_gemini_api_key
+export SUPABASE_SERVICE_ROLE_KEY=your_supabase_service_role_key
 ```
 
 4. Start the development server:
@@ -64,6 +68,7 @@ The application will be available at [http://localhost:3000](http://localhost:30
 - `NEXT_PUBLIC_SUPABASE_URL`: Your Supabase project URL
 - `NEXT_PUBLIC_SUPABASE_ANON_KEY`: Your Supabase anonymous key for client-side access
 - `GEMINI_API_KEY`: Your Google Gemini API key for AI features
+- `SUPABASE_SERVICE_ROLE_KEY`: Your Supabase service role key for server-side access
 
 ## Tech Stack
 
@@ -72,6 +77,7 @@ The application will be available at [http://localhost:3000](http://localhost:30
 - [Google Gemini](https://deepmind.google/technologies/gemini/) - AI insights
 - [HTML5-QRCode](https://github.com/mebjas/html5-qrcode) - Barcode scanning
 - [React Icons](https://react-icons.github.io/react-icons/) - Icon library
+- [Open Food Facts](https://world.openfoodfacts.org/) - Food database
 
 ## Features in Detail
 
@@ -99,6 +105,11 @@ The application will be available at [http://localhost:3000](http://localhost:30
 - Price tracking
 - Dark/Light theme toggle
 - Responsive design for all screen sizes
+
+### Expenditure Tracker
+- Budget tracking
+- Savings goal setting
+- Expense tracking
 
 ## Contributing
 
