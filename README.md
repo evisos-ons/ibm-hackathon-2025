@@ -1,6 +1,6 @@
 # ScanSave - Team 10
 
-By Sebastian (set29), Ash (at613), Patrick (pgc8) and Yunus (ya129)
+By Sebastian (set29), Ashvin (at613), Patrick (pgc8) and Yunus (ya129)
 
 **View the deployed project at [scansave.in](https://scansave.in)!**
 
