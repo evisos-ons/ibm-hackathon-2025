@@ -1,7 +1,7 @@
 .page {
   height: calc(100dvh - 72px);
   padding: 1rem;
-  box-sizing: border-box; 
+  box-sizing: border-box;
   margin-top: 64px;
   background: hsl(var(--background));
   color: hsl(var(--foreground));
@@ -43,7 +43,7 @@
 .features {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 2rem;
+  gap: 1rem;
   padding: 2rem;
   box-sizing: border-box;
   margin: 0 auto;
@@ -123,7 +123,7 @@
   background: hsl(var(--card));
   border: 1px solid hsl(var(--border));
   border-radius: var(--radius);
-  padding: 1.5rem;
+  padding: 1rem;
   margin-top: 2rem;
 }
 
@@ -233,7 +233,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 1.5rem;
+  gap: 1rem;
   width: 100%;
   max-width: 400px;
 }
@@ -248,7 +248,7 @@
 
 .divider::before,
 .divider::after {
-  content: '';
+  content: "";
   position: absolute;
   top: 50%;
   width: 45%;
@@ -300,29 +300,29 @@
     border-color: hsl(var(--border));
     color: hsl(var(--foreground));
   }
-  
+
   .input:focus {
     border-color: #0070f3;
   }
-  
+
   .divider {
     color: #888;
   }
-  
+
   .divider::before,
   .divider::after {
     background-color: #333;
   }
-  
+
   .hint {
     color: #888;
   }
-  
+
   .productInfo {
     background-color: #1a1a1a;
     color: white;
   }
-  
+
   .nutritionInfo,
   .environmentalInfo {
     background-color: #222;
@@ -342,13 +342,63 @@
   background: hsl(var(--background));
   border-bottom: 1px solid hsl(var(--border));
   z-index: 100;
-  backdrop-filter: blur(10px);
+  backdrop-filter: blur(2px);
+}
+
+.headerLeft {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+@media (max-width: 768px) {
+  .header {
+    padding: 0 1rem;
+  }
 }
 
 .headerControls {
   display: flex;
   align-items: center;
   gap: 1rem;
+}
+
+.headerControls a {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.5rem;
+  box-sizing: border-box; 
+}
+
+@media (max-width: 768px) {
+  .headerControls {
+    gap: 0.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .headerControls {
+    justify-content: space-around;
+    align-items: center;
+    gap: 2rem;
+    width: 100%;
+  }
+}
+
+.headerControls svg {
+  color: hsl(var(--primary));
+  transition: all 0.2s ease;
+}
+
+.headerControls svg:hover {
+  transform: scale(0.9);
+}
+
+.activeHeader{
+  color: hsl(var(--foreground));
+  transform: scale(1.1);
 }
 
 .themeToggle {
@@ -369,7 +419,7 @@
   transform: scale(0.9);
 }
 
-.header a {
+.headerLeft {
   display: flex;
   align-items: center;
   gap: 0.5rem;
@@ -381,6 +431,12 @@
 
 .header a:hover {
   background: hsl(var(--muted) / 0.1);
+}
+
+@media (max-width: 480px) {
+  .headerLeft {
+    display: none;
+  }
 }
 
 @media (prefers-color-scheme: dark) {
@@ -398,7 +454,7 @@
   flex-direction: column;
   align-items: center;
   gap: 16px;
-  margin-bottom: 2rem;
+  margin-bottom: 5rem;
 }
 
 .scannerFixedContainer {
@@ -414,8 +470,8 @@
 }
 
 .stepTitle {
-  font-size: 1.5rem;
-font-weight: 600;
+  font-size: 1rem;
+  font-weight: 600;
   color: hsl(var(--primary));
   font-family: inherit;
 }
@@ -456,7 +512,7 @@ font-weight: 600;
   color: hsl(var(--muted-foreground));
   margin-bottom: 0.5rem;
   text-align: center;
-  padding: 0 .25rem;
+  padding: 0 0.25rem;
   box-sizing: border-box;
 }
 
@@ -471,12 +527,20 @@ font-weight: 600;
   color: hsl(var(--primary));
 }
 
-@keyframes rotate {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+.loadingScreen svg {
+  animation: rotate 1.2s infinite cubic-bezier(0.4, 0, 0.2, 1);
+  transform-origin: center;
+  will-change: transform;
 }
 
-
+@keyframes rotate {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
 
 .loadingAnimation {
   margin: 2rem auto;
@@ -496,9 +560,15 @@ font-weight: 600;
 }
 
 @keyframes scan {
-  0% { top: 0; }
-  50% { top: 100%; }
-  100% { top: 0; }
+  0% {
+    top: 0;
+  }
+  50% {
+    top: 100%;
+  }
+  100% {
+    top: 0;
+  }
 }
 
 .loadingText {
@@ -518,7 +588,7 @@ font-weight: 600;
   left: 0;
   width: 100%;
   padding: 1rem;
-  box-sizing: border-box; 
+  box-sizing: border-box;
   background-color: hsl(var(--background));
   border-top: 1px solid hsl(var(--border));
   display: flex;
@@ -611,12 +681,12 @@ font-weight: 600;
 }
 
 .accordion summary::after {
-  content: '›';
+  content: "›";
   position: absolute;
   right: 1rem;
   transform: rotate(90deg);
   transition: transform 0.2s ease;
-  font-size: 1.5rem;
+  font-size: 1rem;
   line-height: 1;
 }
 
@@ -665,7 +735,7 @@ font-weight: 600;
   background: hsl(var(--card));
   border: 1px solid hsl(var(--border));
   border-radius: var(--radius);
-  padding: 1.5rem;
+  padding: 1rem;
   width: 100%;
   text-align: center;
 }
@@ -700,8 +770,8 @@ font-weight: 600;
 .portionSlider {
   background: hsl(var(--card));
   border-radius: var(--radius);
-  padding: 2rem;
-  margin: 2rem 0;
+  padding: 1rem;
+  margin: 1rem 0;
   width: 100%;
 }
 
@@ -767,7 +837,7 @@ font-weight: 600;
 .productCard {
   background: hsl(var(--card));
   border-radius: var(--radius);
-  padding: 1.5rem;
+  padding: 1rem;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -785,7 +855,7 @@ font-weight: 600;
 
 .confirmButtons {
   display: flex;
-  align-items: center;    
+  align-items: center;
   justify-content: center;
   position: fixed;
   bottom: 0;
@@ -793,6 +863,7 @@ font-weight: 600;
   padding: 1rem;
   box-sizing: border-box;
   border-top: 1px solid hsl(var(--border));
+  background: hsl(var(--card));
   gap: 1rem;
   width: 100%;
 }
@@ -898,7 +969,7 @@ font-weight: 600;
   display: flex;
   flex-direction: row;
   align-items: flex-end;
-  gap: 1.5rem;
+  gap: 1rem;
   overflow-x: auto;
   min-height: min-content;
   width: 100%;
@@ -981,7 +1052,7 @@ font-weight: 600;
 }
 
 .aiButton:hover {
-  background: hsl(var(--primary) /.8);
+  background: hsl(var(--primary) / 0.8);
 }
 
 .aiButton:disabled {
@@ -991,27 +1062,31 @@ font-weight: 600;
 }
 
 .aiButton:disabled:hover {
-  transform: none
+  transform: none;
 }
 
 .aiColumn {
-  box-shadow: 0 0 0 1px hsl(var(--primary) / .5);
+  box-shadow: 0 0 0 1px hsl(var(--primary) / 0.5);
   padding: 1rem;
   border-radius: var(--radius);
   animation: pulseAnimation 3s infinite;
 }
 
 @keyframes pulseAnimation {
-  0% { box-shadow: 0 0 0 1px hsl(var(--primary) / .5); }
-  50% { box-shadow: 0 0 0 2px hsl(var(--primary) / .75); }
-  100% { box-shadow: 0 0 0 1px hsl(var(--primary) / .5); }
+  0% {
+    box-shadow: 0 0 0 1px hsl(var(--primary) / 0.5);
+  }
+  50% {
+    box-shadow: 0 0 0 2px hsl(var(--primary) / 0.75);
+  }
+  100% {
+    box-shadow: 0 0 0 1px hsl(var(--primary) / 0.5);
+  }
 }
 
 .aiColumn h3 {
   color: hsl(var(--primary));
 }
-
-
 
 .sparkle {
   display: inline-block;
@@ -1023,9 +1098,18 @@ font-weight: 600;
 }
 
 @keyframes sparkleAnimation {
-  0% { transform: scale(1); opacity: 1; }
-  50% { transform: scale(1.2); opacity: 0.8; }
-  100% { transform: scale(1); opacity: 1; }
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.2);
+    opacity: 0.8;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
 }
 
 .recyclingTip {
@@ -1126,7 +1210,7 @@ font-weight: 600;
   background: hsl(var(--card));
   border: 1px solid hsl(var(--border));
   border-radius: var(--radius);
-  padding: 1.5rem;
+  padding: 1rem;
   text-align: center;
   width: 100%;
   display: flex;
@@ -1165,7 +1249,7 @@ font-weight: 600;
     background: hsl(var(--card));
     color: hsl(var(--foreground));
   }
-  
+
   .findCheaperButton:hover {
     background: hsl(var(--primary));
     color: hsl(var(--primary-foreground));
@@ -1188,9 +1272,15 @@ font-weight: 600;
 }
 
 @keyframes pulse {
-  0% { opacity: 0.6; }
-  50% { opacity: 1; }
-  100% { opacity: 0.6; }
+  0% {
+    opacity: 0.6;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0.6;
+  }
 }
 
 /* .suggestionsSection .accordion {
@@ -1217,16 +1307,8 @@ font-weight: 600;
   color: hsl(var(--primary));
 }
 
-
-.profileHeader {
-  text-align: center;
-  margin-bottom: 2rem;
-}
-
-
 .profileName {
-  font-size: 1.5rem;
-  margin-bottom: 0.5rem;
+  font-size: 1rem;
   color: hsl(var(--foreground));
 }
 
@@ -1262,7 +1344,6 @@ font-weight: 600;
   min-height: calc(100dvh - 160px);
 }
 
-
 .recentlyScanned {
   background: hsl(var(--card));
   border: 1px solid hsl(var(--border));
@@ -1287,7 +1368,7 @@ font-weight: 600;
 }
 
 .alternativesSection h3 {
-  margin-bottom: 1.5rem;
+  margin-bottom: 1rem;
   color: var(--text-primary);
   font-size: 1.25rem;
 }
@@ -1295,7 +1376,7 @@ font-weight: 600;
 .alternativesGrid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-  gap: 1.5rem;
+  gap: 1rem;
   margin-top: 1rem;
 }
 
@@ -1306,7 +1387,6 @@ font-weight: 600;
   overflow: hidden;
   transition: transform 0.2s ease;
 }
-
 
 .alternativeImageContainer {
   width: 100%;
@@ -1326,7 +1406,6 @@ font-weight: 600;
 .alternativeCard:hover .alternativeImage {
   transform: scale(1.05);
 }
-
 
 .alternativeInfo {
   padding: 1rem;
@@ -1386,15 +1465,13 @@ font-weight: 600;
   }
 }
 
-
 .profileHeader {
   text-align: center;
-  margin-bottom: 2rem;
+  margin-bottom: 1rem;
 }
 
 .profileName {
-  font-size: 1.5rem;
-  margin-bottom: 0.5rem;
+  font-size: 1rem;
   color: hsl(var(--foreground));
 }
 
@@ -1409,6 +1486,19 @@ font-weight: 600;
   margin-bottom: 2rem;
 }
 
+@media (max-width: 640px) {
+  .profileName {
+    text-align: left;
+  }
+
+  .profileEmail {
+    text-align: left;
+  }
+
+  .profileHeader {
+    text-align: left;
+  }
+}
 
 .profileActions {
   display: flex;
@@ -1426,12 +1516,12 @@ font-weight: 600;
   justify-content: center;
   margin-top: 1rem;
   gap: 0.5rem;
-  padding: 2px 16px ;
+  padding: 2px 16px;
   box-sizing: border-box;
   border: none;
   border-radius: var(--radius);
   background: hsl(var(--background));
-  color: hsl(var(--foreground) / .5);
+  color: hsl(var(--foreground) / 0.5);
   border: 1px solid hsl(var(--border));
   font-size: 0.875rem;
   cursor: pointer;
@@ -1441,9 +1531,14 @@ font-weight: 600;
 }
 
 .logoutButton:hover {
-  background: hsl(var(--primary) /.2);
+  background: hsl(var(--primary) / 0.2);
 }
 
+@media (max-width: 640px) {
+  .logoutButtonContainer {
+    justify-content: flex-start;
+  }
+}
 
 @media (max-width: 640px) {
   .profileStats {
@@ -1463,7 +1558,8 @@ font-weight: 600;
 
 /* Star background animation */
 @keyframes twinkle {
-  0%, 100% {
+  0%,
+  100% {
     opacity: 0.5;
     transform: scale(1);
   }
@@ -1490,8 +1586,8 @@ font-weight: 600;
 }
 
 .authForm {
-  background: hsl(var(--background));   
-  padding: 1.5rem 1.25rem;
+  background: hsl(var(--background));
+  padding: 1rem 1.25rem;
   border-radius: 15px;
   /* box-shadow: 0 0 20px hsl(var(--muted)); */
   width: 100%;
@@ -1502,7 +1598,7 @@ font-weight: 600;
 }
 
 .formGroup {
-  margin-bottom: 1.5rem;
+  margin-bottom: 1rem;
 }
 
 .formGroup label {
@@ -1571,7 +1667,7 @@ font-weight: 600;
 }
 
 .textButton:hover {
-    color: hsl(var(--primary));
+  color: hsl(var(--primary));
   text-decoration: underline;
 }
 
@@ -1594,7 +1690,7 @@ font-weight: 600;
 }
 
 .switchMode {
-  margin-top: 1.5rem;
+  margin-top: 1rem;
   text-align: center;
   color: hsl(var(--muted-foreground));
 }
@@ -1630,8 +1726,8 @@ font-weight: 600;
 .scanItem {
   display: flex;
   align-items: center;
-  gap: .5rem;
-  padding: .5rem;
+  gap: 0.5rem;
+  padding: 0.5rem;
   box-sizing: border-box;
   background: hsl(var(--card));
   border: 1px solid hsl(var(--border));
@@ -1658,7 +1754,7 @@ font-weight: 600;
 
 .scanItemInfo h4 {
   margin: 0;
-  font-size: .875rem;
+  font-size: 0.875rem;
   color: hsl(var(--primary));
 }
 
@@ -1736,10 +1832,15 @@ font-weight: 600;
   transition: all 0.2s ease;
 }
 
+@media (max-width: 768px) {
+  .headerTitle svg {
+    display: none;
+  }
+}
+
 .headerTitle:hover svg {
   transform: rotate(-45deg);
 }
-
 
 .hero {
   text-align: center;
@@ -1752,8 +1853,12 @@ font-weight: 600;
   font-size: 3.5rem;
   font-weight: 900;
   line-height: 1.2;
-  margin-bottom: 1.5rem;
-  background: linear-gradient(to right, hsl(var(--foreground)), hsl(var(--primary)));
+  margin-bottom: 1rem;
+  background: linear-gradient(
+    to right,
+    hsl(var(--foreground)),
+    hsl(var(--primary))
+  );
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -1818,7 +1923,7 @@ font-weight: 600;
 }
 
 .insightsHeader h2 {
-  font-size: 1.5rem;
+  font-size: 1rem;
   color: hsl(var(--foreground));
 }
 
@@ -1938,8 +2043,12 @@ font-weight: 600;
 }
 
 @keyframes spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 .loadMoreButton {
@@ -1990,7 +2099,7 @@ font-weight: 600;
 .profileButton {
   margin: 0.5rem 0;
   padding: 0.5rem 1rem;
-  background-color: #4CAF50;
+  background-color: #4caf50;
   color: white;
   border: none;
   border-radius: 4px;
@@ -2012,7 +2121,7 @@ font-weight: 600;
 .error-message {
   color: #dc3545;
   background: #f8d7da;
-  padding: 1.5rem;
+  padding: 1rem;
   border-radius: 8px;
   margin: 2rem 0;
   text-align: center;
@@ -2092,8 +2201,8 @@ font-weight: 600;
 .statsGrid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 1.5rem;
-  margin: 1.5rem 0;
+  gap: 1rem;
+  margin: 1rem 0;
 }
 
 .chartContainer {
@@ -2107,7 +2216,7 @@ font-weight: 600;
 
 .chartContainer h2 {
   color: hsl(var(--primary));
-  margin-bottom: 1.5rem;
+  margin-bottom: 1rem;
   font-size: 1.25rem;
   padding-left: 1rem;
   padding-top: 1rem;
@@ -2144,7 +2253,7 @@ font-weight: 600;
   background: hsl(var(--card));
   border: 1px solid hsl(var(--border));
   border-radius: var(--radius);
-  padding: 1.5rem;
+  padding: 1rem;
 }
 
 .chartWrapper h2 {
@@ -2152,7 +2261,6 @@ font-weight: 600;
   font-size: 1.1rem;
   color: hsl(var(--foreground));
 }
-
 
 /* Adjust existing styles */
 .statsGrid {
@@ -2172,7 +2280,7 @@ font-weight: 600;
   display: grid;
   grid-template-columns: repeat(2, 1fr); /* Two columns */
   grid-template-rows: repeat(2, auto); /* Two rows */
-  gap: 1.5rem;
+  gap: 1rem;
   margin: 2rem 0;
 }
 
@@ -2180,23 +2288,23 @@ font-weight: 600;
   background: hsl(var(--card));
   border: 1px solid hsl(var(--border));
   border-radius: var(--radius);
-  padding: 1.5rem;
+  padding: 1rem;
   text-align: center;
   transition: transform 0.2s ease;
   display: flex;
   flex-direction: column;
-  justify-content:center;
+  justify-content: center;
   align-items: center;
+}
+
+.statsSection .statCard:nth-child(3) {
+  grid-column: span 2;
 }
 
 @media (max-width: 768px) {
   .statCard {
     align-items: flex-start;
   }
-}
-
-.statCard:hover {
-  transform: translateY(-3px);
 }
 
 .statCard h3 {
@@ -2223,7 +2331,7 @@ font-weight: 600;
 }
 
 .expenditureButton:hover p {
-  text-shadow: 0 0 8px #87CEEB; /* Light blue glow */
+  text-shadow: 0 0 8px #87ceeb; /* Light blue glow */
 }
 
 .customTooltip {
@@ -2277,7 +2385,7 @@ font-weight: 600;
   width: 100%;
   padding: 1rem;
   box-sizing: border-box;
-  background-color: hsl(var(--primary) /.8);
+  background-color: hsl(var(--primary) / 0.8);
   color: hsl(var(--primary-foreground));
   border-radius: var(--radius);
   text-align: center;
@@ -2292,7 +2400,7 @@ font-weight: 600;
 }
 
 .trackerButton:hover {
-  background-color: hsl(var(--primary) /.5);
+  background-color: hsl(var(--primary) / 0.5);
 }
 
 /* Add these new styles */
@@ -2310,21 +2418,24 @@ font-weight: 600;
   }
 }
 
-.budgetSection, .savingsSection {
+.budgetSection,
+.savingsSection {
   background: hsl(var(--card));
-  padding: 1.5rem;
+  padding: 1rem;
   max-width: 100vw;
   box-sizing: border-box;
   border-radius: var(--radius);
   border: 1px solid hsl(var(--border));
 }
 
-.budgetSection h2, .savingsSection h2 {
+.budgetSection h2,
+.savingsSection h2 {
   color: hsl(var(--primary));
   font-size: 1.2rem;
 }
 
-.budgetSection p, .savingsSection p {
+.budgetSection p,
+.savingsSection p {
   margin: 0;
   color: hsl(var(--muted-foreground));
 }
@@ -2343,24 +2454,29 @@ font-weight: 600;
   transition: width 0.3s ease;
 }
 
-.budgetForm, .savingsForm {
+.budgetForm,
+.savingsForm {
   display: flex;
   gap: 0.5rem;
   margin-top: 1rem;
 }
 
-.budgetForm input, .savingsForm input {
+.budgetForm input,
+.savingsForm input {
   /* flex: 1; */
   width: 100%;
-  padding: 0.15rem 0.5rem 0.15rem 1.5rem;
-  box-sizing: border-box; 
+  padding: 0.75rem 1rem;
+  text-align: center;
+  box-sizing: border-box;
   border: 1px solid hsl(var(--border));
+  color: hsl(var(--foreground));
   border-radius: var(--radius);
   font-family: inherit;
   background: hsl(var(--input));
 }
 
-.budgetForm button, .savingsForm button {
+.budgetForm button,
+.savingsForm button {
   padding: 0.5rem 1rem;
   width: 100%;
   border: none;
@@ -2478,8 +2594,12 @@ font-weight: 600;
 
 /* Add loading spinner */
 @keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
 
 .loadingSpinner {
@@ -2495,7 +2615,7 @@ font-weight: 600;
 
 .trendsSection {
   margin-top: 1rem;
-  padding: 1.5rem;
+  padding: 1rem;
   background: hsl(var(--card));
   border: 1px solid hsl(var(--border));
   border-radius: var(--radius);
@@ -2518,7 +2638,7 @@ font-weight: 600;
 
 .trendTab {
   padding: 0.25rem 1.5rem;
-  box-sizing: border-box; 
+  box-sizing: border-box;
   border: 1px solid hsl(var(--border));
   border-radius: var(--radius);
   background: hsl(var(--card));
@@ -2532,7 +2652,6 @@ font-weight: 600;
 
 .trendTab:hover {
   background: hsl(var(--muted));
-  color: hsl(var(--primary));
 }
 
 .activeTab {
@@ -2669,11 +2788,9 @@ font-weight: 600;
   transition: all 0.2s ease;
 }
 
-
 @media screen and (max-width: 768px) {
   .refreshButton {
     width: 100%;
-
   }
 }
 
@@ -2737,13 +2854,13 @@ font-weight: 600;
 }
 
 .undrawPhoto {
-  background: url('/barcode.gif') no-repeat center;
+  background: url("/barcode.gif") no-repeat center;
   background-size: contain;
   padding: 1rem;
   box-sizing: border-box;
   margin: 0 auto;
-  width: 300px;
-  height: 300px;
+  width: 250px;
+  height: 250px;
   border-radius: var(--radius);
 }
 
@@ -2784,8 +2901,8 @@ font-weight: 600;
 .statsGrid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 1.5rem;
-  margin: 1.5rem 0;
+  gap: 1rem;
+  margin: 1rem 0;
 }
 
 .chartContainer {
@@ -2799,7 +2916,7 @@ font-weight: 600;
 
 .chartContainer h2 {
   color: hsl(var(--primary));
-  margin-bottom: 1.5rem;
+  margin-bottom: 1rem;
   font-size: 1.25rem;
   padding-left: 1rem;
   padding-top: 1rem;
@@ -2836,7 +2953,7 @@ font-weight: 600;
   background: hsl(var(--card));
   border: 1px solid hsl(var(--border));
   border-radius: var(--radius);
-  padding: 1.5rem;
+  padding: 1rem;
 }
 
 .chartWrapper h2 {
@@ -2849,45 +2966,42 @@ font-weight: 600;
 .statsGrid {
   margin-bottom: 2rem;
 }
-  .chartContainer {
-    width: 100%;
-    min-height: 400px;
-    margin: 2rem 0;
-  }
+.chartContainer {
+  width: 100%;
+  min-height: 400px;
+  margin: 2rem 0;
+}
 
-  .recharts-cartesian-grid line {
-    stroke: hsl(var(--border));
-  }
+.recharts-cartesian-grid line {
+  stroke: hsl(var(--border));
+}
 
-  .recharts-tooltip {
-    background: hsl(var(--background)) !important;
-    border: 1px solid hsl(var(--border)) !important;
-    border-radius: var(--radius) !important;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1) !important;
-    color: hsl(var(--foreground)) !important;
-  }
+.recharts-tooltip {
+  background: hsl(var(--background)) !important;
+  border: 1px solid hsl(var(--border)) !important;
+  border-radius: var(--radius) !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1) !important;
+  color: hsl(var(--foreground)) !important;
+}
 
-  .recharts-tooltip-item {
-    color: hsl(var(--foreground)) !important;
-  }
+.recharts-tooltip-item {
+  color: hsl(var(--foreground)) !important;
+}
 
-  .expenditurePage {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 1rem;
-    margin-top: 64px;
-    min-height: calc(100dvh - 64px);
-  }
+.expenditurePage {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 1rem;
+  margin-top: 64px;
+  min-height: calc(100dvh - 64px);
+}
 
-  .expenditurePage h1 {
-    font-size: 1.25rem;
-    color: hsl(var(--primary));
-    font-weight: 600;
-    margin-bottom: 1rem;
-  }
-
-
-
+.expenditurePage h1 {
+  font-size: 1.25rem;
+  color: hsl(var(--primary));
+  font-weight: 600;
+  margin-bottom: 1rem;
+}
 
 .insightsContainer {
   width: 100%;
@@ -2901,7 +3015,7 @@ font-weight: 600;
 }
 
 .insightsHeader h2 {
-  font-size: 1.5rem;
+  font-size: 1rem;
 }
 
 .insightTabs {
@@ -3005,7 +3119,7 @@ font-weight: 600;
   gap: 0.5rem;
   color: hsl(var(--primary));
   font-size: 0.875rem;
-  margin-top:0.5rem;
+  margin-top: 0.5rem;
 }
 
 .insightLoading {
@@ -3018,7 +3132,7 @@ font-weight: 600;
 }
 
 .aiInsightsSection {
-  margin: 2rem 0;
+  margin: 1rem 0;
   /* padding-top: 2rem; */
   border: 1px solid hsl(var(--border));
   border-radius: var(--radius);
@@ -3029,8 +3143,6 @@ font-weight: 600;
   font-size: 1.2rem;
   color: hsl(var(--primary));
 }
-
-
 
 .loadMoreButton {
   display: flex;
@@ -3123,7 +3235,7 @@ font-weight: 600;
   display: none;
 }
 
-.iosPrompt p{
+.iosPrompt p {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -3138,14 +3250,14 @@ font-weight: 600;
 
 .savingsChallengeSection {
   background: hsl(var(--card));
-  padding: 1.5rem;
+  padding: 1rem;
   border-radius: var(--radius);
   border: 1px solid hsl(var(--border));
   width: 100%;
   margin-top: 1rem;
 }
 
-.savingsChallengeSection h2{
+.savingsChallengeSection h2 {
   color: hsl(var(--primary));
   font-size: 1.2rem;
 }
@@ -3276,4 +3388,29 @@ font-weight: 600;
   height: 100%;
   background: hsl(var(--primary));
   transition: width 0.3s ease;
+}
+
+.headerIcon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px;
+  border-radius: var(--radius);
+  color: hsl(var(--muted-foreground));
+  transition: all 0.2s ease;
+}
+
+.headerIcon:hover {
+  color: hsl(var(--foreground));
+  background: hsl(var(--muted) / 0.3);
+}
+
+.activeHeader {
+  color: hsl(var(--primary)) !important;
+  background: hsl(var(--primary) / 0.1);
+  transform: scale(1.1);
+}
+
+.activeHeader:hover {
+  background: hsl(var(--primary) / 0.2);
 }

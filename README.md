@@ -2,6 +2,8 @@
 
 By Sebastian (set29), Ash (at613), Patrick (pgc8) and Yunus (ya129)
 
+**View the deployed project at [scansave.in](https://scansave.in)!**
+
 A modern web application that helps users scan food products to understand their nutritional value, environmental impact, and get AI-powered insights about their food choices.
 
 ## Features
@@ -14,8 +16,6 @@ A modern web application that helps users scan food products to understand their
 - Environmental impact and recycling information
 - Dark/Light theme support
 - Responsive design for all devices
-
-# 'Clear and concise instructions on how to run *the* project.':
 
 ## Prerequisites
 

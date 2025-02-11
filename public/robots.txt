@@ -1,0 +1,5 @@
+User-agent: *
+Disallow: */api/*
+
+Sitemap: https://scansave.in/sitemap.xml
+
