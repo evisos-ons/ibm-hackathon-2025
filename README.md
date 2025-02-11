@@ -1,4 +1,4 @@
-# ScanSaveIn - Team 10
+# ScanSave - Team 10
 
 By Sebastian (set29), Ash (at613), Patrick (pgc8) and Yunus (ya129)
 
