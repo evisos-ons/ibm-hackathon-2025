@@ -48,7 +48,7 @@ Do not use any markdown formatting (no **, -, #, etc.). Use simple plain text wi
 Remember to format the response as a valid JSON object with the exact keys specified above.`;
 
     // Get response from Gemini
-    const model = genAI.getGenerativeModel({ model: "gemini-pro" });
+    const model = genAI.getGenerativeModel({ model: "gemini-1.5-pro" });
     const result = await model.generateContent(prompt);
     const response = await result.response;
     const text = response.text();
